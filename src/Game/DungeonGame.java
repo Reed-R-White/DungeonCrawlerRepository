@@ -18,7 +18,10 @@ import javax.swing.Timer;
 public class DungeonGame {
     private static final long serialVersionUID = 1L;
     private static final int GAMEWINDOWSIZE = 600;
-    
+    public int[][] obstacleCoords = new int[6][6];
+    public Obstacle[] obstacleArr = new Obstacle[obstacleCoords.length*obstacleCoords[0].length];
+    public static final int gridWidth = 20;
+
     private JFrame gameWindow;
     
     private DungeonPlayer player1;
@@ -30,6 +33,16 @@ public class DungeonGame {
         gameWindow.setLayout(new BorderLayout());
         gameWindow.setVisible(true);
         player1 = new DungeonPlayer(gameWindow);
+
+        //Create coords for the obstacles
+        //outer loop controls X, inner loop controls Y
+        for(int i=0;i<obstacleCoords.length;i++){
+            for(int j=0;j<obstacleCoords[i].length;j++){
+                obstacleCoords[i][j]=j*100;
+            }
+        }
+        
+        
         
     }
 

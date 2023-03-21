@@ -90,6 +90,20 @@ public class Obstacle {
                 posX3=posX1;
                 posY3=posY1+50;
                 break;
+            case VERTICAL:
+                posX1=posX1+25;
+                posX2=posX1;
+                posY2=posY1+50;
+                posX3=posX1;
+                posY3=posY1;
+                break;
+            case HORIZONTAL:
+                posY1=posY1+25;
+                posX2=posX1+50;
+                posY2=posY1;
+                posX3=posX1;
+                posY3=posY1;
+                break;
         }
         
 
@@ -100,13 +114,10 @@ public class Obstacle {
 
     public boolean checkCollision(float x,float y){
 
-        
         if((x >= posX1 && x <= (posX1 + ObstacleObject[0].getWidth()) && y >= posY1 && y <= (posY1 + ObstacleObject[0].getHeight())) || (x >= posX2 && x <= (posX2 + ObstacleObject[1].getWidth()) && y >= posY2 && y <= (posY2 + ObstacleObject[1].getHeight())) || (x >= posX3 && x <= (posX3 + ObstacleObject[2].getWidth()) && y >= posY3 && y <= (posY3 + ObstacleObject[2].getHeight()))){
             return true;
-
         }
         return false;
-        
     }
 
 }

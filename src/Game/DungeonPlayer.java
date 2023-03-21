@@ -28,13 +28,19 @@ public class DungeonPlayer {
 	
 	public DungeonPlayer(JFrame playerJFrame) {
 		homeFrame = playerJFrame;
-		
+		playerX = playerJFrame.getX()/2;
+		playerY = playerJFrame.getY()/2;
+
+		newPosition = new Point(playerX, playerY);
+
+		//This MouseListener sets a NewPosition whenever the mouse is moved.
 		homeFrame.addMouseMotionListener(new MouseMotionAdapter() {
 	        public void mouseMoved(MouseEvent e) {
-	        	newPosition = new Point(e.getX(), e.getY());
+				newPosition.setLocation(e.getX(), e.getY());
 	        }
 	    });
 		
+		//This ActionListener increments the player towards NewPosition each time it's called
 		ActionListener movementPerSecond = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				 currentPosition = new Point(playerX, playerY);
@@ -66,7 +72,8 @@ public class DungeonPlayer {
 	}
 	
 	private void getLocal(int x, int y) {
-    	int numberOfBoxes = 20;
+    	//This variable is the number of columns.
+		int numberOfBoxes = DungeonGame.gridWidth;
     	int boxLength = homeFrame.getWidth()/numberOfBoxes;
     	int xIndex = x/boxLength;
     	int yIndex = y/boxLength;
