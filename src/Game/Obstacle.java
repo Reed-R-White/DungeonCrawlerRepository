@@ -42,7 +42,7 @@ public class Obstacle {
         
         for(int i=0;i<ObstacleObject.length;i++){
             
-            sprite[i] = new ImageIcon("Pepe1.jpeg");
+            sprite[i] = new ImageIcon("cobblestone_texture.jpeg");
             System.out.println("Sprite has dimensions " + sprite[i].getIconWidth() + " by "+sprite[i].getIconHeight());
             
             //Resize it down to 50x50
