@@ -1,12 +1,9 @@
 package Game;
 
 import java.awt.Image;
-
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-
-
 
 public class Obstacle {
     
@@ -28,42 +25,16 @@ public class Obstacle {
         ObstacleObject[1] = new JLabel();
         ObstacleObject[2] = new JLabel();
 
+        /*
         gameJFrame.getContentPane().add(ObstacleObject[0]);
         gameJFrame.getContentPane().add(ObstacleObject[1]);
         gameJFrame.getContentPane().add(ObstacleObject[2]);
-        
+        */
     }
 
     public void draw(){
 
-        //retrieve the image
-        ImageIcon sprite[] = new ImageIcon[3];
-        Image[] tempImage = new Image[sprite.length];
-        
-        for(int i=0;i<ObstacleObject.length;i++){
-            
-            sprite[i] = new ImageIcon("cobblestone_texture.jpeg");
-            System.out.println("Sprite has dimensions " + sprite[i].getIconWidth() + " by "+sprite[i].getIconHeight());
-            
-            //Resize it down to 50x50
-            tempImage[i] = sprite[i].getImage();
-            sprite[i] = new ImageIcon(tempImage[i].getScaledInstance(50, 50,java.awt.Image.SCALE_SMOOTH));
-    
-            //Put it in the game
-            System.out.println("i = "+i);
-            System.out.println("Sprite has dimensions " + sprite[i].getIconWidth() + " by "+sprite[i].getIconHeight());
-            
-            ObstacleObject[i].setIcon(sprite[i]);
-
-            ObstacleObject[i].setBounds((int)posX1+50, (int)posY1, sprite[i].getIconWidth(), sprite[i].getIconHeight());
-            
-            ObstacleObject[i].setVisible(true);
-        }
-
-        /*[a b]
-         *[c d]
-         */
-
+        //Config the rotation
         switch(rotation){
             case POINTING_BOTTOM_RIGHT:
                 posX1=posX1+50;
@@ -105,11 +76,44 @@ public class Obstacle {
                 posY3=posY1;
                 break;
         }
-        
 
-        ObstacleObject[0].setBounds((int)posX1, (int)posY1, sprite[0].getIconWidth(), sprite[0].getIconHeight());
-        ObstacleObject[1].setBounds((int)posX2, (int)posY2, sprite[1].getIconWidth(), sprite[1].getIconHeight());
-        ObstacleObject[2].setBounds((int)posX3, (int)posY3, sprite[2].getIconWidth(), sprite[2].getIconHeight());
+
+
+        //retrieve the image
+        ImageIcon sprite = new ImageIcon("src/Game/cobblestone_texture.jpeg");
+        Image tempImage = sprite.getImage();
+        tempImage = tempImage.getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH);
+        sprite = new ImageIcon(tempImage);      
+
+        //Draw the images
+        for(int i=0;i<ObstacleObject.length;i++){
+            
+            //sprite[i] = new ImageIcon("src/Game/playerSprite.png");
+            /*System.out.println("Sprite has dimensions " + sprite[i].getIconWidth() + " by "+sprite[i].getIconHeight());
+            
+            //Resize it down to 50x50
+            tempImage[i] = sprite[i].getImage();
+            sprite[i] = new ImageIcon(tempImage[i].getScaledInstance(50, 50,java.awt.Image.SCALE_SMOOTH));
+    
+            //Put it in the game
+            System.out.println("i = "+i);*/
+            
+            ObstacleObject[i].setIcon(sprite);
+            ObstacleObject[i].setBounds((int)posX1, (int)posY1, 50, 50);
+            ObstacleObject[i].setVisible(true);
+            gameJFrame.add(ObstacleObject[i]);
+        }
+        
+        ObstacleObject[0].setBounds((int)posX1, (int)posY1, 50, 50);
+        ObstacleObject[1].setBounds((int)posX2, (int)posY2, 50, 50);
+        ObstacleObject[2].setBounds((int)posX3, (int)posY3, 50, 50);
+
+        System.out.println("X1 = "+posX1+", Y1 = "+posY1);
+        System.out.println("X2 = "+posX2+", Y2 = "+posY2);
+        System.out.println("X3 = "+posX3+", Y3 = "+posY3);
+
+        gameJFrame.revalidate();
+
     }
 
     public boolean checkCollision(float x,float y){

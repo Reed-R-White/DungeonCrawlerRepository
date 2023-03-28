@@ -13,7 +13,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.Timer;
 
 public class DungeonPlayer {
@@ -23,13 +25,13 @@ public class DungeonPlayer {
 	private int playerY;
 	private Point newPosition;
 	private Point currentPosition;
-	private Image playerAvatar;
+	private JLabel playerAvatar;
 	private JFrame homeFrame;
 	
 	public DungeonPlayer(JFrame playerJFrame) {
 		homeFrame = playerJFrame;
-		playerX = playerJFrame.getX()/2;
-		playerY = playerJFrame.getY()/2;
+		playerX = playerJFrame.getWidth()/2;
+		playerY = playerJFrame.getHeight()/2;
 
 		newPosition = new Point(playerX, playerY);
 
@@ -54,6 +56,7 @@ public class DungeonPlayer {
 	                    double dy = MAXMOVEMENT * (newPosition.getY() - currentPosition.getY()) / distance;
 
 	                    // update player's position
+
 	                    playerX += (int) dx;
 	                    playerY += (int) dy;
 	                }
@@ -64,11 +67,18 @@ public class DungeonPlayer {
 	    Timer timer = new Timer(10, movementPerSecond);
 	    timer.start();
 	    
-	    try {
-	    	playerAvatar = ImageIO.read(new File("src/Game/playerSprite.png"));
+		//Draw the player
+		playerAvatar = new JLabel();
+		ImageIcon playerSprite = new ImageIcon("src/Game/playerSprite.png");
+		playerAvatar.setIcon(playerSprite);
+		playerAvatar.setBounds(playerX, playerY, 50, 50);
+		playerAvatar.setVisible(true);
+		playerJFrame.add(playerAvatar);
+	    /*try {
+	    	
 	    } catch (IOException FileNotFoundException) {
 	    	System.out.println(FileNotFoundException + " resulted in failure");
-	    }
+	    }*/
 	}
 	
 	private void getLocal(int x, int y) {
@@ -80,28 +90,32 @@ public class DungeonPlayer {
     	System.out.println("The player is in Column: "+ xIndex + " Row: " + yIndex);
     }
 	
-	public void actionPerformed(ActionEvent e) {
+	/*public void actionPerformed(ActionEvent e) {
     	Point mouseSpot = MouseInfo.getPointerInfo().getLocation();
         Point panelLocation = homeFrame.getLocationOnScreen();
         playerX = (int) (mouseSpot.getX() - panelLocation.getX());
         playerY = (int) (mouseSpot.getY() - panelLocation.getY());
-    }
+    }*/
 	
 	public void drawPlayer() {
 		// This code is adapted from an online example to fix image flicker.
 		
-		// Create an off-screen image buffer
+		/*// Create an off-screen image buffer
 	    Image offScreenImage = homeFrame.createImage(homeFrame.getWidth(), homeFrame.getHeight());
 	    Graphics offScreenGraphics = offScreenImage.getGraphics();
 	    
 	    // Clear the previous image
-	    offScreenGraphics.clearRect(0, 0, homeFrame.getWidth(), homeFrame.getHeight());
+	    offScreenGraphics.clearRect(playerX, playerY, playerAvatar.getWidth(), playerAvatar.getHeight());
 	    
 	    // Draw the new image on the off-screen buffer
-	    offScreenGraphics.drawImage(playerAvatar, playerX, playerY, null);
+	    offScreenGraphics.drawImage(playerAvatar.getIcon(), playerX, playerY, null);
 	    
 	    // Paint the off-screen buffer on the screen
 	    homeFrame.getGraphics().drawImage(offScreenImage, 0, 0, null);
+		*/ 
+
+		playerAvatar.setBounds(playerX, playerY, 50, 50);
+		homeFrame.revalidate();
 	}
 	
 }

@@ -31,9 +31,11 @@ public class DungeonGame {
         gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gameWindow.setLayout(new BorderLayout());
         gameWindow.setVisible(true);
+        //Add the player
         player1 = new DungeonPlayer(gameWindow);
 
-        obstacleArr[0] = new Obstacle(gameWindow, 0, 0, Rotation.POINTING_TOP_LEFT);
+        //Add the obstacles
+        obstacleArr[0] = new Obstacle(gameWindow, 200, 200, Rotation.POINTING_TOP_RIGHT);
         obstacleArr[0].draw();
         
         
