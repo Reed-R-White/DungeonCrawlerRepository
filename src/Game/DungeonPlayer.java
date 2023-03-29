@@ -56,10 +56,13 @@ public class DungeonPlayer {
 	                    double dy = MAXMOVEMENT * (newPosition.getY() - currentPosition.getY()) / distance;
 
 	                    // update player's position
+						
+							playerX += (int) dx;
+							playerY += (int) dy;
+						
 
-	                    playerX += (int) dx;
-	                    playerY += (int) dy;
 	                }
+
 	                drawPlayer();
 	            }
 	        };
@@ -115,7 +118,7 @@ public class DungeonPlayer {
 		*/ 
 
 		playerAvatar.setBounds(playerX, playerY, 50, 50);
-		homeFrame.revalidate();
+		homeFrame.repaint();
 	}
 	
 }

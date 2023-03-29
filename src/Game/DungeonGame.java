@@ -35,10 +35,11 @@ public class DungeonGame {
         player1 = new DungeonPlayer(gameWindow);
 
         //Add the obstacles
-        obstacleArr[0] = new Obstacle(gameWindow, 200, 200, Rotation.POINTING_TOP_RIGHT);
+        obstacleArr[0] = new Obstacle(gameWindow, 50, 50, Rotation.POINTING_BOTTOM_LEFT);
         obstacleArr[0].draw();
         
-        
+        //obstacleArr[1] = new Obstacle(gameWindow, 300, 50, Rotation.POINTING_TOP_RIGHT);
+        //obstacleArr[1].draw();
         
     }
 
