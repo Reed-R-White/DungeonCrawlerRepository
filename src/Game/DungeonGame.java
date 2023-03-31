@@ -41,9 +41,6 @@ public class DungeonGame implements ActionListener, MouseListener {
         //Add the obstacles
         obstacleArr[0] = new Obstacle(gameWindow, 50, 50, Rotation.POINTING_BOTTOM_LEFT);
         obstacleArr[0].draw();
-        
-        //obstacleArr[1] = new Obstacle(gameWindow, 300, 50, Rotation.POINTING_TOP_RIGHT);
-        //obstacleArr[1].draw();
 
         //Set up the timer
         Timer timer = new Timer(10, new ActionListener() {
@@ -68,10 +65,10 @@ public class DungeonGame implements ActionListener, MouseListener {
                 }
             }
         });
+
 	    timer.start();
 
         gameWindow.addMouseListener(this);;
-        
     }
 
 
@@ -80,39 +77,31 @@ public class DungeonGame implements ActionListener, MouseListener {
     }
 
     public void mousePressed(MouseEvent e) {
-		player1.setNewTarget(e.getX(), e.getY());
+		Point newTarget = new Point(e.getX(), e.getY());
+        player1.setNewTarget(newTarget);
         System.out.println("new target: "+e.getX()+", "+e.getY());
 	}
 
-    //Auto-generated ActionPerformed stub.  Do I need this?
+    //Weird auto-generated things that the program needs to compile but are absolutely useless.
+
     @Override
     public void actionPerformed(ActionEvent arg0) {
-        //player1.movePlayer((int)dx,(int)dy);
     }
 
     @Override
     public void mouseClicked(MouseEvent arg0) {
-        // TODO Auto-generated method stub
-        //throw new UnsupportedOperationException("Unimplemented method 'mouseClicked'");
     }
 
     @Override
     public void mouseEntered(MouseEvent arg0) {
-        // TODO Auto-generated method stub
-        //throw new UnsupportedOperationException("Unimplemented method 'mouseEntered'");
     }
 
     @Override
     public void mouseExited(MouseEvent arg0) {
-        // TODO Auto-generated method stub
-        //throw new UnsupportedOperationException("Unimplemented method 'mouseExited'");
     }
 
-    
     @Override
     public void mouseReleased(MouseEvent arg0) {
-        // TODO Auto-generated method stub
-        //throw new UnsupportedOperationException("Unimplemented method 'mouseReleased'");
     }
 }
 
