@@ -7,13 +7,8 @@ import javax.swing.JLabel;
 
 
 /**
- * This class creates an obstacle out of 2 or 3 squares to put into a game.
- * 
- * @param gameJFrame A JFrame that the Obstacle should exist in.
- * @param startingX Initial X for the Obstacle.
- * @param startingY Initial X for the Obstacle.
- * @param rotation What sort of Obstacle this is.  It will be either Horizontal, Vertical, or one of 4 elbow shapes.
- */ 
+ * This class creates an Obstacle, an object that the player can detect collision with.
+ */
 public class Obstacle {
     
     protected final JFrame gameJFrame;
@@ -21,6 +16,14 @@ public class Obstacle {
 
     private float posX1,posY1,posX2,posY2,posX3,posY3;
 
+    /**
+    * Object Constructor
+    * 
+    * @param gameJFrame A JFrame that the Obstacle should exist in.
+    * @param startingX Initial X for the Obstacle.
+    * @param startingY Initial X for the Obstacle.
+    * @param rotation What sort of Obstacle this is.  It will be either Horizontal, Vertical, or one of 4 elbow shapes.
+    */ 
     public Obstacle(JFrame gameJFrame,float startingX,float startingY,Rotation rotation){
 
         //Assign variables
