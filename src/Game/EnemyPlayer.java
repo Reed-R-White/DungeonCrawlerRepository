@@ -39,7 +39,7 @@ public class EnemyPlayer extends Player {
 		
 		follow = false;
 		color = Color.red;
-		speed = (float) 0.90;
+		speed = (float) 0.50;
 		player = player1;
 		
 		//NOte for later: go forwards or move into upper section

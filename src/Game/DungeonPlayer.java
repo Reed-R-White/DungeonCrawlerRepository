@@ -5,12 +5,15 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.MouseInfo;
 import java.awt.Point;
+import java.awt.Polygon;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -105,37 +108,55 @@ public class DungeonPlayer {
 	    homeFrame.getGraphics().drawImage(offScreenImage, 0, 0, null);
 	}
 	
+	public static void rotateRectangle(Point[] rectangle, Point pivot, double angle) {
+		// WARNING: CHAT GPT CODE PLZ USE CAREFULLY
+	    double cos = Math.cos(angle);
+	    double sin = Math.sin(angle);
+	    for (Point p : rectangle) {
+	        double dx = p.x - pivot.x;
+	        double dy = p.y - pivot.y;
+	        p.x = pivot.x + (int) (dx * cos - dy * sin);
+	        p.y = pivot.y + (int) (dx * sin + dy * cos);
+	    }
+	}
+	
 	public boolean attack(Point point) {
 	    // Get the direction from the player to the mouse
-	    double deltaX = point.getX() - playerX;
-	    double deltaY = point.getY() - playerY;
+	    double deltaX = newPosition.getX() - playerX;
+	    double deltaY = newPosition.getY() - playerY;
 	    double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-	    
+
 	    // Calculate the unit vector in the direction of the mouse
 	    double unitX = deltaX / distance;
 	    double unitY = deltaY / distance;
-	    
+
 	    // Calculate the rectangle emanating from the player in the direction of the mouse
 	    double rectWidth = 100;
 	    double rectHeight = 50;
 	    double rectX = playerX;
 	    double rectY = playerY - rectHeight / 2.0;
-	    
+
 	    // Rotate the rectangle to match the angle of the mouse in relation to the player
 	    double angle = Math.atan2(deltaY, deltaX);
 	    Graphics g = homeFrame.getGraphics();
-	    Graphics2D g2d = (Graphics2D) g;
-	    g2d.rotate(angle, playerX, playerY);
-	    g2d.drawRect((int) rectX, (int) rectY, (int) rectWidth, (int) rectHeight);
-	    g2d.rotate(-angle, playerX, playerY);
 	    
+	    Point bottomLeft = new Point((int) rectX, (int) rectY);
+	    Point topLeft = new Point((int) rectX, (int) (rectY + rectHeight));
+	    Point bottomRight = new Point((int) (rectX + rectWidth), (int) rectY);
+	    Point topRight = new Point((int) (rectX + rectWidth), (int) (rectY + rectHeight));
+	    Point[] recPoints = new Point[] {bottomLeft, topLeft, bottomRight, topRight};
+	    rotateRectangle(recPoints,new Point(playerX, playerY), angle);
+	    
+	    int[] xCords = new int[] {(int) bottomLeft.getX(), (int) topLeft.getX(), (int) topRight.getX(), (int) bottomRight.getX()}; 
+	    int[] yCords = new int[] {(int) bottomLeft.getY(), (int) topLeft.getY(), (int) topRight.getY(), (int) bottomRight.getY()};
+	    
+	    Polygon hitbox = new Polygon(xCords, yCords, 4);
+	    
+	    
+	    Graphics2D g2d = (Graphics2D) g;
+	    g2d.draw(hitbox);
+	    return hitbox.contains(point);
 	    // Check if the point is in the rectangle
-	    if (point.getX() >= rectX && point.getX() <= rectX + rectWidth &&
-	            point.getY() >= rectY && point.getY() <= rectY + rectHeight) {
-	        return true;
-	    } else {
-	        return false;
-	    }
 	}
 	
 }

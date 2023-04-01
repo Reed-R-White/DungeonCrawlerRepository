@@ -37,7 +37,7 @@ public class DungeonGame {
         gameWindow.addKeyListener(new KeyListener() {
 		    public void keyPressed(KeyEvent e) {
 		        if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-		            if(player1.attack(new Point((int) test.getX(), (int) test.getY()))) {
+		        	if(player1.attack(new Point((int) test.getX(), (int) test.getY()))) {
 		            	System.out.println("hit");
 		            }
 		            else {
