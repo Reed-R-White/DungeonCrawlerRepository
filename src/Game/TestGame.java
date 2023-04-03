@@ -43,7 +43,7 @@ public class TestGame extends JFrame {
 		while (true) {
 			player1.move();
 			enemy1.move();
-			enemy1.checkPlayer(player1);
+			//enemy1.checkPlayer(player1);
 			grid1.repaint();
 			try {
 				Thread.sleep(10);

@@ -19,8 +19,8 @@ import javax.swing.Timer;
 public class DungeonPlayer {
 	
 	private static final int MAXMOVEMENT = 7;
-	private int playerX;
-	private int playerY;
+	public int playerX;
+	public int playerY;
 	private Point newPosition;
 	private Point currentPosition;
 	private Image playerAvatar;
@@ -28,10 +28,13 @@ public class DungeonPlayer {
 	
 	public DungeonPlayer(JFrame playerJFrame) {
 		homeFrame = playerJFrame;
+		playerX = playerJFrame.getWidth()/2;
+		playerY = playerJFrame.getHeight()/2;
+		newPosition = new Point(playerX,playerY);
 		
 		homeFrame.addMouseMotionListener(new MouseMotionAdapter() {
 	        public void mouseMoved(MouseEvent e) {
-	        	newPosition = new Point(e.getX(), e.getY());
+	        	newPosition.setLocation(e.getX(),e.getY());
 	        }
 	    });
 		
