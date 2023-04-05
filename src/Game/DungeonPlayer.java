@@ -119,7 +119,7 @@ public class DungeonPlayer {
 	 */
 	public void drawPlayer() {
 
-		playerAvatar.setBounds(playerX-5, playerY-5, 50, 50);
+		playerAvatar.setBounds(playerX, playerY, 50, 50);
 		homeFrame.repaint();
 	}
 	
