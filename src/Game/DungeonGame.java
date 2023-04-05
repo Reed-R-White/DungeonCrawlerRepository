@@ -1,10 +1,6 @@
 package Game;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,9 +8,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.Timer;
 
+/**
+ * The driver/main class for the game.
+ */
 public class DungeonGame implements ActionListener, MouseListener {
     
     //private static final long serialVersionUID = 1L;
@@ -71,7 +69,7 @@ public class DungeonGame implements ActionListener, MouseListener {
         obstacleArr[20] = new Obstacle(gameWindow, 150, 150, Rotation.POINTING_TOP_LEFT);
         obstacleArr[21] = new Obstacle(gameWindow, 350, 350, Rotation.POINTING_BOTTOM_RIGHT);
 
-        //Draw all the objects        
+        //Draw all the objects
         for(Obstacle obj : obstacleArr){
             obj.draw();
         }
@@ -122,6 +120,10 @@ public class DungeonGame implements ActionListener, MouseListener {
         new DungeonGame();
     }
 
+    /**
+     * Sets the next target location for the player to seek.
+     * The new target will be the position of the mouse click.
+     */
     public void mousePressed(MouseEvent e) {
 		Point newTarget = new Point(e.getX(), e.getY());
         player1.setNewTarget(newTarget);

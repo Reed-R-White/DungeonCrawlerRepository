@@ -1,22 +1,9 @@
 package Game;
 
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.MouseInfo;
 import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.Timer;
 
 /**
  * A player object, with coordinates, movement capabilities, and a CheckLocal function.
@@ -27,7 +14,6 @@ public class DungeonPlayer {
 	private int playerX;
 	private int playerY;
 	private Point newPosition;
-	private Point currentPosition;
 	private JLabel playerAvatar;
 	private JFrame homeFrame;
 	
@@ -55,17 +41,18 @@ public class DungeonPlayer {
 	
 	/**
 	 * Check which row and column a specified point is in.
+	 * Currently unused code.
 	 * @param x 
 	 * @param y
 	 */
-	private void getLocal(int x, int y) {
+	/*private void getLocal(int x, int y) {
     	//This variable is the number of columns.
 		int numberOfBoxes = DungeonGame.gridWidth;
     	int boxLength = homeFrame.getWidth()/numberOfBoxes;
     	int xIndex = x/boxLength;
     	int yIndex = y/boxLength;
     	System.out.println("The player is in Column: "+ xIndex + " Row: " + yIndex);
-    }
+    }// */
 
 	/**
 	 * Move the player by a specified amount in both x and y
