@@ -179,5 +179,6 @@ public class EnemyPlayer extends Player {
 		// Paint the off-screen buffer on the screen
 		homeFrame.getGraphics().drawImage(offScreenImage, 0, 0, null);
 	}
+	
 
 }

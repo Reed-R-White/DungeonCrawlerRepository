@@ -15,15 +15,18 @@ import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+
 import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
 import java.util.Random;
+
+import java.awt.event.MouseListener;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-public class DungeonGame {
+public class DungeonGame implements ActionListener, MouseListener {
 	private static final long serialVersionUID = 1L;
 	private static final int GAMEWINDOWSIZE = 600;
 
@@ -31,6 +34,13 @@ public class DungeonGame {
 
 	private DungeonPlayer player1;
 	private ArrayList<EnemyPlayer> enemies;
+
+	// private static final long serialVersionUID = 1L;
+
+	public Obstacle[] obstacleArr = new Obstacle[20];
+	public static final int gridWidth = 20;
+	private Point currentPosition;
+	private double dx, dy, distance;
 
 	/**
 	 * Constructor for the DungeonGame class. Creates the game window, initializes
@@ -42,9 +52,49 @@ public class DungeonGame {
 		gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gameWindow.setLayout(new BorderLayout());
 		gameWindow.setVisible(true);
+		// Add the player
 		player1 = new DungeonPlayer(gameWindow);
+		currentPosition = new Point(player1.getX(), player1.getY());
+
 		enemies = new ArrayList<>();
 		addEnemy(200, 200, gameWindow);
+
+		// Add the obstacles
+		obstacleArr[0] = new Obstacle(gameWindow, 50, 50, Rotation.POINTING_BOTTOM_LEFT);
+		obstacleArr[0].draw();
+
+		// Set up the timer
+		Timer timer = new Timer(10, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+
+				currentPosition.setLocation(player1.getX(), player1.getY());
+				;
+
+				// calculate distance between currentPosition and newPosition
+				distance = currentPosition.distance(player1.getNewTarget());
+
+				if (distance > 5) {
+					// calculate the amount to move in each direction based on MAXMOVEMENT
+					dx = DungeonPlayer.MAXMOVEMENT * (player1.getNewTarget().getX() - currentPosition.getX())
+							/ distance;
+					dy = DungeonPlayer.MAXMOVEMENT * (player1.getNewTarget().getY() - currentPosition.getY())
+							/ distance;
+					// marginally move the player by the x and y.
+
+					if (obstacleArr[0].checkCollision((float) (player1.getX() + dx),
+							(float) (player1.getY() + dy)) == false) {
+						player1.movePlayer((int) dx, (int) dy);
+					}
+
+				}
+			}
+		});
+
+		timer.start();
+
+		gameWindow.addMouseListener(this);
+		;
 
 		// Game loop
 		while (true) {
@@ -59,6 +109,30 @@ public class DungeonGame {
 				enemy.drawPlayer();
 			}
 		}
+	}
+
+	public void mousePressed(MouseEvent e) {
+		Point newTarget = new Point(e.getX(), e.getY());
+		player1.setNewTarget(newTarget);
+		System.out.println("new target: " + e.getX() + ", " + e.getY());
+	}
+
+	// Weird auto-generated things that the program needs to compile but are
+	// absolutely useless.
+
+	public void actionPerformed(ActionEvent arg0) {
+	}
+
+	public void mouseClicked(MouseEvent arg0) {
+	}
+
+	public void mouseEntered(MouseEvent arg0) {
+	}
+
+	public void mouseExited(MouseEvent arg0) {
+	}
+
+	public void mouseReleased(MouseEvent arg0) {
 	}
 
 	/**
@@ -96,4 +170,5 @@ public class DungeonGame {
 	public static void main(String[] args) {
 		new DungeonGame();
 	}
+
 }
