@@ -21,30 +21,52 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.Timer;
-
+/**
+ * 
+ * @author Reed White
+ */
 public class DungeonPlayer {
 	
+	/* The maximum movement distance for the player */
 	private static final int MAXMOVEMENT = 3;
+	/* The amount of damage done to an enemy by the player */
 	private static final int PLAYERDAMAGE = 5;
+	/* The health of the player */
 	private int playerHealth = 10;
+	/* The x-coordinate of the player */
 	private int playerX;
+	/* The y-coordinate of the player */
 	private int playerY;
+	/* The new position of the player */
 	private Point newPosition;
+	/* The current position of the player */
 	private Point currentPosition;
+	/* The avatar of the player */
 	private Image playerAvatar;
+	/* The JFrame that the game is running in */
 	private JFrame homeFrame;
-	
+
+	/**
+	 * Constructs a DungeonPlayer object
+	 * @param playerJFrame The JFrame that the game is displayed in
+	 */
 	public DungeonPlayer(JFrame playerJFrame) {
 		homeFrame = playerJFrame;
 		newPosition = new Point(playerX, playerY);
 		
 		homeFrame.addMouseMotionListener(new MouseMotionAdapter() {
+	        /*
+	         * Updates the new position of the player based on mouse movement
+	         */
 	        public void mouseMoved(MouseEvent e) {
 	        	newPosition = new Point(e.getX(), e.getY());
 	        }
 	    });
 		
 		ActionListener movementPerSecond = new ActionListener() {
+			/*
+			 * Moves the player a maximum distance of MAXMOVEMENT each second
+			 */
 			public void actionPerformed(ActionEvent e) {
 				 currentPosition = new Point(playerX, playerY);
 
@@ -73,8 +95,13 @@ public class DungeonPlayer {
 	    	System.out.println("src/Game/playerSprite.png not found resulted in failure");
 	    }
 	}
-	
-	private void getLocal(int x, int y) {
+
+	/**
+	 * Calculates the index of the player's current location within the game grid
+	 * @param x The x-coordinate of the player
+	 * @param y The y-coordinate of the player
+	 */
+	public void getGridLocation(int x, int y) {
     	int numberOfBoxes = 20;
     	int boxLength = homeFrame.getWidth()/numberOfBoxes;
     	int xIndex = x/boxLength;
@@ -82,17 +109,28 @@ public class DungeonPlayer {
     	System.out.println("The player is in Column: "+ xIndex + " Row: " + yIndex);
     }
 	
-	
+	/**
+	 * Gets the x-coordinate of the player's position.
+	 * @return the x-coordinate of the player's position
+	 */
 	public int getX() {
 		return playerX;
 	}
 	
+	/**
+	 * Gets the y-coordinate of the player's position.
+	 * @return the y-coordinate of the player's position
+	 */
 	public int getY() {
 		return playerY;
 	}
 	
+	/*
+	 * Draws the player's image on screen
+	 */
 	public void drawPlayer() {
 		// This code is adapted from an online example to fix image flicker.
+		// FIND SRC
 		
 		// Create an off-screen image buffer
 	    Image offScreenImage = homeFrame.createImage(homeFrame.getWidth(), homeFrame.getHeight());
@@ -108,8 +146,15 @@ public class DungeonPlayer {
 	    homeFrame.getGraphics().drawImage(offScreenImage, 0, 0, null);
 	}
 	
-	public static void rotateRectangle(Point[] rectangle, Point pivot, double angle) {
+	/**
+	 * Rotates a rectangle around a pivot point by a given angle.
+	 * @param rectangle   an array of four points representing the corners of the rectangle
+	 * @param pivot   the point around which to rotate the rectangle
+	 * @param angle   the angle in radians by which to rotate the rectangle
+	 */
+	public void rotateRectangle(Point[] rectangle, Point pivot, double angle) {
 		// WARNING: CHAT GPT CODE PLZ USE CAREFULLY
+		// add context
 	    double cos = Math.cos(angle);
 	    double sin = Math.sin(angle);
 	    for (Point p : rectangle) {
@@ -120,6 +165,15 @@ public class DungeonPlayer {
 	    }
 	}
 	
+	/**
+	* This method executes an attack action from the player towards the given point.
+	* The attack is executed by creating a rectangle projecting from the player towards
+	* the given point and checking whether a passed in point exists within this rectangle.
+	* If an intersection is found, the game object will receive {@link DungeonPlayer.PLAYERDAMAGE} points of damage.
+	*
+	* @param point   the point towards which the player should execute the attack
+	* @return true if an attack was executed, false otherwise
+	*/
 	public boolean attack(Point point) {
 	    // Get the direction from the player to the mouse
 	    double deltaX = newPosition.getX() - playerX;
