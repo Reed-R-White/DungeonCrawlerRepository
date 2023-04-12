@@ -23,6 +23,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.Timer;
+
 /**
  * 
  * @author Reed White
@@ -30,7 +31,7 @@ import javax.swing.Timer;
 public class DungeonPlayer {
 	
 	/* The maximum movement distance for the player */
-	private static final int MAXMOVEMENT = 3;
+	public static final int MAXMOVEMENT = 3;
 	/* The amount of damage done to an enemy by the player */
 	private static final int PLAYERDAMAGE = 5;
 	/* The health of the player */
@@ -43,6 +44,7 @@ public class DungeonPlayer {
 	private Point newPosition;
 	/* The current position of the player */
 	private Point currentPosition;
+	
 	private JLabel playerAvatar;
 	private JFrame homeFrame;
 	
@@ -54,6 +56,26 @@ public class DungeonPlayer {
 		homeFrame = playerJFrame;
 		playerX = playerJFrame.getWidth()/2;
 		playerY = playerJFrame.getHeight()/2;
+		
+		newPosition = new Point(playerX, playerY);
+		
+		homeFrame.addMouseMotionListener(new MouseMotionAdapter() {
+	        /*
+	         * Updates the new position of the player based on mouse movement
+	         */
+	        public void mouseMoved(MouseEvent e) {
+	        	newPosition = new Point(e.getX(), e.getY());
+	        }
+	    });
+		
+		ActionListener movementPerSecond = new ActionListener() {
+			/*
+			 * Moves the player a maximum distance of MAXMOVEMENT each second
+			 */
+			public void actionPerformed(ActionEvent e) {
+				currentPosition = new Point(playerX, playerY);
+			};
+		};
 
 		newPosition = new Point(playerX, playerY);
 
