@@ -31,9 +31,9 @@ import javax.swing.Timer;
 public class DungeonPlayer {
 	
 	/* The maximum movement distance for the player */
-	public static final int MAXMOVEMENT = 3;
+	public int MAXMOVEMENT = 3;
 	/* The amount of damage done to an enemy by the player */
-	private static final int PLAYERDAMAGE = 5;
+	private int PLAYERDAMAGE = 5;
 	/* The health of the player */
 	private int playerHealth = 10;
 	/* The x-coordinate of the player */
@@ -64,7 +64,7 @@ public class DungeonPlayer {
 	         * Updates the new position of the player based on mouse movement
 	         */
 	        public void mouseMoved(MouseEvent e) {
-	        	newPosition = new Point(e.getX(), e.getY());
+	        	setNewTarget(new Point(e.getX(), e.getY()));
 	        }
 	    });
 		
@@ -76,15 +76,16 @@ public class DungeonPlayer {
 				currentPosition = new Point(playerX, playerY);
 			};
 		};
-
-		newPosition = new Point(playerX, playerY);
+		Timer timer = new Timer(10, movementPerSecond);
+		timer.start();
 
 		
 		//Draw the player for the first time
 		playerAvatar = new JLabel();
 		ImageIcon playerSprite = new ImageIcon("src/Game/playerSprite.png");
-		playerAvatar.setIcon(playerSprite);
-		playerAvatar.setBounds(playerX, playerY, 50, 50);
+		ImageIcon playerIdle = new ImageIcon("src/Game/playerIdle.png");
+		playerAvatar.setIcon(playerIdle);
+		playerAvatar.setBounds(playerX, playerY, 32, 32);
 		playerAvatar.setVisible(true);
 		playerJFrame.add(playerAvatar);
 	    
@@ -150,13 +151,21 @@ public class DungeonPlayer {
 	public int getY(){
 		return playerY;
 	}
+	
+	public int getHealth() {
+		return playerHealth;
+	}
+	
+	public void takeDamage(int damageAmount) {
+		playerHealth -= damageAmount;
+	}
 
 	/**
 	 * Redraw the player at the current player X and Y.
 	 */
 	public void drawPlayer() {
 
-		playerAvatar.setBounds(playerX-5, playerY-5, 50, 50);
+		playerAvatar.setBounds(playerX-25, playerY-45, 32, 32);
 		homeFrame.repaint();
 	}
 	
@@ -192,15 +201,10 @@ public class DungeonPlayer {
 	    // Get the direction from the player to the mouse
 	    double deltaX = newPosition.getX() - playerX;
 	    double deltaY = newPosition.getY() - playerY;
-	    double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-
-	    // Calculate the unit vector in the direction of the mouse
-	    double unitX = deltaX / distance;
-	    double unitY = deltaY / distance;
 
 	    // Calculate the rectangle emanating from the player in the direction of the mouse
-	    double rectWidth = 100;
-	    double rectHeight = 50;
+	    double rectWidth = 90;
+	    double rectHeight = 10;
 	    double rectX = playerX;
 	    double rectY = playerY - rectHeight / 2.0;
 
@@ -223,6 +227,66 @@ public class DungeonPlayer {
 	    
 	    Graphics2D g2d = (Graphics2D) g;
 	    g2d.draw(hitbox);
+	    return hitbox.contains(point);
+	    // Check if the point is in the rectangle
+	}
+	
+	public boolean sweepAttack(Point point) {
+		double ROTATIONCONSTANT = 0.25;
+		
+		Graphics g = homeFrame.getGraphics();
+	    Graphics2D g2d = (Graphics2D) g;
+		
+	    // Get the direction from the player to the mouse
+	    
+	    double deltaX = newPosition.getX() - playerX;
+	    double deltaY = newPosition.getY() - playerY;
+	    
+	    int rotationPointAdjustmentX = 3*Integer.signum((int) deltaX);
+	    int rotationPointAdjustmentY = 3*Integer.signum((int) deltaY);
+	    Point sweepRotationPoint = new Point((playerX + rotationPointAdjustmentX), (playerY + rotationPointAdjustmentY));
+
+	    // Calculate the rectangle emanating from the player in the direction of the mouse
+	    double rectWidth = 15;
+	    double rectHeight = 15;
+	    double rectX = playerX- 30;
+	    double rectY = (playerY- 30 - rectHeight / 2.0);
+
+	    // Rotate the rectangle to match the angle of the mouse in relation to the player
+	    double angle = Math.atan2(deltaY, deltaX);
+	    
+	    
+	    Point bottomLeft = new Point((int) rectX, (int) rectY);
+	    Point topLeft = new Point((int) rectX, (int) (rectY + rectHeight));
+	    Point bottomRight = new Point((int) (rectX + rectWidth), (int) rectY);
+	    Point topRight = new Point((int) (rectX + rectWidth), (int) (rectY + rectHeight));
+	    Point[] recPoints = new Point[] {bottomLeft, topLeft, bottomRight, topRight};
+	    rotateRectangle(recPoints,sweepRotationPoint, (angle+ROTATIONCONSTANT*5));
+	    
+	    int[] xCords = new int[] {(int) bottomLeft.getX(), (int) topLeft.getX(), (int) topRight.getX(), (int) bottomRight.getX()}; 
+	    int[] yCords = new int[] {(int) bottomLeft.getY(), (int) topLeft.getY(), (int) topRight.getY(), (int) bottomRight.getY()};
+	    
+	    Polygon hitbox = new Polygon(xCords, yCords, 4);
+	    if (hitbox.contains(point)) {
+	    	return true;
+	    }
+	    
+	    g2d.draw(hitbox);
+	    
+	    for (int i = 0; i < 5; i++) {
+	    	rotateRectangle(recPoints, sweepRotationPoint, ROTATIONCONSTANT);
+		    
+		    xCords = new int[] {(int) bottomLeft.getX(), (int) topLeft.getX(), (int) topRight.getX(), (int) bottomRight.getX()}; 
+		    yCords = new int[] {(int) bottomLeft.getY(), (int) topLeft.getY(), (int) topRight.getY(), (int) bottomRight.getY()};
+		    
+		    hitbox = new Polygon(xCords, yCords, 4);
+		    if (hitbox.contains(point)) {
+		    	return true;
+		    }
+		    
+		    g2d.draw(hitbox);
+	    }
+	    
 	    return hitbox.contains(point);
 	    // Check if the point is in the rectangle
 	}

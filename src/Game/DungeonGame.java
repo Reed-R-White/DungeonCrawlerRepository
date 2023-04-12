@@ -12,6 +12,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
+import java.awt.Cursor;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -28,6 +30,10 @@ public class DungeonGame implements ActionListener, MouseListener {
     
     private DungeonPlayer player1;
     private Point currentPosition;
+    
+    private int boostTimer = 0;
+    private int boostCoolDown = 0;
+    
     private double dx,dy,distance;
 
     public DungeonGame() {
@@ -40,7 +46,10 @@ public class DungeonGame implements ActionListener, MouseListener {
         player1 = new DungeonPlayer(gameWindow);
         EnemyPlayer test = new EnemyPlayer(gameWindow, 10, 10, 10, 10, player1);
         
+        gameWindow.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
+        
         gameWindow.addKeyListener(new KeyListener() {
+        	//Simple print statements here need to be replaced by enemy hit logic
 		    public void keyPressed(KeyEvent e) {
 		        if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 		        	if(player1.attack(new Point((int) test.getX(), (int) test.getY()))) {
@@ -50,6 +59,22 @@ public class DungeonGame implements ActionListener, MouseListener {
 		            	System.out.println("miss");
 		            }
 		        }
+		        
+		        if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
+		        	if(player1.sweepAttack(new Point((int) test.getX(), (int) test.getY()))) {
+		            	System.out.println("hit");
+		            }
+		            else {
+		            	System.out.println("miss");
+		            }
+		        }
+		        
+		        else if (e.getKeyCode() == KeyEvent.VK_W) {
+		        	if (boostCoolDown <= 0) {
+		        		boostTimer = 30;
+		        	}
+		        }
+		        
 		    }
 		    
 			@Override
@@ -75,6 +100,21 @@ public class DungeonGame implements ActionListener, MouseListener {
         Timer timer = new Timer(10, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
+            	if (player1.getHealth() <= 0) {
+            		gameWindow.dispatchEvent(new WindowEvent(gameWindow, WindowEvent.WINDOW_CLOSING));
+            	}
+            	
+            	if (boostTimer > 0) {
+            		boostTimer -= 1;
+            		player1.MAXMOVEMENT = 6;
+            		boostCoolDown = 300;
+            	}
+            	else if (boostTimer <= 0) {
+            		player1.MAXMOVEMENT = 3;
+            		if (boostCoolDown > 0) {
+            			boostCoolDown -= 1;
+            		}
+            	}
                 
                 currentPosition.setLocation(player1.getX(), player1.getY());;
 
@@ -83,8 +123,8 @@ public class DungeonGame implements ActionListener, MouseListener {
 
 	            if (distance > 5) {
                     // calculate the amount to move in each direction based on MAXMOVEMENT
-                    dx = DungeonPlayer.MAXMOVEMENT * (player1.getNewTarget().getX() - currentPosition.getX()) / distance;
-                    dy = DungeonPlayer.MAXMOVEMENT * (player1.getNewTarget().getY() - currentPosition.getY()) / distance;
+                    dx = player1.MAXMOVEMENT * (player1.getNewTarget().getX() - currentPosition.getX()) / distance;
+                    dy = player1.MAXMOVEMENT * (player1.getNewTarget().getY() - currentPosition.getY()) / distance;
                     // marginally move the player by the x and y.
                     
                     if(obstacleArr[0].checkCollision((float)(player1.getX()+dx), (float)(player1.getY()+dy))==false){
