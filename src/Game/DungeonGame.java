@@ -23,6 +23,7 @@ public class DungeonGame implements ActionListener, MouseListener {
     
     //private static final long serialVersionUID = 1L;
     private static final int GAMEWINDOWSIZE = 600;
+    private static final int ATTACKCOOLDOWN = 20;
     public Obstacle[] obstacleArr = new Obstacle[20];
     public static final int gridWidth = 20;
 
@@ -33,6 +34,7 @@ public class DungeonGame implements ActionListener, MouseListener {
     
     private int boostTimer = 0;
     private int boostCoolDown = 0;
+    private int attackTimer = 0;
     
     private double dx,dy,distance;
 
@@ -52,26 +54,32 @@ public class DungeonGame implements ActionListener, MouseListener {
         	//Simple print statements here need to be replaced by enemy hit logic
 		    public void keyPressed(KeyEvent e) {
 		        if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-		        	if(player1.attack(new Point((int) test.getX(), (int) test.getY()))) {
-		            	System.out.println("hit");
-		            }
-		            else {
-		            	System.out.println("miss");
-		            }
+		        	if (attackTimer <= 0) {
+		        		attackTimer = ATTACKCOOLDOWN;
+			        	if(player1.attack(new Point((int) test.getX(), (int) test.getY()))) {
+			            	System.out.println("hit");
+			            }
+			            else {
+			            	System.out.println("miss");
+			            }
+		        	}
 		        }
 		        
 		        if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
-		        	if(player1.sweepAttack(new Point((int) test.getX(), (int) test.getY()))) {
-		            	System.out.println("hit");
-		            }
-		            else {
-		            	System.out.println("miss");
-		            }
+		        	if (attackTimer <= 0) {
+		        		attackTimer = ATTACKCOOLDOWN;
+			        	if(player1.sweepAttack(new Point((int) test.getX(), (int) test.getY()))) {
+			            	System.out.println("hit");
+			            }
+			            else {
+			            	System.out.println("miss");
+			            }
+		        	}
 		        }
 		        
 		        else if (e.getKeyCode() == KeyEvent.VK_W) {
 		        	if (boostCoolDown <= 0) {
-		        		boostTimer = 30;
+		        		boostTimer = 10;
 		        	}
 		        }
 		        
@@ -107,13 +115,17 @@ public class DungeonGame implements ActionListener, MouseListener {
             	if (boostTimer > 0) {
             		boostTimer -= 1;
             		player1.MAXMOVEMENT = 6;
-            		boostCoolDown = 300;
+            		boostCoolDown = 100;
             	}
             	else if (boostTimer <= 0) {
             		player1.MAXMOVEMENT = 3;
             		if (boostCoolDown > 0) {
             			boostCoolDown -= 1;
             		}
+            	}
+            	
+            	if (attackTimer > 0) {
+            		attackTimer -= 1;
             	}
                 
                 currentPosition.setLocation(player1.getX(), player1.getY());;
