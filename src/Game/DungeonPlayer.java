@@ -25,22 +25,22 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.Timer;
 
+
+
 /**
- * A player object, with coordinates, movement capabilities, and a CheckLocal
- * function.
+ * A player object, with coordinates, movement capabilities, and a CheckLocal function.
  */
 public class DungeonPlayer {
-
+	
 	public static final int MAXMOVEMENT = 7;
-	public int playerX;
-	public int playerY;
-	public int health;
-
+	private int playerX;
+	private int playerY;
 	private Point newPosition;
 	private Point currentPosition;
 	private JLabel playerAvatar;
 	private JFrame homeFrame;
 	private int invincibilityCounter;
+	private int health;
 
 	/**
 	 * <<<<<<< HEAD Constructor for the DungeonPlayer class.
@@ -54,6 +54,15 @@ public class DungeonPlayer {
 		newPosition = new Point(playerX, playerY);
 		health = 100;
 		invincibilityCounter = 0;
+
+		//Draw the player for the first time
+		playerAvatar = new JLabel();
+		ImageIcon playerSprite = new ImageIcon("src/Game/playerSprite.png");
+		playerAvatar.setIcon(playerSprite);
+		playerAvatar.setBounds(playerX, playerY, 50, 50);
+		playerAvatar.setVisible(true);
+		playerJFrame.add(playerAvatar);
+
 
 		// Add a MouseMotionListener to the homeFrame to track the player's movement
 		homeFrame.addMouseMotionListener(new MouseMotionAdapter() {
@@ -87,29 +96,30 @@ public class DungeonPlayer {
 		Timer timer = new Timer(10, movementPerSecond);
 		timer.start();
 
-		// Load the player's avatar from a file
-		//playerAvatar = ImageIO.read(new File("src/Game/playerSprite.png"));
-		playerAvatar = new JLabel();
-		ImageIcon playerSprite = new ImageIcon("src/Game/playerSprite.png");
-		playerAvatar.setIcon(playerSprite);
-		playerAvatar.setBounds(playerX, playerY, 50, 50);
-		playerAvatar.setVisible(true);
-		playerJFrame.add(playerAvatar);
-	}
 
+
+
+
+	    
+	}
+	
 	/**
-	 * Calculates the player's position in the game grid.
-	 *
-	 * @param x the x-coordinate of the player's position
-	 * @param y the y-coordinate of the player's position
+	 * Check which row and column a specified point is in.
+	 * @param x 
+	 * @param y
 	 */
 	private void getLocal(int x, int y) {
-		int numberOfBoxes = 20;
-		int boxLength = homeFrame.getWidth() / numberOfBoxes;
-		int xIndex = x / boxLength;
-		int yIndex = y / boxLength;
-		System.out.println("The player is in Column: " + xIndex + " Row: " + yIndex);
-	}
+    	//This variable is the number of columns.
+		int numberOfBoxes = DungeonGame.gridWidth;
+    	int boxLength = homeFrame.getWidth()/numberOfBoxes;
+    	int xIndex = x/boxLength;
+    	int yIndex = y/boxLength;
+    	System.out.println("The player is in Column: "+ xIndex + " Row: " + yIndex);
+    }
+
+	
+	
+	
 
 	/**
 	 * This method handles the user mouse movement event, which updates the player's
@@ -158,15 +168,7 @@ public class DungeonPlayer {
 	 * @param y
 	 */
 
-//	private void getLocal(int x, int y) {
-//    	//This variable is the number of columns.
-//		int numberOfBoxes = DungeonGame.gridWidth;
-//    	int boxLength = homeFrame.getWidth()/numberOfBoxes;
-//    	int xIndex = x/boxLength;
-//    	int yIndex = y/boxLength;
-//    	System.out.println("The player is in Column: "+ xIndex + " Row: " + yIndex);
-//   }
-// xxxx
+
 	/**
 	 * Move the player by a specified amount in both x and y
 	 * 
@@ -218,6 +220,11 @@ public class DungeonPlayer {
 	public int getY() {
 		return playerY;
 	}
+	
+	/**
+	 * Redraw the player at the current player X and Y.
+	 */
+	
 
 	/**
 	 * Redraw the player at the current player X and Y. >>>>>>> main
@@ -225,7 +232,7 @@ public class DungeonPlayer {
 	public void drawPlayer() {
 
 		playerAvatar.setBounds(playerX - 5, playerY - 5, 50, 50);
-		homeFrame.repaint();
+		//homeFrame.repaint();
 	}
 
 	/**
