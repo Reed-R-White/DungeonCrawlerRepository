@@ -8,6 +8,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowEvent;
 import java.awt.Cursor;
 
@@ -33,6 +35,7 @@ public class DungeonGame implements ActionListener, MouseListener {
     private int boostCoolDown = 0;
     
     private double dx,dy,distance;
+    boolean isColliding = false;
 
     public DungeonGame() {
         gameWindow = new JFrame("Dungeon Game");
@@ -42,7 +45,8 @@ public class DungeonGame implements ActionListener, MouseListener {
         gameWindow.setVisible(true);
         //Add the player
         player1 = new DungeonPlayer(gameWindow);
-        EnemyPlayer test = new EnemyPlayer(gameWindow, 10, 10, 10, 10, player1);
+        //Add the enemy
+        EnemyPlayer test = new EnemyPlayer(gameWindow, 300, 100, 10, 10, player1);
         
         gameWindow.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
         
@@ -137,13 +141,14 @@ public class DungeonGame implements ActionListener, MouseListener {
             	}
             	
             	if (boostTimer > 0) {
-            		boostTimer -= 1;
-            		player1.MAXMOVEMENT = 6;
-            		boostCoolDown = 300;
+            		boostTimer -= 1; //Count down the Boost timer
+            		player1.MAXMOVEMENT = 6; //Make the player speed faster
+            		boostCoolDown = 300; //Set the cooldown
             	}
             	else if (boostTimer <= 0) {
-            		player1.MAXMOVEMENT = 3;
-            		if (boostCoolDown > 0) {
+                    player1.MAXMOVEMENT = 3; //Return the player speed to normal.
+                    //Start the cooldown
+                    if (boostCoolDown > 0) {
             			boostCoolDown -= 1;
             		}
             	}
@@ -157,32 +162,48 @@ public class DungeonGame implements ActionListener, MouseListener {
                     // calculate the amount to move in each direction based on MAXMOVEMENT
                     dx = player1.MAXMOVEMENT * (player1.getNewTarget().getX() - currentPosition.getX()) / distance;
                     dy = player1.MAXMOVEMENT * (player1.getNewTarget().getY() - currentPosition.getY()) / distance;
-                    // marginally move the player by the x and y.
                     
                     // Check collision
-
-                    boolean isColliding = false;
+                    isColliding = false;
                     for(Obstacle obj : obstacleArr){
-                        if(obj.checkCollision((float)(player1.getX()+dx), (float)(player1.getY()+dy)) || obj.checkCollision((float)(player1.getX()+50+dx), (float)(player1.getY()+dy)) || obj.checkCollision((float)(player1.getX()+50+dx), (float)(player1.getY()+50+dy)) || obj.checkCollision((float)(player1.getX()+dx), (float)(player1.getY()+50+dy))){
+                        if(obj.checkCollision((float)(player1.getX()+dx), (float)(player1.getY()+dy)) || obj.checkCollision((float)(player1.getX()+player1.PLAYERSIZE+dx), (float)(player1.getY()+dy)) || obj.checkCollision((float)(player1.getX()+player1.PLAYERSIZE+dx), (float)(player1.getY()+player1.PLAYERSIZE+dy)) || obj.checkCollision((float)(player1.getX()+dx), (float)(player1.getY()+player1.PLAYERSIZE+dy))){
                             isColliding = true;
-                            System.out.println("Collision!");
+                            System.out.println("Collision at " + player1.getX() + ", " + player1.getY());
                             player1.setNewTarget(currentPosition);
                             break;
                         }
                     }
 
                     if(!isColliding){
-
                         // Marginally move the player by the x and y.
                         player1.movePlayer((int)dx,(int)dy);
                     }
                 }
+
+                test.move();
+                gameWindow.repaint();
             }
+
+            
         });
 
 	    timer.start();
 
-        gameWindow.addMouseListener(this);;
+        //gameWindow.addMouseListener(this);
+        gameWindow.addMouseMotionListener(new MouseMotionListener() {
+
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                player1.setNewTarget(new Point(e.getX(),e.getY()));
+            }
+
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                // TODO Auto-generated method stub
+                //throw new UnsupportedOperationException("Unimplemented method 'mouseDragged'");
+            }
+            
+        });
     }
 
 

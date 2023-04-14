@@ -8,7 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.Timer;
 
 public class EnemyPlayer extends Player {
@@ -18,7 +20,11 @@ public class EnemyPlayer extends Player {
 	private int health = 100;
 	private int movementIndex;
 	private boolean follow;
-	private DungeonPlayer  player;
+	private DungeonPlayer player;
+	private static double speed = .5;
+	private JLabel enemyAvatar;
+	private float posX, posY;
+
 
 	public EnemyPlayer(JFrame gameJFrame, float startingX, float startingY, float width, float height, DungeonPlayer player1) {
 		super(gameJFrame, startingX, startingY, width, height);
@@ -39,7 +45,8 @@ public class EnemyPlayer extends Player {
 		
 		follow = false;
 		color = Color.red;
-		speed = (float) 0.50;
+		posX = startingX;
+		posY = startingY;
 		player = player1;
 		
 		//NOte for later: go forwards or move into upper section
@@ -53,6 +60,15 @@ public class EnemyPlayer extends Player {
 
 		movementIndex = 0;
 
+		//Draw the Enemy for the first time
+		enemyAvatar = new JLabel();
+		ImageIcon enemyIcon = new ImageIcon("src/Game/playerSprite.png");
+		enemyAvatar.setIcon(enemyIcon);
+		enemyAvatar.setBounds((int) posX, (int) posY, 32, 32);
+		enemyAvatar.setVisible(true);
+		gameJFrame.add(enemyAvatar);
+
+		/* 
 		ActionListener movementPerSecond = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				follow = checkPlayer();
@@ -62,7 +78,7 @@ public class EnemyPlayer extends Player {
 	    };
 		
 	    Timer timer = new Timer(10, movementPerSecond);
-	    timer.start();
+	    timer.start();*/
 		
 	}
 	
@@ -79,26 +95,24 @@ public class EnemyPlayer extends Player {
 	}
 
 	public void move() {
+		follow = checkPlayer();
+		
 		if (follow) {
-			int playerX = player.getX();
-			int playerY = player.getY();
-			float deltaX = 0;
-			float deltaY = 0;
 
-			if (posX > playerX) {
+			if (posX > player.getX()) {
 				posX -= speed;
-				deltaX = -1;
-			} else if (posX < playerX) {
+				
+			} else if (posX < player.getX()) {
 				posX += speed;
-				deltaX = 1;
+	
 			}
 
-			if (posY > playerY) {
+			if (posY > player.getY()) {
 				posY -= speed;
-				deltaY = -1;
-			} else if (posY < playerY) {
+	
+			} else if (posY < player.getY()) {
 				posY += speed;
-				deltaY = 1;
+
 			}
 
 		} else {
@@ -112,9 +126,15 @@ public class EnemyPlayer extends Player {
 			movementIndex += 1;
 		}
 
+		drawEnemy();
+
 	}
 
 	private boolean checkPlayer() {
 		return Math.sqrt(Math.pow(posX - player.getX(), 2) + Math.pow(posY - player.getY(), 2)) <= PLAYER_FOLLOW_DISTANCE;
+	}
+
+	private void drawEnemy(){
+		enemyAvatar.setBounds((int) posX, (int) posY, 32, 32);
 	}
 }
