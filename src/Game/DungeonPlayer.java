@@ -2,27 +2,11 @@ package Game;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Polygon;
-import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
-import java.awt.geom.Rectangle2D;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.Timer;
 
 /**
  * 
@@ -44,6 +28,7 @@ public class DungeonPlayer {
 	private Point newPosition;
 	/* The current position of the player */
 	private Point currentPosition;
+	public int PLAYERSIZE = 30;
 	
 	private JLabel playerAvatar;
 	private JFrame homeFrame;
@@ -59,52 +44,17 @@ public class DungeonPlayer {
 		
 		newPosition = new Point(playerX, playerY);
 		
-		homeFrame.addMouseMotionListener(new MouseMotionAdapter() {
-	        /*
-	         * Updates the new position of the player based on mouse movement
-	         */
-	        public void mouseMoved(MouseEvent e) {
-	        	setNewTarget(new Point(e.getX(), e.getY()));
-	        }
-	    });
-		
-		ActionListener movementPerSecond = new ActionListener() {
-			/*
-			 * Moves the player a maximum distance of MAXMOVEMENT each second
-			 */
-			public void actionPerformed(ActionEvent e) {
-				currentPosition = new Point(playerX, playerY);
-			};
-		};
-		Timer timer = new Timer(10, movementPerSecond);
-		timer.start();
-
-		
 		//Draw the player for the first time
 		playerAvatar = new JLabel();
-		ImageIcon playerSprite = new ImageIcon("src/Game/playerSprite.png");
+		//ImageIcon playerSprite = new ImageIcon("src/Game/playerSprite.png");
 		ImageIcon playerIdle = new ImageIcon("src/Game/playerIdle.png");
 		playerAvatar.setIcon(playerIdle);
-		playerAvatar.setBounds(playerX, playerY, 32, 32);
+		playerAvatar.setBounds(playerX, playerY, PLAYERSIZE, PLAYERSIZE);
 		playerAvatar.setVisible(true);
 		playerJFrame.add(playerAvatar);
 	    
 	}
 	
-	/**
-	 * Check which row and column a specified point is in.
-	 * @param x 
-	 * @param y
-	 */
-	private void getLocal(int x, int y) {
-    	//This variable is the number of columns.
-		int numberOfBoxes = DungeonGame.gridWidth;
-    	int boxLength = homeFrame.getWidth()/numberOfBoxes;
-    	int xIndex = x/boxLength;
-    	int yIndex = y/boxLength;
-    	System.out.println("The player is in Column: "+ xIndex + " Row: " + yIndex);
-    }
-
 	/**
 	 * Move the player by a specified amount in both x and y
 	 * @param dx The movement along the x axis
@@ -164,8 +114,7 @@ public class DungeonPlayer {
 	 * Redraw the player at the current player X and Y.
 	 */
 	public void drawPlayer() {
-
-		playerAvatar.setBounds(playerX-25, playerY-45, 32, 32);
+		playerAvatar.setBounds(playerX, playerY, PLAYERSIZE, PLAYERSIZE);
 		homeFrame.repaint();
 	}
 	
@@ -223,7 +172,6 @@ public class DungeonPlayer {
 	    int[] yCords = new int[] {(int) bottomLeft.getY(), (int) topLeft.getY(), (int) topRight.getY(), (int) bottomRight.getY()};
 	    
 	    Polygon hitbox = new Polygon(xCords, yCords, 4);
-	    
 	    
 	    Graphics2D g2d = (Graphics2D) g;
 	    g2d.draw(hitbox);
