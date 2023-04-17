@@ -194,7 +194,7 @@ public class DungeonGame implements ActionListener, MouseListener {
 
             @Override
             public void mouseMoved(MouseEvent e) {
-                player1.setNewTarget(new Point(e.getX(),e.getY()));
+                player1.setNewTarget(new Point(e.getX()-20,e.getY()-40));
             }
 
             @Override
