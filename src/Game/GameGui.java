@@ -68,7 +68,7 @@ public class GameGui extends JFrame {
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
 		panel.add(buttonPanel, BorderLayout.CENTER);
 		buttonPanel.add(play);
-		play.setPreferredSize(new Dimension(500, 500));
+		play.setPreferredSize(new Dimension(50, 50));
 		buttonPanel.add(Box.createRigidArea(new Dimension(0, 20)));
 		buttonPanel.setBackground(Color.decode("#B2AC88"));
 		play.setAlignmentX(JComponent.CENTER_ALIGNMENT);
