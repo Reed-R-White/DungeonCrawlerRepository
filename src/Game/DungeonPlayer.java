@@ -1,5 +1,8 @@
 package Game;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -17,7 +20,7 @@ public class DungeonPlayer {
 	/* The maximum movement distance for the player */
 	public int MAXMOVEMENT = 3;
 	/* The amount of damage done to an enemy by the player */
-	private int PLAYERDAMAGE = 5;
+	private int playerDamage;
 	/* The health of the player */
 	private int playerHealth = 10;
 	/* The x-coordinate of the player */
@@ -27,8 +30,10 @@ public class DungeonPlayer {
 	/* The new position of the player */
 	private Point newPosition;
 	/* The current position of the player */
-	private Point currentPosition;
-	public int PLAYERSIZE = 30;
+	public int PLAYERSIZE = 32;
+	
+	private int xMouseOffsetToContentPaneFromJFrame;
+	private int yMouseOffsetToContentPaneFromJFrame;
 	
 	private JLabel playerAvatar;
 	private JFrame homeFrame;
@@ -42,17 +47,29 @@ public class DungeonPlayer {
 		playerX = playerJFrame.getWidth()/2;
 		playerY = playerJFrame.getHeight()/2;
 		
+		playerDamage = 10;
+		
 		newPosition = new Point(playerX, playerY);
 		
 		//Draw the player for the first time
 		playerAvatar = new JLabel();
 		//ImageIcon playerSprite = new ImageIcon("src/Game/playerSprite.png");
 		ImageIcon playerIdle = new ImageIcon("src/Game/playerIdle.png");
+		ImageIcon playerOld = new ImageIcon("src/Game/playerSprite.png");
 		playerAvatar.setIcon(playerIdle);
 		playerAvatar.setBounds(playerX, playerY, PLAYERSIZE, PLAYERSIZE);
 		playerAvatar.setVisible(true);
 		playerJFrame.add(playerAvatar);
 	    
+		Container gameContentPane = homeFrame.getContentPane();
+
+        // Event mouse position is given relative to JFrame, where
+        // dolphin's image in JLabel is given relative to ContentPane,
+        // so adjust for the border ( / 2  since border is on either side)
+        int borderWidth = (homeFrame.getWidth() - gameContentPane.getWidth()) / 2;
+        // assume side border = bottom border; ignore title bar
+        xMouseOffsetToContentPaneFromJFrame = borderWidth;
+        yMouseOffsetToContentPaneFromJFrame = homeFrame.getHeight() - gameContentPane.getHeight() - borderWidth;
 	}
 	
 	/**
@@ -104,6 +121,10 @@ public class DungeonPlayer {
 	
 	public int getHealth() {
 		return playerHealth;
+	}
+	
+	public int getDamage() {
+		return playerDamage;
 	}
 	
 	public void takeDamage(int damageAmount) {
@@ -171,8 +192,18 @@ public class DungeonPlayer {
 	    int[] xCords = new int[] {(int) bottomLeft.getX(), (int) topLeft.getX(), (int) topRight.getX(), (int) bottomRight.getX()}; 
 	    int[] yCords = new int[] {(int) bottomLeft.getY(), (int) topLeft.getY(), (int) topRight.getY(), (int) bottomRight.getY()};
 	    
-	    Polygon hitbox = new Polygon(xCords, yCords, 4);
+	    for (int i = 0; i < xCords.length; i++) {
+	    	xCords[i] += xMouseOffsetToContentPaneFromJFrame + PLAYERSIZE/2;
+	    }
 	    
+	    for (int i = 0; i < yCords.length; i++) {
+	    	yCords[i] += yMouseOffsetToContentPaneFromJFrame + PLAYERSIZE/2;
+	    }
+	    
+	    
+	    
+	    Polygon hitbox = new Polygon(xCords, yCords, 4);
+	    System.out.println("///attacking from player X:"+ playerX + " Y: "+playerY+ " \n /// Rectangle at X:"+rectX+" Y: "+rectY);
 	    Graphics2D g2d = (Graphics2D) g;
 	    g2d.draw(hitbox);
 	    return hitbox.contains(point);
@@ -192,6 +223,7 @@ public class DungeonPlayer {
 	    
 	    int rotationPointAdjustmentX = 3*Integer.signum((int) deltaX);
 	    int rotationPointAdjustmentY = 3*Integer.signum((int) deltaY);
+	    
 	    Point sweepRotationPoint = new Point((playerX + rotationPointAdjustmentX), (playerY + rotationPointAdjustmentY));
 
 	    // Calculate the rectangle emanating from the player in the direction of the mouse
@@ -204,6 +236,7 @@ public class DungeonPlayer {
 	    double angle = Math.atan2(deltaY, deltaX);
 	    
 	    
+	    
 	    Point bottomLeft = new Point((int) rectX, (int) rectY);
 	    Point topLeft = new Point((int) rectX, (int) (rectY + rectHeight));
 	    Point bottomRight = new Point((int) (rectX + rectWidth), (int) rectY);
@@ -213,6 +246,14 @@ public class DungeonPlayer {
 	    
 	    int[] xCords = new int[] {(int) bottomLeft.getX(), (int) topLeft.getX(), (int) topRight.getX(), (int) bottomRight.getX()}; 
 	    int[] yCords = new int[] {(int) bottomLeft.getY(), (int) topLeft.getY(), (int) topRight.getY(), (int) bottomRight.getY()};
+	    
+	    for (int i = 0; i < xCords.length; i++) {
+	    	xCords[i] += xMouseOffsetToContentPaneFromJFrame + PLAYERSIZE/2;
+	    }
+	    
+	    for (int i = 0; i < yCords.length; i++) {
+	    	yCords[i] += yMouseOffsetToContentPaneFromJFrame + PLAYERSIZE/2;
+	    }
 	    
 	    Polygon hitbox = new Polygon(xCords, yCords, 4);
 	    if (hitbox.contains(point)) {
@@ -226,6 +267,14 @@ public class DungeonPlayer {
 		    
 		    xCords = new int[] {(int) bottomLeft.getX(), (int) topLeft.getX(), (int) topRight.getX(), (int) bottomRight.getX()}; 
 		    yCords = new int[] {(int) bottomLeft.getY(), (int) topLeft.getY(), (int) topRight.getY(), (int) bottomRight.getY()};
+		    
+		    for (int n = 0; n < xCords.length; n++) {
+		    	xCords[n] += xMouseOffsetToContentPaneFromJFrame + PLAYERSIZE/2;
+		    }
+		    
+		    for (int n = 0; n < yCords.length; n++) {
+		    	yCords[n] += yMouseOffsetToContentPaneFromJFrame + PLAYERSIZE/2;
+		    }
 		    
 		    hitbox = new Polygon(xCords, yCords, 4);
 		    if (hitbox.contains(point)) {

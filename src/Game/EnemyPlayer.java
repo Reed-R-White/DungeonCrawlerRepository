@@ -93,6 +93,14 @@ public class EnemyPlayer extends Player {
 	public float getY() {
 		return posY;
 	}
+	
+	public int getHealth() {
+		return health;
+	}
+	
+	public JLabel getJLabel() {
+		return enemyAvatar;
+	}
 
 	public void move() {
 		follow = checkPlayer();
@@ -135,6 +143,7 @@ public class EnemyPlayer extends Player {
 	}
 
 	private void drawEnemy(){
-		enemyAvatar.setBounds((int) posX, (int) posY, 32, 32);
+		//manual x and y adjustment reflects the window border values from other classes
+		enemyAvatar.setBounds((int) posX - 8, (int) posY - 31, 32, 32);
 	}
 }
