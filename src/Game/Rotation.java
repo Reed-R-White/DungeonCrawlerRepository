@@ -5,7 +5,11 @@ package Game;
         POINTING_TOP_RIGHT,
         POINTING_BOTTOM_LEFT,
         POINTING_BOTTOM_RIGHT,
-        HORIZONTAL,
-        VERTICAL;
+        T_HORIZONTAL,
+        B_HORIZONTAL,
+        SINGLE,
+        L_VERTICAL,
+    	R_VERTICAL;
+    	
     }
 

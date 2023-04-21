@@ -38,7 +38,7 @@ public class EnemyPlayer extends Player {
 	private int attack;
 	JFrame homeFrame;
 	Obstacle[] obstacleArr;
-	private int enemyhealth;
+	private int enemyHealth;
 
 	private final static int PLAYER_FOLLOW_DISTANCE = 200;
 
@@ -56,7 +56,7 @@ public class EnemyPlayer extends Player {
 	 * @param movementPatternY The Y values of the movement pattern of the enemy.
 	 */
 	public EnemyPlayer(JFrame gameJFrame, float startingX, float startingY, float width, float height,
-			ArrayList<Integer> movementPatternX, ArrayList<Integer> movementPatternY, int enemyhealth, int attack,
+			ArrayList<Integer> movementPatternX, ArrayList<Integer> movementPatternY, int enemyHealth, int attack,
 			DungeonPlayer player, Obstacle[] obstacleArr) {
 		super(gameJFrame, startingX, startingY, width, height);
 		
@@ -71,8 +71,8 @@ public class EnemyPlayer extends Player {
 		this.player = player;
 		this.attack = attack;
 		this.obstacleArr = obstacleArr;
-		this.enemyhealth = enemyhealth;
-		this.healthBar = new JLabel("" + enemyhealth);
+		this.enemyHealth = enemyHealth;
+		this.healthBar = new JLabel("" + enemyHealth);
 
 		Random random = new Random();
 
@@ -118,8 +118,8 @@ public class EnemyPlayer extends Player {
 	}
 
 	public void takeDamage(int damageAmount) {
-		enemyhealth -= damageAmount;
-		if(enemyhealth <= 0) {
+		enemyHealth -= damageAmount;
+		if(enemyHealth <= 0) {
 			gameJFrame.remove(enemyAvatar);
 			gameJFrame.remove(healthBar);
 		}
@@ -132,6 +132,14 @@ public class EnemyPlayer extends Player {
 	public float getY() {
 		return posY;
 
+	}
+	
+	public int getEnemyHealth() {
+		return enemyHealth;
+	}
+	
+	public JLabel getJLabel() {
+		return enemyAvatar;
 	}
 
 	/**
@@ -243,7 +251,7 @@ public class EnemyPlayer extends Player {
 	}
 
 	public boolean isAlive() {
-		return enemyhealth > 0;
+		return enemyHealth > 0;
 	}
 
 	private boolean checkPlayer() {
@@ -253,7 +261,7 @@ public class EnemyPlayer extends Player {
 
 	public void drawEnemy() {
 		enemyAvatar.setBounds((int) posX, (int) posY, 32, 32);
-		healthBar.setText("" + enemyhealth);
+		healthBar.setText("" + enemyHealth);
 		healthBar.setBounds((int) posX + 10, (int) posY - 25, 32, 32);
 	}
 }
