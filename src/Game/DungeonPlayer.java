@@ -81,6 +81,8 @@ public class DungeonPlayer {
 
 		// Draw the player for the first time
 		playerAvatar = new JLabel();
+		ImageIcon playerSprite = new ImageIcon("src/Game/playerIdle.png");
+		playerAvatar.setIcon(playerSprite);
 		
 		
 		playerAvatar.setBounds(playerX, playerY, PLAYERSIZE, PLAYERSIZE);

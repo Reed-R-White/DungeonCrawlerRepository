@@ -56,7 +56,7 @@ public class EnemyPlayer extends Player {
 	 * @param movementPatternY The Y values of the movement pattern of the enemy.
 	 */
 	public EnemyPlayer(JFrame gameJFrame, float startingX, float startingY, float width, float height,
-			ArrayList<Integer> movementPatternX, ArrayList<Integer> movementPatternY, int enemyHealth, int attack,
+			int enemyHealth, int attack,
 			DungeonPlayer player, Obstacle[] obstacleArr) {
 		super(gameJFrame, startingX, startingY, width, height);
 		
@@ -65,14 +65,16 @@ public class EnemyPlayer extends Player {
 		color = Color.red;
 		speed = 0.5f;
 
-		this.movementPatternX = movementPatternX;
-		this.movementPatternY = movementPatternY;
+		
 		
 		this.player = player;
 		this.attack = attack;
 		this.obstacleArr = obstacleArr;
 		this.enemyHealth = enemyHealth;
 		this.healthBar = new JLabel("" + enemyHealth);
+		
+		movementPatternX = new ArrayList<Integer>();
+		movementPatternY = new ArrayList<Integer>();
 
 		Random random = new Random();
 
@@ -102,6 +104,9 @@ public class EnemyPlayer extends Player {
 		}
 
 		movementIndex = 0;
+		
+//		this.movementPatternX = movementPatternX;
+//		this.movementPatternY = movementPatternY;
 
 		// Draw the Enemy for the first time
 		enemyAvatar = new JLabel();
@@ -147,6 +152,7 @@ public class EnemyPlayer extends Player {
 	 * pattern otherwise.
 	 */
 	public void move() {
+		checkPlayer(player);
 
 		if (follow) {
 
@@ -203,6 +209,7 @@ public class EnemyPlayer extends Player {
 			// increment movement index
 			movementIndex += 1;
 		}
+		drawEnemy();
 	}
 	
 	/**
@@ -230,7 +237,7 @@ public class EnemyPlayer extends Player {
 		if (player.getX() >= posX && player.getX() <= posX + width && player.getY() >= posY
 				&& player.getY() <= posY + height && player.getInvincibility() == 0) {
 
-			player.enemyTakeDamage(attack);
+			player.takeDamage(attack);
 
 		}
 	}

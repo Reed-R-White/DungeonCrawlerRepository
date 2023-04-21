@@ -417,7 +417,8 @@ public class DungeonGame implements ActionListener, MouseListener {
                 	if(enemy.getEnemyHealth() >= 0) {
                 		levelOver = false;
                 		enemy.move();
-                		gameWindow.repaint();
+                		
+                		gameWindow.repaint();;
                 	}
                 }
                 
@@ -520,8 +521,7 @@ public class DungeonGame implements ActionListener, MouseListener {
 
 		}
 
-		EnemyPlayer enemy = new EnemyPlayer(gameWindow, startingX, startingY, 50, 50, movementPatternX,
-				movementPatternY, 100, 10, player1, obstacleArr);
+		EnemyPlayer enemy = new EnemyPlayer(gameWindow, startingX, startingY, 50, 50, 100, 10, player1, obstacleArr);
 		enemies.add(enemy);
 	}
 
