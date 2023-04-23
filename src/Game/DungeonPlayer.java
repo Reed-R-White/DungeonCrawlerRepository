@@ -59,7 +59,7 @@ public class DungeonPlayer {
 	private int invincibilityCounter;
 
 	/**
-	 * <<<<<<< HEAD Constructor for the DungeonPlayer class.
+	 * Constructor for the DungeonPlayer class.
 	 *
 	 * @param playerJFrame the JFrame containing the player
 	 */
