@@ -6,9 +6,6 @@
 
 package Game;
 
-import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -16,10 +13,9 @@ import java.util.Random;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.Timer;
+
 
 import java.awt.Color;
-
 import java.awt.Graphics;
 import java.awt.Image;
 import java.io.File;
@@ -72,7 +68,7 @@ public class EnemyPlayer extends Player {
 		this.attack = attack;
 		this.obstacleArr = obstacleArr;
 		this.enemyHealth = enemyHealth;
-		this.healthBar = new JLabel("" + enemyHealth);
+		
 		
 		movementPatternX = new ArrayList<Integer>();
 		movementPatternY = new ArrayList<Integer>();
@@ -94,7 +90,7 @@ public class EnemyPlayer extends Player {
 		posX = startingX;
 		posY = startingY;
 
-		// NOte for later: go forwards or move into upper section
+		// Note for later: go forwards or move into upper section
 
 		for (int i = movementPatternX.size() - 1; i >= 0; i--) {
 			movementPatternX.add(movementPatternX.get(i) * -1);
@@ -116,6 +112,7 @@ public class EnemyPlayer extends Player {
 		enemyAvatar.setBounds((int) posX, (int) posX, ENEMYSIZE, ENEMYSIZE);
 		enemyAvatar.setVisible(true);
 		gameJFrame.add(enemyAvatar);
+		healthBar = new JLabel("" + enemyHealth);
 		gameJFrame.add(healthBar);
 		
 		// Reverses the movement pattern so the enemy will move back and forth instead
@@ -125,6 +122,8 @@ public class EnemyPlayer extends Player {
 
 	public void takeDamage(int damageAmount) {
 		enemyHealth -= damageAmount;
+		healthBar.setText(""+enemyHealth);
+		gameJFrame.repaint();
 		if(enemyHealth <= 0) {
 			gameJFrame.remove(enemyAvatar);
 			gameJFrame.remove(healthBar);

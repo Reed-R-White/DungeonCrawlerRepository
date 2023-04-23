@@ -1,5 +1,7 @@
 package Game;
 
+import java.awt.Point;
+
 import javax.swing.JFrame;
 
 public class MapLayout {
@@ -30,9 +32,13 @@ public class MapLayout {
 				{7,4,4,4,4,4,8},
 			});
 	        
+			//Set the player position
+			gamePlayer.setCurrentPosition(new Point(300, 300));
+
+			//Create the enemies
 	        mapEnemies = new EnemyPlayer[5];
 	        for (int i = 0; i < mapEnemies.length; i++) {
-	        	mapEnemies[i] = new EnemyPlayer(gameWindow, 300+(10*i), 100+(5*i), 10, 10, i, i, gamePlayer, obstacleArr);
+	        	mapEnemies[i] = new EnemyPlayer(gameWindow, 300+(10*i), 100+(5*i), 10, 10, 50, i, gamePlayer, obstacleArr);
 	        	//mapEnemies[i] = new EnemyPlayer(gameWindow, 300+(10*i), 100+(5*i), 10, 10, gamePlayer);
 	        }
 	        break;
@@ -46,8 +52,12 @@ public class MapLayout {
 				{7,4,4,4,8,8,8},
 			});
 			
+			//Set the player position
+			gamePlayer.setCurrentPosition(new Point(300, 300));
+
+			//Create the enemies
 			mapEnemies = new EnemyPlayer[3];
-			mapEnemies[0] = new EnemyPlayer(gameWindow, 25+50*2, 25+50*2, 10, 10, 0, 0, gamePlayer, obstacleArr);
+			mapEnemies[0] = new EnemyPlayer(gameWindow, 70, 70, 10, 10, 0, 0, gamePlayer, obstacleArr);
 			mapEnemies[1] = new EnemyPlayer(gameWindow, 25+50*5, 25+50*2, 10, 10, 0, 0, gamePlayer, obstacleArr);
 			mapEnemies[2] = new EnemyPlayer(gameWindow, 25+50*3, 25+50*5, 10, 10, 0, 0, gamePlayer, obstacleArr);
 //			mapEnemies[0] = new EnemyPlayer(gameWindow, 25+50*2, 25+50*2, 10, 10, gamePlayer);
@@ -65,6 +75,10 @@ public class MapLayout {
 				{7,4,0,0,0,0,0}
 			});
 			
+			//Set the player position
+			gamePlayer.setCurrentPosition(new Point(300, 300));
+
+			//Create the enemies
 			mapEnemies = new EnemyPlayer[3];
 			mapEnemies[0] = new EnemyPlayer(gameWindow, 25+50*2, 25+50*2, 10, 10, 0, 0, gamePlayer, obstacleArr);
 			mapEnemies[1] = new EnemyPlayer(gameWindow, 25+50*5, 25+50*2, 10, 10, 0, 0, gamePlayer, obstacleArr);

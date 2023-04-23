@@ -63,14 +63,14 @@ public class DungeonPlayer {
 	 *
 	 * @param playerJFrame the JFrame containing the player
 	 */
-	public DungeonPlayer(JFrame playerJFrame) {
+	public DungeonPlayer(JFrame playerJFrame, int X, int Y) {
 		homeFrame = playerJFrame;
 
-		playerX = playerJFrame.getWidth() / 2;
-		playerY = playerJFrame.getHeight() / 2;
+		playerX = X;
+		playerY = Y;
 
 		
-		playerDamage = 10;
+		playerDamage = 20;
 		
 
 		newPosition = new Point(playerX, playerY);
@@ -83,8 +83,6 @@ public class DungeonPlayer {
 		playerAvatar = new JLabel();
 		ImageIcon playerSprite = new ImageIcon("src/Game/playerIdle.png");
 		playerAvatar.setIcon(playerSprite);
-		
-		
 		playerAvatar.setBounds(playerX, playerY, PLAYERSIZE, PLAYERSIZE);
 		playerAvatar.setVisible(true);
 		playerJFrame.add(playerAvatar);
@@ -160,9 +158,16 @@ public class DungeonPlayer {
 		return playerHealth;
 	}
 
+	public void setCurrentPosition(Point pos){
+		playerX = (int)pos.getX();
+		playerY = (int)pos.getY();
+	}
 
+
+	//Duplicate method with the one below, remove one or the other.
 	public void playerTakeDamage(int damageAmount) {
 		playerHealth -= damageAmount;
+		drawPlayer();
 	}
 	
 	public int getDamage() {
@@ -170,8 +175,8 @@ public class DungeonPlayer {
 	}
 	
 	public void takeDamage(int damageAmount) {
-
 		playerHealth -= damageAmount;
+		drawPlayer();
 	}
 
 	/**
@@ -215,6 +220,7 @@ public class DungeonPlayer {
 	 */
 	public void enemyTakeDamage(int attack) {
 		playerHealth -= attack;
+		drawPlayer();
 		invincibilityCounter = 500;
 	}
 

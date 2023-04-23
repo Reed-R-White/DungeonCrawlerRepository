@@ -54,7 +54,7 @@ public class GameGui extends JFrame {
 		panel.add(titlePanel, BorderLayout.NORTH);
 
 		// Set up the title panel
-		title.setFont(new Font("Times New Roman", Font.BOLD, 70));
+		title.setFont(new Font("Times New Roman", Font.BOLD, 58));
 		title.setForeground(Color.WHITE);
 		Border border = BorderFactory.createLineBorder(Color.BLACK, 2);
 		title.setBorder(border);
