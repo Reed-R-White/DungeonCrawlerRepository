@@ -223,8 +223,7 @@ public class EnemyPlayer extends Player {
 		double distance = Math.sqrt(Math.pow(posX - player.getX(), 2) + Math.pow(posY - player.getY(), 2));
 		// if the distance from player is 200 or less
 		if (distance <= 200) {
-			// set follow to true
-			follow = true;
+			follow = true; // set follow to true
 			// this.player = player;
 		} else {
 			// set follow to false
@@ -270,5 +269,6 @@ public class EnemyPlayer extends Player {
 		enemyAvatar.setBounds((int) posX, (int) posY, 32, 32);
 		healthBar.setText("" + enemyHealth);
 		healthBar.setBounds((int) posX + 10, (int) posY - 25, 32, 32);
+		gameJFrame.repaint();
 	}
 }
