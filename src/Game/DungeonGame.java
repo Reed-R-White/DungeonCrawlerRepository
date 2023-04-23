@@ -383,6 +383,8 @@ public class DungeonGame implements ActionListener, MouseListener {
             	if (attackTimer > 0) {
             		attackTimer -= 1;
             	}
+            	
+            	
                 
                 currentPosition.setLocation(player1.getX(), player1.getY());;
 
@@ -417,6 +419,9 @@ public class DungeonGame implements ActionListener, MouseListener {
                 	if(enemy.getEnemyHealth() >= 0) {
                 		levelOver = false;
                 		enemy.move();
+                		enemy.attack(player1);
+    					player1.reduceInvincibility();
+    					enemy.checkPlayer(player1);
                 		
                 		gameWindow.repaint();;
                 	}

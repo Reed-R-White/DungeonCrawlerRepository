@@ -39,6 +39,7 @@ public class EnemyPlayer extends Player {
 	JFrame homeFrame;
 	Obstacle[] obstacleArr;
 	private int enemyHealth;
+	public final int ENEMYSIZE = 32;
 
 	private final static int PLAYER_FOLLOW_DISTANCE = 200;
 
@@ -112,7 +113,7 @@ public class EnemyPlayer extends Player {
 		enemyAvatar = new JLabel();
 		ImageIcon enemySprite = new ImageIcon("src/Game/enemySprite.png");
 		enemyAvatar.setIcon(enemySprite);
-		enemyAvatar.setBounds((int) posX, (int) posX, 32, 32);
+		enemyAvatar.setBounds((int) posX, (int) posX, ENEMYSIZE, ENEMYSIZE);
 		enemyAvatar.setVisible(true);
 		gameJFrame.add(enemyAvatar);
 		gameJFrame.add(healthBar);
@@ -152,63 +153,61 @@ public class EnemyPlayer extends Player {
 	 * pattern otherwise.
 	 */
 	public void move() {
+		
+		float deltaX =0, deltaY=0;
+		
 		checkPlayer(player);
 
 		if (follow) {
 
 			if (posX > player.getX()) {
-				// subtract speed from pos x
-				if (posX - speed >= 0 && posX - speed <= DungeonGame.GAMEWINDOWSIZE - width
-						&& !collidesWithObstacle(posX - speed, posY)) {
-					posX -= speed;
-				}
-
-			} else if (posX < player.getX()) {
-				// add speed to pos x
-				if (posX + speed >= 0 && posX + speed <= DungeonGame.GAMEWINDOWSIZE - width
-						&& !collidesWithObstacle(posX + speed, posY)) {
-					posX += speed;
-				}
+				deltaX = -2*speed;
+			} 
+			
+			else if (posX < player.getX()) {
+				deltaX = 2*speed;
 			}
 
 			if (posY > player.getY()) {
-				// subtract speed from pos y
-				if (posY - speed >= 0 && posY - speed <= DungeonGame.GAMEWINDOWSIZE - height
-						&& !collidesWithObstacle(posX, posY - speed)) {
-					posY -= speed;
-				}
-
-			} else if (posY < player.getY()) {
-				// add speed to pos y
-				if (posY + speed >= 0 && posY + speed <= DungeonGame.GAMEWINDOWSIZE - height
-						&& !collidesWithObstacle(posX, posY + speed)) {
-					posY += speed;
-				}
+				deltaY = -2*speed;
 			}
 
-		} else {
+			else if (posY < player.getY()) {
+				deltaY = 2*speed;
+			}
+
+		} else if(!follow) {
 			// if you go out of bounds
 			if (movementIndex >= movementPatternX.size()) {
 				// set movement index to 0
 				movementIndex = 0;
 			}
 			// set delta x to index value
-			int deltaX = movementPatternX.get((int) movementIndex);
+			deltaX = movementPatternX.get((int) movementIndex)*speed;
 			// set delta y to index value
-			int deltaY = movementPatternY.get((int) movementIndex);
+			deltaY = movementPatternY.get((int) movementIndex)*speed;
 			// set pos x
-			if (posX + deltaX * speed >= 0 && posX + deltaX * speed <= DungeonGame.GAMEWINDOWSIZE - width
-					&& !collidesWithObstacle(posX + deltaX * speed, posY)) {
-				posX += deltaX * speed;
-			}
-			// set pos y
-			if (posY + deltaY * speed >= 0 && posY + deltaY * speed <= DungeonGame.GAMEWINDOWSIZE - width
-					&& !collidesWithObstacle(posX, posY + deltaY * speed)) {
-				posY += deltaY * speed;
-			}
+			
 			// increment movement index
 			movementIndex += 1;
 		}
+		//Check x, if not colliding, move.
+		if (posX + deltaX >= 0 && posX + deltaX <= DungeonGame.GAMEWINDOWSIZE - ENEMYSIZE
+						&& !collidesWithObstacle(posX + deltaX, posY) 
+						&& !collidesWithObstacle(posX + deltaX + ENEMYSIZE, posY)
+						&& !collidesWithObstacle(posX + deltaX, posY + ENEMYSIZE)
+						&& !collidesWithObstacle(posX + deltaX + ENEMYSIZE, posY + ENEMYSIZE)) {
+			posX += deltaX ;
+		}
+		// set pos y
+		if (posY + deltaY >= 0 && posY + deltaY <= DungeonGame.GAMEWINDOWSIZE - ENEMYSIZE
+						&& !collidesWithObstacle(posX, posY + deltaY)
+						&& !collidesWithObstacle(posX, posY + deltaY + ENEMYSIZE)
+						&& !collidesWithObstacle(posX+ENEMYSIZE, posY + deltaY)
+						&& !collidesWithObstacle(posX+ENEMYSIZE, posY + deltaY + ENEMYSIZE)) {
+			posY += deltaY;
+		}
+		
 		drawEnemy();
 	}
 	
@@ -245,14 +244,9 @@ public class EnemyPlayer extends Player {
 	private boolean collidesWithObstacle(float x, float y) {
 		for (int i = 0; i < obstacleArr.length; i++) {
 			Obstacle obstacle = obstacleArr[i];
-			for (int r = 0; r < height; r++) {
-				for (int c = 0; c < width; c++) {
-					if (obstacle != null && obstacle.checkCollision(x + c, y + r)) {
-						return true;
-					}
-				}
+			if (obstacle != null && obstacle.checkCollision(x, y)) {
+				return true;
 			}
-
 		}
 		return false;
 	}
