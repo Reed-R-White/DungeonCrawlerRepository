@@ -37,7 +37,7 @@ public class MapLayout {
 			//Create the enemies
 	        mapEnemies = new EnemyPlayer[5];
 	        for (int i = 0; i < mapEnemies.length; i++) {
-	        	mapEnemies[i] = new EnemyPlayer(gameWindow, 300+(10*i), 100+(5*i), 10, 10, 50, i, gamePlayer, obstacleArr);
+	        	mapEnemies[i] = new EnemyPlayer(gameWindow, 300+(10*i), 100+(5*i), 10, 10, 50, 5, gamePlayer, obstacleArr);
 	        	//mapEnemies[i] = new EnemyPlayer(gameWindow, 300+(10*i), 100+(5*i), 10, 10, gamePlayer);
 	        }
 	        break;
@@ -56,9 +56,9 @@ public class MapLayout {
 
 			//Create the enemies
 			mapEnemies = new EnemyPlayer[3];
-			mapEnemies[0] = new EnemyPlayer(gameWindow, 70, 70, 10, 10, 60, 0, gamePlayer, obstacleArr);
-			mapEnemies[1] = new EnemyPlayer(gameWindow, 70, 500, 10, 10, 60, 0, gamePlayer, obstacleArr);
-			mapEnemies[2] = new EnemyPlayer(gameWindow, 700, 70, 10, 10, 60, 0, gamePlayer, obstacleArr);
+			mapEnemies[0] = new EnemyPlayer(gameWindow, 70, 70, 10, 10, 60, 5, gamePlayer, obstacleArr);
+			mapEnemies[1] = new EnemyPlayer(gameWindow, 70, 500, 10, 10, 60, 5, gamePlayer, obstacleArr);
+			mapEnemies[2] = new EnemyPlayer(gameWindow, 700, 70, 10, 10, 60, 5, gamePlayer, obstacleArr);
 			
 			break;
 			
@@ -76,9 +76,9 @@ public class MapLayout {
 
 			//Create the enemies
 			mapEnemies = new EnemyPlayer[3];
-			mapEnemies[0] = new EnemyPlayer(gameWindow, 25+50*2, 25+50*2, 10, 10, 0, 0, gamePlayer, obstacleArr);
-			mapEnemies[1] = new EnemyPlayer(gameWindow, 25+50*5, 25+50*2, 10, 10, 0, 0, gamePlayer, obstacleArr);
-			mapEnemies[2] = new EnemyPlayer(gameWindow, 25+50*3, 25+50*5, 10, 10, 0, 0, gamePlayer, obstacleArr);
+			mapEnemies[0] = new EnemyPlayer(gameWindow, 25+50*2, 25+50*2, 10, 10, 100, 5, gamePlayer, obstacleArr);
+			mapEnemies[1] = new EnemyPlayer(gameWindow, 25+50*5, 25+50*2, 10, 10, 100, 5, gamePlayer, obstacleArr);
+			mapEnemies[2] = new EnemyPlayer(gameWindow, 25+50*3, 25+50*5, 10, 10, 100, 5, gamePlayer, obstacleArr);
 			
 			break;
 		}

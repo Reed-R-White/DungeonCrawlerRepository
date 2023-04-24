@@ -88,7 +88,7 @@ public class DungeonGame implements ActionListener, MouseListener {
         currentPosition = new Point(player1.getX(),player1.getY());
 
         //currentMap = new MapLayout(mapType.MAZE, gameWindow, player1);
-        currentLevel = 2;
+        currentLevel = 3;
 		loadMap();
         
         gameWindow.addKeyListener(new KeyListener() {
@@ -262,8 +262,11 @@ public class DungeonGame implements ActionListener, MouseListener {
         });
     }
     
+	/**
+	 * Draws the map, associated enemies, and the player to correspond with the current level.
+	 */
     private void loadMap() {
-    	
+
     	switch(currentLevel) {
     	case 1:
 			currentMap = new MapLayout(mapType.DEFAULT, gameWindow, player1);

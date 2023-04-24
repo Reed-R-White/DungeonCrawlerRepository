@@ -72,11 +72,7 @@ public class DungeonPlayer {
 
 		playerX = X;
 		playerY = Y;
-
-		
 		playerDamage = 20;
-		
-
 		newPosition = new Point(playerX, playerY);
 		
 		playerHealth = 100;
@@ -182,7 +178,7 @@ public class DungeonPlayer {
 		
 		if (invincibilityCounter<=0){
 			System.out.println("Player hit! Invincibility timer was " +invincibilityCounter);
-			playerHealth = playerHealth - 5;
+			playerHealth = playerHealth - damageAmount;
 			invincibilityCounter = INVINCIBILITYTIME;
 			drawPlayer();
 		} else{

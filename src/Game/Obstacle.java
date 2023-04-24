@@ -239,14 +239,6 @@ public class Obstacle {
         
         System.out.println("X3 = "+posX3+", Y3 = "+posY3);
 
-     
-
-
-		// System.out.println("x of obj 3 = "+ObstacleObject[2].getX()+", y of obj 3 =
-		// "+ObstacleObject[2].getY());
-		// System.out.println("width of obj 3 = "+ObstacleObject[2].getWidth()+", height
-		// of obj 3 = "+ObstacleObject[2].getHeight());
-
         //retrieve and resize the image
         ImageIcon sprite = new ImageIcon("src/Game/cobblestone_texture.jpeg");
         Image tempImage = sprite.getImage();
