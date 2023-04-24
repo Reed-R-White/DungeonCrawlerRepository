@@ -38,7 +38,7 @@ import Game.MapLayout.mapType;
 public class DungeonGame implements ActionListener, MouseListener {
 
 	// private static final long serialVersionUID = 1L;
-	public static final int GAMEWINDOWSIZE = 900;
+	public static final int GAMEWINDOWSIZE = 600;
 	public Obstacle[] obstacleArr = new Obstacle[22];
 
 	public static final int gridWidth = 20;
@@ -92,7 +92,7 @@ public class DungeonGame implements ActionListener, MouseListener {
         currentPosition = new Point(player1.getX(),player1.getY());
 
         //currentMap = new MapLayout(mapType.MAZE, gameWindow, player1);
-        currentLevel = 1;
+        currentLevel = 3;
 		loadMap();
         
         gameWindow.addKeyListener(new KeyListener() {

@@ -50,7 +50,6 @@ public class DungeonPlayer {
 	private Point newPosition;
 	/* The current position of the player */
 
-	private Point currentPosition;
 	public int PLAYERSIZE = 32;
 	
 	private int xMouseOffsetToContentPaneFromJFrame;
