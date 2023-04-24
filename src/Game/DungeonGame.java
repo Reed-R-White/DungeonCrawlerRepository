@@ -7,6 +7,7 @@
 package Game;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -14,22 +15,17 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
-
-import java.awt.event.MouseMotionAdapter;
-import java.util.ArrayList;
-import java.util.Random;
-
 import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowEvent;
 import java.awt.Cursor;
-import java.awt.MouseInfo;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.Timer;
-
 import Game.MapLayout.mapType;
 
 /**
@@ -38,7 +34,7 @@ import Game.MapLayout.mapType;
 public class DungeonGame implements ActionListener, MouseListener {
 
 	// private static final long serialVersionUID = 1L;
-	public static final int GAMEWINDOWSIZE = 900;
+	public static final int GAMEWINDOWSIZE = 800;
 	public Obstacle[] obstacleArr = new Obstacle[22];
 
 	public static final int gridWidth = 20;
@@ -64,17 +60,16 @@ public class DungeonGame implements ActionListener, MouseListener {
 	private int yMouseOffsetToContentPaneFromJFrame;
 	private Point targetPoint;
 	boolean isColliding = false;
-	JFrame gameGUI;
 
-
-    public DungeonGame(JFrame gameGUI) {
-		this.gameGUI = gameGUI;
+    public DungeonGame() {
+		//this.gameGUI = gameGUI;
 		gameWindow = new JFrame("Dungeon Game");
         gameWindow.setSize(GAMEWINDOWSIZE, GAMEWINDOWSIZE+25);
         gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gameWindow.setLayout(new BorderLayout());
+		gameWindow.setBackground(Color.GREEN);
         gameWindow.setVisible(true);
-        //Add the player
+    
         gameWindow.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
         
         Container gameContentPane = gameWindow.getContentPane();
@@ -87,12 +82,13 @@ public class DungeonGame implements ActionListener, MouseListener {
         xMouseOffsetToContentPaneFromJFrame = borderWidth;
         yMouseOffsetToContentPaneFromJFrame = gameWindow.getHeight() - gameContentPane.getHeight() - borderWidth;
         
-        player1 = new DungeonPlayer(gameWindow, 100, 100);
+		//Add the player
+        player1 = new DungeonPlayer(gameWindow, 70, 70);
         
         currentPosition = new Point(player1.getX(),player1.getY());
 
         //currentMap = new MapLayout(mapType.MAZE, gameWindow, player1);
-        currentLevel = 1;
+        currentLevel = 2;
 		loadMap();
         
         gameWindow.addKeyListener(new KeyListener() {
@@ -226,20 +222,21 @@ public class DungeonGame implements ActionListener, MouseListener {
 							enemy.attack(player1);
 						}
 						
-						player1.reduceInvincibility();
+						
 						enemy.move();
     					enemy.checkPlayer(player1);                		
-                		//gameWindow.repaint();
                 	}
                 }
-                
-				
+
+				player1.reduceInvincibility();
 
                 if(levelOver) {
                 	currentLevel += 1;
                 	clearFrame();
                 	loadMap();
                 }
+
+				
             }
         });
 
@@ -278,6 +275,7 @@ public class DungeonGame implements ActionListener, MouseListener {
     		break;
     	default:
     		currentMap = new MapLayout(mapType.DEFAULT, gameWindow, player1);
+			break;
     	}
     	currentMap.drawMap();
         obstacleArr = currentMap.getObjectArray();
@@ -295,14 +293,6 @@ public class DungeonGame implements ActionListener, MouseListener {
     	}
     }
 
-
-    //
-    
-    
-//    public static void main(String[] args) {
-//        new DungeonGame();
-//    }
-
     /**
      * Sets the next target location for the player to seek.
      * The new target will be the position of the mouse click.
@@ -314,33 +304,7 @@ public class DungeonGame implements ActionListener, MouseListener {
 
 	}
 
-	/**
-	 * Adds an enemy character to the game with a randomized movement pattern.
-	 * 
-	 * @param startingX  The starting x position of the enemy character.
-	 * @param startingY  The starting y position of the enemy character.
-	 * @param gameWindow The JFrame that the game is displayed in.
-	 */
-	private void addEnemy(float startingX, float startingY, JFrame gameWindow) {
-		Random random = new Random();
-		ArrayList<Integer> movementPatternX = new ArrayList<Integer>();
-		ArrayList<Integer> movementPatternY = new ArrayList<Integer>();
-
-		for (int i = 0; i < 10; i++) {
-			int directionX = random.nextInt(3) - 1;
-			int directionY = random.nextInt(3) - 1;
-			for (int j = 0; j < 40; j++) {
-				movementPatternX.add(directionX);
-				movementPatternY.add(directionY);
-			}
-
-		}
-
-		EnemyPlayer enemy = new EnemyPlayer(gameWindow, startingX, startingY, 50, 50, 100, 10, player1, obstacleArr);
-		enemies.add(enemy);
-	}
-
-	// Weird auto-generated things that the program needs to compile but are
+		// Weird auto-generated things that the program needs to compile but are
 	// absolutely useless.
 
 	@Override

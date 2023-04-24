@@ -20,7 +20,6 @@ public class MapLayout {
 		
 		mapJFrame = gameWindow;
 		
-		
 		switch (selectedMap) {
 		case DEFAULT:
 			obstacleArr = scanMap(new int[][] {
@@ -33,7 +32,7 @@ public class MapLayout {
 			});
 	        
 			//Set the player position
-			gamePlayer.setCurrentPosition(new Point(300, 300));
+			gamePlayer.setCurrentPosition(new Point(70, 70));
 
 			//Create the enemies
 	        mapEnemies = new EnemyPlayer[5];

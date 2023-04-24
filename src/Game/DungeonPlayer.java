@@ -7,19 +7,12 @@
 
 package Game;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
+
 import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Polygon;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
-import java.util.Timer;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -178,11 +171,14 @@ public class DungeonPlayer {
 	 *               player
 	 */
 	public void takeDamage(int damageAmount) {
+		
 		if (invincibilityCounter<=0){
-			System.out.println(invincibilityCounter);
-			playerHealth = playerHealth-damageAmount;
+			System.out.println("Player hit! Invincibility timer was " +invincibilityCounter);
+			playerHealth = playerHealth - 5;
 			invincibilityCounter = INVINCIBILITYTIME;
 			drawPlayer();
+		} else{
+			System.out.println("  Hahaha Miss!");
 		}
 	}
 

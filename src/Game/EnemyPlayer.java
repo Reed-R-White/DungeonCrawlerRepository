@@ -16,13 +16,6 @@ import javax.swing.JLabel;
 
 
 import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import java.awt.Point;
 
 public class EnemyPlayer extends Player {
 	private List<Integer> movementPatternX;
@@ -232,8 +225,7 @@ public class EnemyPlayer extends Player {
 	}
 
 	public void attack(DungeonPlayer player) {
-		
-		System.out.println("Hit!  Player at "+ player.getHealth());
+		System.out.println("Attack attempt,  Player at "+ player.getHealth());
 		player.takeDamage(damage);
 		
 	}
