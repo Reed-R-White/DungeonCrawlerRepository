@@ -1,3 +1,5 @@
+//Fully commented.
+
 /**
 * The GameGui class creates a graphical user interface for the Dungeon Game.
 * It extends the JFrame class and includes a title, a play button, a quit button,
@@ -16,7 +18,6 @@ import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -24,6 +25,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
+/**
+ * This class creates the menu, where the player can either begin the game, or back out.
+ * 
+ * @author Ryan O'Valley
+ */
 public class GameGui extends JFrame {
 
 	// Declare instance variables

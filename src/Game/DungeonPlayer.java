@@ -1,3 +1,5 @@
+//Fully commented
+
 /**
  * The DungeonPlayer class represents the player of a game. 
  * It allows the player to move their avatar in response to mouse movements 
@@ -20,38 +22,28 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 /**
+ * The class managing the player, including their health, attacks, and movement.
  * 
- * @author Reed White
+ * @author Reed White, Charlie Said, Ryan O'Valley
  */
 public class DungeonPlayer {
 
-	/* The maximum movement distance for the player */
 	public int MAXMOVEMENT = 3;
-
 	private final int INVINCIBILITYTIME = 50;
-
-	/* The amount of damage done to an enemy by the player */
-
 	private int playerDamage;
-
-	/* The health of the player */
 	private int playerHealth;
-	/* The x-coordinate of the player */
-	private int playerX;
-	/* The y-coordinate of the player */
-	private int playerY;
-	/* The new position of the player */
+	private int playerX, playerY;
 	private Point newPosition;
-
 	public int PLAYERSIZE = 32;
-	
+	private int invincibilityCounter;
+
 	private int xMouseOffsetToContentPaneFromJFrame;
 	private int yMouseOffsetToContentPaneFromJFrame;
 	
 	private JLabel playerAvatar;
 	private JLabel healthBar;
 	private JFrame homeFrame;
-	private int invincibilityCounter;
+	
 
 	/**
 	 * Constructor for the DungeonPlayer class.
@@ -65,9 +57,6 @@ public class DungeonPlayer {
 		playerY = Y;
 		playerDamage = 20;
 		newPosition = new Point(playerX, playerY);
-		
-		playerHealth = 100;
-		healthBar = new JLabel("" + playerHealth);
 		invincibilityCounter = 0;
 
 		// Draw the player for the first time
@@ -77,17 +66,15 @@ public class DungeonPlayer {
 		playerAvatar.setBounds(playerX, playerY, PLAYERSIZE, PLAYERSIZE);
 		playerAvatar.setVisible(true);
 		playerJFrame.add(playerAvatar);
-
+		
+		//Add the health bar
+		playerHealth = 100;
+		healthBar = new JLabel("" + playerHealth);
 		playerJFrame.add(healthBar);
 
-	    
+	    //Calculate the offset required for the player sprite.
 		Container gameContentPane = homeFrame.getContentPane();
-
-        // Event mouse position is given relative to JFrame, where
-        // dolphin's image in JLabel is given relative to ContentPane,
-        // so adjust for the border ( / 2  since border is on either side)
         int borderWidth = (homeFrame.getWidth() - gameContentPane.getWidth()) / 2;
-        // assume side border = bottom border; ignore title bar
         xMouseOffsetToContentPaneFromJFrame = borderWidth;
         yMouseOffsetToContentPaneFromJFrame = homeFrame.getHeight() - gameContentPane.getHeight() - borderWidth;
 
@@ -145,15 +132,30 @@ public class DungeonPlayer {
 		return playerY;
 	}
 
+	/**
+	 * Getter for the player's health
+	 * 
+	 * @return player health
+	 */
 	public int getHealth() {
 		return playerHealth;
 	}
 
+	/**
+	 * Setter for the player's position.
+	 * 
+	 * @param pos The point to put the player at.
+	 */
 	public void setCurrentPosition(Point pos){
 		playerX = (int)pos.getX();
 		playerY = (int)pos.getY();
 	}
 	
+	/**
+	 * Getter for the player's damage output (damage dealt to enemies)
+	 * 
+	 * @return playerDamage
+	 */
 	public int getDamage() {
 		return playerDamage;
 	}
@@ -209,6 +211,11 @@ public class DungeonPlayer {
 
 	}
 
+	/**
+	 * Getter for the player's maximum movement.
+	 * 
+	 * @return MAXMOVEMENT
+	 */
 	public int getMaxMovement() {
 		return MAXMOVEMENT;
 	}
@@ -241,8 +248,8 @@ public class DungeonPlayer {
 	 * within this rectangle. If an intersection is found, the game object will
 	 * receive {@link DungeonPlayer.PLAYERDAMAGE} points of damage.
 	 *
-	 * @param point the point towards which the player should execute the attack
-	 * @return true if an attack was executed, false otherwise
+	 * @param enemy the enemy the method checks its attack against
+	 * @return true if an attack hit, false otherwise
 	 */
 	public boolean attack(EnemyPlayer enemy) {
 		Point enemPoint = new Point((int) enemy.getX(), (int) enemy.getY());
@@ -303,6 +310,16 @@ public class DungeonPlayer {
 
 	}
 
+	/**
+	 * This method executes an attack action from the player towards the given
+	 * point. The attack is executed by drawing a rectangle projecting from the
+	 * player towards the given point and checking whether a given point exists
+	 * within this rectangle. If an intersection is found, the game object will
+	 * receive {@link DungeonPlayer.PLAYERDAMAGE} points of damage.
+	 *
+	 * @param enemy the enemy the method checks the attack against.
+	 * @return true if an attack hit, false otherwise
+	 */
 	public boolean sweepAttack(EnemyPlayer enemy) {
 		
 		Point enemPoint = new Point((int) enemy.getX(), (int) enemy.getY());

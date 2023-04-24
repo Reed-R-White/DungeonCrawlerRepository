@@ -1,10 +1,18 @@
+//Fully commented.
+
 package Game;
 
 import java.awt.Point;
-
 import javax.swing.JFrame;
 
+/**
+ * This class creates and tracks different maps that the game can load.
+ * 
+ * @author Reed White, Charlie Said, and Ryan O'Valley
+ */
 public class MapLayout {
+	
+	//Enum to track which map design is called for.
 	enum mapType{
 		DEFAULT,
 		MAZE,
@@ -16,10 +24,19 @@ public class MapLayout {
 	private EnemyPlayer[] mapEnemies;
 	private JFrame mapJFrame;
 	
+	/**
+	 * Constructor for the MapLayout, which sets up the specified map design, and the enemies in that map.
+	 * It also sets the player's location to a specific starting point on the map.
+	 * 
+	 * @param selectedMap An enum, either DEFAULT, MAZE, COORIDORS, or HOUSE, specifying which map design to use.
+	 * @param gameWindow The JFrame of the game.
+	 * @param gamePlayer The player in the game.
+	 */
 	public MapLayout(mapType selectedMap, JFrame gameWindow, DungeonPlayer gamePlayer) {
 		
 		mapJFrame = gameWindow;
 		
+		//Create the arrays of obstacles
 		switch (selectedMap) {
 		case DEFAULT:
 			obstacleArr = scanMap(new int[][] {
@@ -85,16 +102,34 @@ public class MapLayout {
 		
 	}
 	
-	public Obstacle[] getObjectArray() {
+	/**
+	 * Getter for the array of Obstacles on the map.
+	 * 
+	 * @return An array of Obstacles that are currently on the map.
+	 */
+	public Obstacle[] getObstacleArray() {
 		return obstacleArr;
 	}
 	
+	/**
+	 * Getter for all the enemies currently in the map.
+	 * 
+	 * @return An array of the EnemyPlayers in the map.
+	 */
 	public EnemyPlayer[] getEnemyList() {
 		return mapEnemies;
 	}
 	
+	/**
+	 * This method creates the array of obstacles based on a map key, in the form or a 2D int array.
+	 * 
+	 * @param mapTemplate a 2D int array specifying which obstacles to draw where
+	 * @return An array of obstacles fully constructed.
+	 */
 	private Obstacle[] scanMap(int[][] mapTemplate) {
 		int objectCount = 0;
+		
+		//Count the number of obstacles needed to draw.
 		for (int x = 0; x < mapTemplate.length; x++) {
 			for (int y = 0; y < mapTemplate[x].length; y++) {
 				if (mapTemplate[x][y] > 0 && mapTemplate[x][y] < 10) {
@@ -103,10 +138,12 @@ public class MapLayout {
 			}
 		}
 		
+		//Set up variables
 		Obstacle[] mapObstacles = new Obstacle[objectCount];
 		int mapObstacleIndex = 0;
 		int sideLength = 120;
 		
+		//Draw each obstacle according to its location and type.
 		for (int y = 0; y < mapTemplate.length; y++) {
 			for (int x = 0; x < mapTemplate[y].length; x++) {
 				if (mapTemplate[y][x] > 0 && mapTemplate[y][x] < 10) {
@@ -148,10 +185,12 @@ public class MapLayout {
 		return mapObstacles;
 	}
 	
+	/**
+	 * This method calls the draw method of the obstacle for each obstacle in the game.
+	 */
 	public void drawMap() {
 		for(Obstacle obj : obstacleArr){
             obj.draw();
         }
 	}
-
 }

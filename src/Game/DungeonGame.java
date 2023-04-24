@@ -1,3 +1,5 @@
+//Fully commented.
+
 /**
  * The DungeonGame class creates the game window, player character, and enemy characters. 
  * It contains a game loop which continuously updates the position and actions 
@@ -17,10 +19,8 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.awt.event.WindowEvent;
 import java.awt.Cursor;
 
-import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.Timer;
@@ -28,38 +28,33 @@ import Game.MapLayout.mapType;
 
 /**
  * The driver/main class for the game.
+ * 
+ * @author Charlie Said, Ryan O'Valley, and Reed White
  */
 public class DungeonGame implements ActionListener, MouseListener {
 
-	// private static final long serialVersionUID = 1L;
+	//Game variables
 	public static final int GAMEWINDOWSIZE = 850;
-	public Obstacle[] obstacleArr = new Obstacle[22];
-
-	public static final int gridWidth = 20;
-
+	public Obstacle[] obstacleArr;// = new Obstacle[22];
 	private JFrame gameWindow;
-
-	private DungeonPlayer player1;
-	ArrayList<EnemyPlayer> enemies;
-	private Point currentPosition;
-
-	private int boostTimer = 0;
-	private int boostCoolDown = 0;
-
-	private double dx, dy, distance;
-	
-	private static final int ATTACKCOOLDOWN = 0;
-
 	private MapLayout currentMap;
-	private EnemyPlayer[] currentEnemies;
-	private int attackTimer = 0;
 	private int currentLevel;
 	private int xMouseOffsetToContentPaneFromJFrame;
 	private int yMouseOffsetToContentPaneFromJFrame;
+	
+	//Entity variables
+	private DungeonPlayer player1;
+	private Point currentPosition;
+	private double dx, dy, distance;
+	private EnemyPlayer[] currentEnemies;
+	private int attackTimer = 0;
+	//private int boostTimer = 0;
+	//private int boostCoolDown = 0;
+	private static final int ATTACKCOOLDOWN = 0;
 	private Point targetPoint;
-	boolean isColliding = false;
-	Timer timer;
-	JFrame GameGui;
+	private boolean isColliding = false;
+	private Timer timer;
+	private JFrame GameGui;
 
 	/**
 	 * Creates a DungeonGame, complete with the player, enemy, and obstacles.  
@@ -68,6 +63,8 @@ public class DungeonGame implements ActionListener, MouseListener {
 	 * @param GameGui The initial user interface the program uses.  The Dungeon Game will revert to this when the player dies or when all the levels have been cleared.
 	 */
     public DungeonGame(JFrame GameGui) {
+		
+		//Set up the window
 		gameWindow = new JFrame("Dungeon Game");
         gameWindow.setSize(GAMEWINDOWSIZE, GAMEWINDOWSIZE+25);
         gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -75,41 +72,40 @@ public class DungeonGame implements ActionListener, MouseListener {
 		Container gameContentPane = gameWindow.getContentPane();
 		gameContentPane.setBackground(Color.decode("#B2AC88"));
         gameWindow.setVisible(true);
-
 		this.GameGui = GameGui;
-    
         gameWindow.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
 
-        // Event mouse position is given relative to JFrame, where
-        // dolphin's image in JLabel is given relative to ContentPane,
-        // so adjust for the border ( / 2  since border is on either side)
+        //Create the variables for the player's offset from the mouse.
         int borderWidth = (gameWindow.getWidth() - gameContentPane.getWidth()) / 2;
-        // assume side border = bottom border; ignore title bar
         xMouseOffsetToContentPaneFromJFrame = borderWidth;
         yMouseOffsetToContentPaneFromJFrame = gameWindow.getHeight() - gameContentPane.getHeight() - borderWidth;
         
 		//Add the player
         player1 = new DungeonPlayer(gameWindow, 70, 70);
-        
         currentPosition = new Point(player1.getX(),player1.getY());
 
-        //currentMap = new MapLayout(mapType.MAZE, gameWindow, player1);
-        currentLevel = 3;
+        //Set up the map
+        currentLevel = 1;
 		loadMap();
         
+		//Add controls for different keystrokes
         gameWindow.addKeyListener(new KeyListener() {
-        	//Simple print statements here need to be replaced by enemy hit logic
+        	
 		    public void keyPressed(KeyEvent e) {
-		        if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+		        
+				//The Space key triggers a stabbing attack, which deals extra damage.
+				double damageModifier = 1.3;
+				if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 		        	for(EnemyPlayer enemy: currentEnemies)
 			        	if (attackTimer <= 0) {
 			        		attackTimer = ATTACKCOOLDOWN;
 				        	if(player1.attack(enemy)) {
-				            	enemy.takeDamage(player1.getDamage());
+				            	enemy.takeDamage((int)(player1.getDamage()*damageModifier));
 				            }
 			        	}
 		        }
 		        
+				//The Shift key triggers a sweeping attack
 		        if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
 		        	for(EnemyPlayer enemy: currentEnemies)
 			        	if (attackTimer <= 0) {
@@ -120,6 +116,7 @@ public class DungeonGame implements ActionListener, MouseListener {
 			        	}
 		        }
 		        
+				//Retired code to make the player sprint
 //		        else if (e.getKeyCode() == KeyEvent.VK_W) {
 //		        	if (boostCoolDown <= 0) {
 //		        		boostTimer = 10;
@@ -129,7 +126,6 @@ public class DungeonGame implements ActionListener, MouseListener {
 		        
 		    }
 		    
-
 			@Override
 			public void keyTyped(KeyEvent e) {
 				// TODO Auto-generated method stub
@@ -144,40 +140,44 @@ public class DungeonGame implements ActionListener, MouseListener {
 		});
 
 
+		//Set up the MouseListener logic.
 		gameWindow.addMouseMotionListener(new MouseMotionListener() {
 
+			/**
+			 * Whenever the mouse is moved, set the player's new target to the mouse's new location.
+			 * @param e The mouse move event.
+			 */
 			@Override
 			public void mouseMoved(MouseEvent e) {
-				player1.setNewTarget(new Point(e.getX(), e.getY()));
+				//player1.setNewTarget(new Point(e.getX(), e.getY()));
+
+				targetPoint = new Point(e.getX() - xMouseOffsetToContentPaneFromJFrame - player1.PLAYERSIZE/2 ,e.getY()-yMouseOffsetToContentPaneFromJFrame - player1.PLAYERSIZE/2);
+            	
+                player1.setNewTarget(targetPoint);
 			}
 
+			//Necessary but useless method.
 			@Override
-			public void mouseDragged(MouseEvent e) {
-				// TODO Auto-generated method stub
-				// throw new UnsupportedOperationException("Unimplemented method
-				// 'mouseDragged'");
-			}
+			public void mouseDragged(MouseEvent e) {}
 
 		});
-
 		 gameWindow.addMouseListener(this);
-        
 
         //Set up the timer
         timer = new Timer(10, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
-            	if (player1.getHealth() <= 0) {
-            		//gameWindow.dispatchEvent(new WindowEvent(gameWindow, WindowEvent.WINDOW_CLOSING));\
+            	
+				//If the player is dead, return to the main menu.
+				if (player1.getHealth() <= 0) {
 					gameWindow.setVisible(false);
 					gameWindow.dispose();
 					GameGui.setVisible(true);
 					timer.stop();
-
             	}
-            	
-            	if (boostTimer > 0) {
-            		boostTimer -= 1;
+            	//Retired code relating to the speed boost
+            	/*if (boostTimer > 0) {
+          		boostTimer -= 1;
             		player1.MAXMOVEMENT = 6;
             		boostCoolDown = 100;
             	}
@@ -187,8 +187,9 @@ public class DungeonGame implements ActionListener, MouseListener {
                     if (boostCoolDown > 0) {
             			boostCoolDown -= 1;
             		}
-            	}
+            	}*/
             	
+				//Update the attack timer.
             	if (attackTimer > 0) {
             		attackTimer -= 1;
             	}
@@ -200,7 +201,7 @@ public class DungeonGame implements ActionListener, MouseListener {
 		        // calculate distance between currentPosition and newPosition
 		        distance = currentPosition.distance(player1.getNewTarget());
 
-	            if (distance > 5) {
+	            if (distance > 10) {
                     // calculate the amount to move in each direction based on MAXMOVEMENT
                     dx = player1.MAXMOVEMENT * (player1.getNewTarget().getX() - currentPosition.getX()) / distance;
                     dy = player1.MAXMOVEMENT * (player1.getNewTarget().getY() - currentPosition.getY()) / distance;
@@ -208,11 +209,15 @@ public class DungeonGame implements ActionListener, MouseListener {
                     // Check collision
                     isColliding = false;
                     for(Obstacle obj : obstacleArr){
-                        if(obj.checkCollision((float)(player1.getX()+dx), (float)(player1.getY()+dy)) || obj.checkCollision((float)(player1.getX()+player1.PLAYERSIZE+dx), (float)(player1.getY()+dy)) || obj.checkCollision((float)(player1.getX()+player1.PLAYERSIZE+dx), (float)(player1.getY()+player1.PLAYERSIZE+dy)) || obj.checkCollision((float)(player1.getX()+dx), (float)(player1.getY()+player1.PLAYERSIZE+dy))){
-                            isColliding = true;
-                            //System.out.println("Collision at " + player1.getX() + ", " + player1.getY());
-                            player1.setNewTarget(currentPosition);
-                            break;
+                        if(obj.checkCollision((float)(player1.getX()+dx), (float)(player1.getY()+dy)) 
+							|| obj.checkCollision((float)(player1.getX()+player1.PLAYERSIZE+dx), (float)(player1.getY()+dy)) 
+							|| obj.checkCollision((float)(player1.getX()+player1.PLAYERSIZE+dx), (float)(player1.getY()+player1.PLAYERSIZE+dy)) 
+							|| obj.checkCollision((float)(player1.getX()+dx), (float)(player1.getY()+player1.PLAYERSIZE+dy))){
+                            
+								isColliding = true;
+                            	
+                            	player1.setNewTarget(currentPosition);
+                            	break;
                         }
                     }
 
@@ -224,12 +229,14 @@ public class DungeonGame implements ActionListener, MouseListener {
 	            
 	            boolean levelOver = true;
 	            
+				//Move the enemies
                 for (EnemyPlayer enemy : currentMap.getEnemyList()) {
                 	if(enemy.getEnemyHealth() >= 0) {
                 		levelOver = false;
                 		
+						//If the enemy is within range of the player, attack it
 						double distance = Math.sqrt(Math.pow(enemy.getX() - player1.getX(), 2) + Math.pow(enemy.getY()- player1.getY(), 2));
-						if (distance <=40){
+						if (distance <=enemy.getEnemySize()+10){
 							enemy.attack(player1);
 						}
 						
@@ -247,19 +254,20 @@ public class DungeonGame implements ActionListener, MouseListener {
 							&& !enemy.collidesWithObstacle(enemy.getX()+enemy.EnemySize, enemy.getY() + enemy.getDeltaY())
 							&& !enemy.collidesWithObstacle(enemy.getX()+enemy.EnemySize, enemy.getY() + enemy.getDeltaY() + enemy.EnemySize)) {
 							
+								//Assuming the movement wouldn't put the enemy inside a wall, move the enemy.
 								enemy.move();
-						}
-						
-    					enemy.checkPlayer(player1);                		
+						}            		
                 	} 
                 }
 
+				//After each hit, the player has a short period of invulnerability.
+				//This method counts that timer down so the player can be hit again soon.
 				player1.reduceInvincibility();
 
 				gameWindow.repaint();
 
+				//Advance to the next level
                 if(levelOver) {
-
                 	currentLevel += 1;
 
 					if(currentLevel>3){
@@ -271,32 +279,11 @@ public class DungeonGame implements ActionListener, MouseListener {
 						clearFrame();
 						loadMap();
 					}
-					
                 }
-
-				
             }
         });
 
 	    timer.start();
-
-        //gameWindow.addMouseListener(this);
-        gameWindow.addMouseMotionListener(new MouseMotionListener() {
-
-            @Override
-            public void mouseMoved(MouseEvent e) {
-            	targetPoint = new Point(e.getX() - xMouseOffsetToContentPaneFromJFrame - player1.PLAYERSIZE/2 ,e.getY()-yMouseOffsetToContentPaneFromJFrame - player1.PLAYERSIZE/2);
-            	
-                player1.setNewTarget(targetPoint);
-            }
-
-            @Override
-            public void mouseDragged(MouseEvent e) {
-                // TODO Auto-generated method stub
-                //throw new UnsupportedOperationException("Unimplemented method 'mouseDragged'");
-            }
-            
-        });
     }
     
 	/**
@@ -319,10 +306,13 @@ public class DungeonGame implements ActionListener, MouseListener {
 			break;
     	}
     	currentMap.drawMap();
-        obstacleArr = currentMap.getObjectArray();
+        obstacleArr = currentMap.getObstacleArray();
         currentEnemies = currentMap.getEnemyList();
     }
     
+	/**
+	 * Remove all obstacles and enemies from the map.
+	 */
     private void clearFrame() {
     	for (Obstacle obj : obstacleArr) {
     		for(JLabel component: obj.getObjects()) {
@@ -334,39 +324,23 @@ public class DungeonGame implements ActionListener, MouseListener {
     	}
     }
 
-    /**
-     * Sets the next target location for the player to seek.
-     * The new target will be the position of the mouse click.
-     */
-    public void mousePressed(MouseEvent e) {
-		Point newTarget = new Point(e.getX(), e.getY());
-        player1.setNewTarget(newTarget);
-        System.out.println("new target: "+e.getX()+", "+e.getY());
-
-	}
-
-		// Weird auto-generated things that the program needs to compile but are
-	// absolutely useless.
+	//The rest of these are override methods that the game needs in order to compile...
 
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
-	}
+	public void mouseClicked(MouseEvent e) {}
 
 	@Override
-	public void mouseClicked(MouseEvent arg0) {
-	}
+	public void mousePressed(MouseEvent e) {}
 
 	@Override
-	public void mouseEntered(MouseEvent arg0) {
-	}
+	public void mouseReleased(MouseEvent e) {}
 
 	@Override
-	public void mouseExited(MouseEvent arg0) {
-	}
+	public void mouseEntered(MouseEvent e) {}
 
 	@Override
-	public void mouseReleased(MouseEvent arg0) {
-	}
-	
+	public void mouseExited(MouseEvent e) {}
 
+	@Override
+	public void actionPerformed(ActionEvent e) {}
 }

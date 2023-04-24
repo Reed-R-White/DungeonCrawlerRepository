@@ -1,3 +1,5 @@
+//Fully commented.
+
 /**
  * The EnemyPlayer class represents an enemy in the game. 
  * It extends the Playerclass, and can either follow the player, attack the player,
@@ -17,6 +19,13 @@ import javax.swing.JLabel;
 
 import java.awt.Color;
 
+
+/**
+ * The enemy class extends player, and contains similar capabilites as the user-controlled player.
+ * The main difference is that, unless in follow mode, the enemy will follow a simple pre-defined movement pattern.
+ * 
+ * @authors Ryan O'Valley, Reed White, Charlie Said
+ */
 public class EnemyPlayer extends Player {
 	private List<Integer> movementPatternX;
 	private List<Integer> movementPatternY;
@@ -29,7 +38,7 @@ public class EnemyPlayer extends Player {
 	JFrame homeFrame;
 	Obstacle[] obstacleArr;
 	private int enemyHealth;
-	float deltaX, deltaY;
+	float deltaX = 0, deltaY = 0;
 	public final int EnemySize = 32;
 
 	private final static int PLAYER_FOLLOW_DISTANCE = 200;
@@ -56,18 +65,14 @@ public class EnemyPlayer extends Player {
 		follow = false;
 		color = Color.red;
 		speed = 0.5f;
-
-		
-		
 		this.player = player;
 		this.damage = damage;
 		this.obstacleArr = obstacleArr;
 		this.enemyHealth = enemyHealth;
 		
-		
+		//Set up the random movement patterns
 		movementPatternX = new ArrayList<Integer>();
 		movementPatternY = new ArrayList<Integer>();
-
 		Random random = new Random();
 
 		for (int i = 0; i < 10; i++) {
@@ -77,28 +82,18 @@ public class EnemyPlayer extends Player {
 				movementPatternX.add(directionX);
 				movementPatternY.add(directionY);
 			}
-
 		}
-
 		follow = false;
 		color = Color.red;
 		posX = startingX;
 		posY = startingY;
-
-		// Note for later: go forwards or move into upper section
-
 		for (int i = movementPatternX.size() - 1; i >= 0; i--) {
 			movementPatternX.add(movementPatternX.get(i) * -1);
 		}
-
 		for (int i = movementPatternY.size() - 1; i >= 0; i--) {
 			movementPatternY.add(movementPatternY.get(i) * -1);
 		}
-
 		movementIndex = 0;
-		
-//		this.movementPatternX = movementPatternX;
-//		this.movementPatternY = movementPatternY;
 
 		// Draw the Enemy for the first time
 		enemyAvatar = new JLabel();
@@ -109,94 +104,133 @@ public class EnemyPlayer extends Player {
 		gameJFrame.add(enemyAvatar);
 		healthBar = new JLabel("" + enemyHealth);
 		gameJFrame.add(healthBar);
-		
-		// Reverses the movement pattern so the enemy will move back and forth instead
-		// of just looping.
-
 	}
 
+	/**
+	 * The enemy's health is reduced by an amount equal to the given ammount
+	 * 
+	 * @param damageAmount The amount to reduce the enemy's health by
+	 */
 	public void takeDamage(int damageAmount) {
 		enemyHealth -= damageAmount;
 		healthBar.setText(""+enemyHealth);
-		//gameJFrame.repaint();
+
+		//Check if the enemy is dead.  If it is, remove it.
 		if(enemyHealth <= 0) {
 			gameJFrame.remove(enemyAvatar);
 			gameJFrame.remove(healthBar);
 		}
 	}
 
+	/**
+	 * Getter for the enemy's X-coordinate
+	 * 
+	 * @return the enemy's X-coordinate
+	 */
 	public float getX() {
 		return posX;
 	}
 
+	/**
+	 * Getter for the enemy's Y-coordinate
+	 * 
+	 * @return the enemy's Y-coordinate
+	 */
 	public float getY() {
 		return posY;
 	}
 
+	/**
+	 * Getter for the enemy's delta along the X axis.
+	 * The delta is set by the setDeltas method, but defaults to 0.
+	 * The delta is how much the enemy plans to move, not how much it has or is moving.
+	 * 
+	 * @return the enemy's delta along the X axis
+	 */
 	public float getDeltaX(){
 		return deltaX;
 	}
 
+	/**
+	 * Getter for the enemy's delta along the Y axis.
+	 * The delta is set by the setDeltas method, but defaults to 0.
+	 * The delta is how much the enemy plans to move, not how much it has or is moving.
+	 * 
+	 * @return the enemy's delta along the Y axis
+	 */
 	public float getDeltaY(){
 		return deltaY;
 	}
 
+	/**
+	 * Getter for the enemy's size (which is both its width and height)
+	 * 
+	 * @return enemy size
+	 */
 	public int getEnemySize(){
 		return EnemySize;
 	}
 	
+	/**
+	 * Getter for the enemy's health.  Note that this is its current health, not its maximum health
+	 * 
+	 * @return enemy current health
+	 */
 	public int getEnemyHealth() {
 		return enemyHealth;
 	}
-	
+
+	/**
+	 * Getter for the enemy's JLabel
+	 * 
+	 * @return enemy avatar JLabel
+	 */
 	public JLabel getJLabel() {
 		return enemyAvatar;
 	}
 
 	/**
-	 * Moves the enemy towards the player if it is following, or follows a movement
-	 * pattern otherwise.
+	 * Determines where the enemy ought to move to next.  
+	 * If in following mode, the enemy will move towards the player.
+	 * Otherwise, the enemy will follow its predetermined course.
 	 */
 	public void setDeltas() {
 		
+		//Check which mode to be in.
 		checkPlayer(player);
 
+		//Calculate deltas if the enemy is near enough to follow the player
 		if (follow) {
-
 			if (posX > player.getX()) {
 				deltaX = -2*speed;
-			} 
-			
-			else if (posX < player.getX()) {
+			} else if (posX < player.getX()) {
 				deltaX = 2*speed;
 			}
-
 			if (posY > player.getY()) {
 				deltaY = -2*speed;
-			}
-
-			else if (posY < player.getY()) {
+			} else if (posY < player.getY()) {
 				deltaY = 2*speed;
 			}
-
-		} else if(!follow) {
-			// if you go out of bounds
+		} //Otherwise, follow the wandering pattern
+		else {
+			// if you go out of bounds in the random-movement array,
 			if (movementIndex >= movementPatternX.size()) {
 				// set movement index to 0
 				movementIndex = 0;
 			}
-			// set delta x to index value
+			
+			//Set the deltas to the next int in the movement pattern.
 			deltaX = movementPatternX.get((int) movementIndex)*speed;
-			// set delta y to index value
 			deltaY = movementPatternY.get((int) movementIndex)*speed;
-			// set pos x
 			
 			// increment movement index
 			movementIndex += 1;
 		}
-
 	}
 
+	/**
+	 * Moves the enemy by its deltas along the X and Y axis, then redraws it
+	 */
 	public void move(){
 		posX += deltaX;
 		posY += deltaY;
@@ -214,7 +248,7 @@ public class EnemyPlayer extends Player {
 		// calculate distance from player
 		double distance = Math.sqrt(Math.pow(posX - player.getX(), 2) + Math.pow(posY - player.getY(), 2));
 		// if the distance from player is 200 or less
-		if (distance <= 200) {
+		if (distance <= PLAYER_FOLLOW_DISTANCE) {
 			follow = true; // set follow to true
 			// this.player = player;
 		} else {
@@ -224,13 +258,22 @@ public class EnemyPlayer extends Player {
 		}
 	}
 
+	/**
+	 * Attempt to damage the player
+	 * 
+	 * @param player the player to deal damage to
+	 */
 	public void attack(DungeonPlayer player) {
-		System.out.println("Attack attempt,  Player at "+ player.getHealth());
-
 		player.takeDamage(damage);
-		
 	}
 
+	/**
+	 * Checks if a certain x,y point collides with an Obstacle, by checking each object in the Obstacle.
+	 * 
+	 * @param x the x-coord of the point to check.
+	 * @param y the y-coord of the point to check.
+	 * @return true if there was a collision, false otherwise.
+	 */
 	public boolean collidesWithObstacle(float x, float y) {
 		for (int i = 0; i < obstacleArr.length; i++) {
 			Obstacle obstacle = obstacleArr[i];
@@ -241,14 +284,21 @@ public class EnemyPlayer extends Player {
 		return false;
 	}
 
+	/**
+	 * Checks if the enemy is still alive (if its health is greater than 0).
+	 * 
+	 * @return true if alive, false if not.
+	 */
 	public boolean isAlive() {
 		return enemyHealth > 0;
 	}
 
+	/**
+	 * Puts the enemy in the game at its X and Y coordinates
+	 */
 	public void drawEnemy() {
-		enemyAvatar.setBounds((int) posX, (int) posY, 32, 32);
+		enemyAvatar.setBounds((int) posX, (int) posY, EnemySize, EnemySize);
 		healthBar.setText("" + enemyHealth);
 		healthBar.setBounds((int) posX + 10, (int) posY - 25, 32, 32);
-		//gameJFrame.repaint();
 	}
 }
