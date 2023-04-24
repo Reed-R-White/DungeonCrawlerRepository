@@ -226,6 +226,7 @@ public class EnemyPlayer extends Player {
 
 	public void attack(DungeonPlayer player) {
 		System.out.println("Attack attempt,  Player at "+ player.getHealth());
+
 		player.takeDamage(damage);
 		
 	}

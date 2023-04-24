@@ -52,16 +52,13 @@ public class MapLayout {
 			});
 			
 			//Set the player position
-			gamePlayer.setCurrentPosition(new Point(300, 300));
+			gamePlayer.setCurrentPosition(new Point(400, 300));
 
 			//Create the enemies
 			mapEnemies = new EnemyPlayer[3];
-			mapEnemies[0] = new EnemyPlayer(gameWindow, 70, 70, 10, 10, 0, 0, gamePlayer, obstacleArr);
-			mapEnemies[1] = new EnemyPlayer(gameWindow, 25+50*5, 25+50*2, 10, 10, 0, 0, gamePlayer, obstacleArr);
-			mapEnemies[2] = new EnemyPlayer(gameWindow, 25+50*3, 25+50*5, 10, 10, 0, 0, gamePlayer, obstacleArr);
-//			mapEnemies[0] = new EnemyPlayer(gameWindow, 25+50*2, 25+50*2, 10, 10, gamePlayer);
-//			mapEnemies[1] = new EnemyPlayer(gameWindow, 25+50*5, 25+50*2, 10, 10, gamePlayer);
-//			mapEnemies[2] = new EnemyPlayer(gameWindow, 25+50*3, 25+50*5, 10, 10, gamePlayer);
+			mapEnemies[0] = new EnemyPlayer(gameWindow, 70, 70, 10, 10, 60, 0, gamePlayer, obstacleArr);
+			mapEnemies[1] = new EnemyPlayer(gameWindow, 70, 500, 10, 10, 60, 0, gamePlayer, obstacleArr);
+			mapEnemies[2] = new EnemyPlayer(gameWindow, 700, 70, 10, 10, 60, 0, gamePlayer, obstacleArr);
 			
 			break;
 			
@@ -82,9 +79,6 @@ public class MapLayout {
 			mapEnemies[0] = new EnemyPlayer(gameWindow, 25+50*2, 25+50*2, 10, 10, 0, 0, gamePlayer, obstacleArr);
 			mapEnemies[1] = new EnemyPlayer(gameWindow, 25+50*5, 25+50*2, 10, 10, 0, 0, gamePlayer, obstacleArr);
 			mapEnemies[2] = new EnemyPlayer(gameWindow, 25+50*3, 25+50*5, 10, 10, 0, 0, gamePlayer, obstacleArr);
-//			mapEnemies[0] = new EnemyPlayer(gameWindow, 25+50*2, 25+50*2, 10, 10, gamePlayer);
-//			mapEnemies[1] = new EnemyPlayer(gameWindow, 25+50*5, 25+50*2, 10, 10, gamePlayer);
-//			mapEnemies[2] = new EnemyPlayer(gameWindow, 25+50*3, 25+50*5, 10, 10, gamePlayer);
 			
 			break;
 		}
