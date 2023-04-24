@@ -102,7 +102,7 @@ public class DungeonGame implements ActionListener, MouseListener {
 		        	for(EnemyPlayer enemy: currentEnemies)
 			        	if (attackTimer <= 0) {
 			        		attackTimer = ATTACKCOOLDOWN;
-				        	if(player1.attack(new Point((int) enemy.getX(), (int) enemy.getY()))) {
+				        	if(player1.attack(enemy)) {
 				            	enemy.takeDamage(player1.getDamage());
 				            }
 			        	}
@@ -112,18 +112,18 @@ public class DungeonGame implements ActionListener, MouseListener {
 		        	for(EnemyPlayer enemy: currentEnemies)
 			        	if (attackTimer <= 0) {
 			        		attackTimer = ATTACKCOOLDOWN;
-				        	if(player1.sweepAttack(new Point((int) enemy.getX(), (int) enemy.getY()))) {
+				        	if(player1.sweepAttack(enemy)) {
 				            	enemy.takeDamage(player1.getDamage());
 				            }
 			        	}
 		        }
 		        
-		        else if (e.getKeyCode() == KeyEvent.VK_W) {
-		        	if (boostCoolDown <= 0) {
-		        		boostTimer = 10;
-		        	}
-		        	System.out.println(xMouseOffsetToContentPaneFromJFrame+"\n"+yMouseOffsetToContentPaneFromJFrame);
-		        }
+//		        else if (e.getKeyCode() == KeyEvent.VK_W) {
+//		        	if (boostCoolDown <= 0) {
+//		        		boostTimer = 10;
+//		        	}
+//		        	System.out.println(xMouseOffsetToContentPaneFromJFrame+"\n"+yMouseOffsetToContentPaneFromJFrame);
+//		        }
 		        
 		    }
 		    
@@ -147,6 +147,7 @@ public class DungeonGame implements ActionListener, MouseListener {
 			@Override
 			public void mouseMoved(MouseEvent e) {
 				player1.setNewTarget(new Point(e.getX(), e.getY()));
+				System.out.println(e.getX()+" "+ e.getY());
 			}
 
 			@Override

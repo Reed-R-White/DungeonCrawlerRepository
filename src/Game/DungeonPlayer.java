@@ -15,6 +15,7 @@ import java.awt.Graphics2D;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Polygon;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -253,7 +254,22 @@ public class DungeonPlayer {
 	 * @param point the point towards which the player should execute the attack
 	 * @return true if an attack was executed, false otherwise
 	 */
-	public boolean attack(Point point) {
+	public boolean attack(EnemyPlayer enemy) {
+		Point enemPoint = new Point((int) enemy.getX(), (int) enemy.getY());
+		Point enemBottomLeft = new Point((int) enemy.getX(), (int) enemy.getY() + enemy.ENEMYSIZE);
+		Point enemTopRight = new Point((int) enemy.getX()  + enemy.ENEMYSIZE, (int) enemy.getY());
+		Point enemBottomRight = new Point((int) enemy.getX() + enemy.ENEMYSIZE, (int) enemy.getY() + enemy.ENEMYSIZE);
+		
+		Point[] enemRecPoints = new Point[] { enemBottomLeft, enemPoint, enemBottomRight, enemTopRight };
+		
+		int[] enemxCords = new int[] { (int) enemBottomLeft.getX(), (int) enemPoint.getX(), (int) enemTopRight.getX(),
+				(int) enemBottomRight.getX() };
+		int[] enemyCords = new int[] { (int) enemBottomLeft.getY(), (int) enemPoint.getY(), (int) enemTopRight.getY(),
+				(int) enemBottomRight.getY() };
+		
+		Polygon enemhitbox = new Polygon(enemxCords, enemyCords, 4);
+		Rectangle enemyHitbox = new Rectangle(enemhitbox.getBounds());
+		
 		// Get the direction from the player to the mouse
 		double deltaX = newPosition.getX() - playerX;
 		double deltaY = newPosition.getY() - playerY;
@@ -287,18 +303,33 @@ public class DungeonPlayer {
 	    	yCords[i] += yMouseOffsetToContentPaneFromJFrame + PLAYERSIZE/2;
 	    }
 	    
-	    
-	    
 	    Polygon hitbox = new Polygon(xCords, yCords, 4);
-	    System.out.println("///attacking from player X:"+ playerX + " Y: "+playerY+ " \n /// Rectangle at X:"+rectX+" Y: "+rectY);
+	    Rectangle attackHitbox = new Rectangle(hitbox.getBounds());
+	    
 	    Graphics2D g2d = (Graphics2D) g;
 	    g2d.draw(hitbox);
-	    return hitbox.contains(point);
+	    return attackHitbox.intersects(enemyHitbox);
 	    // Check if the point is in the rectangle
 
 	}
 
-	public boolean sweepAttack(Point point) {
+	public boolean sweepAttack(EnemyPlayer enemy) {
+		
+		Point enemPoint = new Point((int) enemy.getX(), (int) enemy.getY());
+		Point enemBottomLeft = new Point((int) enemy.getX(), (int) enemy.getY() + enemy.ENEMYSIZE);
+		Point enemTopRight = new Point((int) enemy.getX()  + enemy.ENEMYSIZE, (int) enemy.getY());
+		Point enemBottomRight = new Point((int) enemy.getX() + enemy.ENEMYSIZE, (int) enemy.getY() + enemy.ENEMYSIZE);
+		
+		Point[] enemRecPoints = new Point[] { enemBottomLeft, enemPoint, enemBottomRight, enemTopRight };
+		
+		int[] enemxCords = new int[] { (int) enemBottomLeft.getX(), (int) enemPoint.getX(), (int) enemTopRight.getX(),
+				(int) enemBottomRight.getX() };
+		int[] enemyCords = new int[] { (int) enemBottomLeft.getY(), (int) enemPoint.getY(), (int) enemTopRight.getY(),
+				(int) enemBottomRight.getY() };
+		
+		Polygon enemhitbox = new Polygon(enemxCords, enemyCords, 4);
+		Rectangle enemyHitbox = new Rectangle(enemhitbox.getBounds());
+		
 		double ROTATIONCONSTANT = 0.25;
 
 		Graphics g = homeFrame.getGraphics();
@@ -347,7 +378,11 @@ public class DungeonPlayer {
 	    }
 	    
 	    Polygon hitbox = new Polygon(xCords, yCords, 4);
-	    if (hitbox.contains(point)) {
+	    Rectangle attackHitbox = new Rectangle(hitbox.getBounds());
+	    
+	    
+	    enemyHitbox.intersects(enemyHitbox);
+	    if (attackHitbox.intersects(enemyHitbox)) {
 	    	return true;
 	    }
 	    
@@ -368,14 +403,15 @@ public class DungeonPlayer {
 		    }
 		    
 		    hitbox = new Polygon(xCords, yCords, 4);
-		    if (hitbox.contains(point)) {
+		    attackHitbox = new Rectangle(hitbox.getBounds());
+		    if (attackHitbox.intersects(enemyHitbox)) {
 		    	return true;
 		    }
 		    
 		    g2d.draw(hitbox);
 	    }
 	    
-	    return hitbox.contains(point);
+	    return attackHitbox.intersects(enemyHitbox);
 	    // Check if the point is in the rectangle
 	}
 }
