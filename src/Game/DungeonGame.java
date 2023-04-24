@@ -21,8 +21,6 @@ import java.awt.event.WindowEvent;
 import java.awt.Cursor;
 
 import java.util.ArrayList;
-import java.util.Random;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.Timer;
@@ -34,7 +32,7 @@ import Game.MapLayout.mapType;
 public class DungeonGame implements ActionListener, MouseListener {
 
 	// private static final long serialVersionUID = 1L;
-	public static final int GAMEWINDOWSIZE = 800;
+	public static final int GAMEWINDOWSIZE = 850;
 	public Obstacle[] obstacleArr = new Obstacle[22];
 
 	public static final int gridWidth = 20;
@@ -60,19 +58,27 @@ public class DungeonGame implements ActionListener, MouseListener {
 	private int yMouseOffsetToContentPaneFromJFrame;
 	private Point targetPoint;
 	boolean isColliding = false;
+	Timer timer;
+	JFrame GameGui;
 
-    public DungeonGame() {
-		//this.gameGUI = gameGUI;
+	/**
+	 * Creates a DungeonGame, complete with the player, enemy, and obstacles.  
+	 * The Game also starts a timer loop that repaints every 10 milliseconds.
+	 * 
+	 * @param GameGui The initial user interface the program uses.  The Dungeon Game will revert to this when the player dies or when all the levels have been cleared.
+	 */
+    public DungeonGame(JFrame GameGui) {
 		gameWindow = new JFrame("Dungeon Game");
         gameWindow.setSize(GAMEWINDOWSIZE, GAMEWINDOWSIZE+25);
         gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gameWindow.setLayout(new BorderLayout());
-		gameWindow.setBackground(Color.GREEN);
+		Container gameContentPane = gameWindow.getContentPane();
+		gameContentPane.setBackground(Color.decode("#B2AC88"));
         gameWindow.setVisible(true);
+
+		this.GameGui = GameGui;
     
         gameWindow.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
-        
-        Container gameContentPane = gameWindow.getContentPane();
 
         // Event mouse position is given relative to JFrame, where
         // dolphin's image in JLabel is given relative to ContentPane,
@@ -143,7 +149,6 @@ public class DungeonGame implements ActionListener, MouseListener {
 			@Override
 			public void mouseMoved(MouseEvent e) {
 				player1.setNewTarget(new Point(e.getX(), e.getY()));
-				System.out.println(e.getX()+" "+ e.getY());
 			}
 
 			@Override
@@ -159,11 +164,16 @@ public class DungeonGame implements ActionListener, MouseListener {
         
 
         //Set up the timer
-        Timer timer = new Timer(10, new ActionListener() {
+        timer = new Timer(10, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
             	if (player1.getHealth() <= 0) {
-            		gameWindow.dispatchEvent(new WindowEvent(gameWindow, WindowEvent.WINDOW_CLOSING));
+            		//gameWindow.dispatchEvent(new WindowEvent(gameWindow, WindowEvent.WINDOW_CLOSING));\
+					gameWindow.setVisible(false);
+					gameWindow.dispose();
+					GameGui.setVisible(true);
+					timer.stop();
+
             	}
             	
             	if (boostTimer > 0) {
@@ -184,7 +194,7 @@ public class DungeonGame implements ActionListener, MouseListener {
             	}
             	
             	
-                
+                //Update the current position.
                 currentPosition.setLocation(player1.getX(), player1.getY());;
 
 		        // calculate distance between currentPosition and newPosition
@@ -223,18 +233,45 @@ public class DungeonGame implements ActionListener, MouseListener {
 							enemy.attack(player1);
 						}
 						
+						enemy.setDeltas();
+
+						//Check collision with obstacles.
+						if (enemy.getX() + enemy.getDeltaX() >= 0 && enemy.getX() + enemy.getDeltaX() <= DungeonGame.GAMEWINDOWSIZE - enemy.getEnemySize()
+							&& !enemy.collidesWithObstacle(enemy.getX() + enemy.getDeltaX(), enemy.getY()) 
+							&& !enemy.collidesWithObstacle(enemy.getX() + enemy.getDeltaX() + enemy.getEnemySize(), enemy.getY())
+							&& !enemy.collidesWithObstacle(enemy.getX() + enemy.getDeltaX(), enemy.getY() + enemy.getEnemySize())
+							&& !enemy.collidesWithObstacle(enemy.getX() + enemy.getDeltaX() + enemy.getEnemySize(), enemy.getY() + enemy.getEnemySize())
+							&& enemy.getY() + enemy.getDeltaY() >= 0 && enemy.getY() + enemy.getDeltaY() <= DungeonGame.GAMEWINDOWSIZE - enemy.EnemySize
+							&& !enemy.collidesWithObstacle(enemy.getX(), enemy.getY() + enemy.getDeltaY())
+							&& !enemy.collidesWithObstacle(enemy.getX(), enemy.getY() + enemy.getDeltaY() + enemy.EnemySize)
+							&& !enemy.collidesWithObstacle(enemy.getX()+enemy.EnemySize, enemy.getY() + enemy.getDeltaY())
+							&& !enemy.collidesWithObstacle(enemy.getX()+enemy.EnemySize, enemy.getY() + enemy.getDeltaY() + enemy.EnemySize)) {
+							
+								enemy.move();
+						}
 						
-						enemy.move();
     					enemy.checkPlayer(player1);                		
-                	}
+                	} 
                 }
 
 				player1.reduceInvincibility();
 
+				gameWindow.repaint();
+
                 if(levelOver) {
+
                 	currentLevel += 1;
-                	clearFrame();
-                	loadMap();
+
+					if(currentLevel>3){
+						gameWindow.setVisible(false);
+						gameWindow.dispose();
+						GameGui.setVisible(true);
+						timer.stop();
+					} else {
+						clearFrame();
+						loadMap();
+					}
+					
                 }
 
 				

@@ -64,11 +64,11 @@ public class MapLayout {
 			
 		case HOUSE:
 			obstacleArr = scanMap(new int[][] {
-				{0,0,0,0,0,0,0},
-				{5,3,0,5,6,0,0},
-				{7,8,0,4,8,0,0},
-				{4,4,0,0,0,0,0},
-				{7,4,0,0,0,0,0}
+				{5,3,3,3,3,3,6},
+				{5,3,0,5,6,0,2},
+				{7,8,0,4,8,0,2},
+				{4,4,0,0,0,0,2},
+				{7,4,4,4,4,4,8}
 			});
 			
 			//Set the player position
@@ -76,9 +76,9 @@ public class MapLayout {
 
 			//Create the enemies
 			mapEnemies = new EnemyPlayer[3];
-			mapEnemies[0] = new EnemyPlayer(gameWindow, 25+50*2, 25+50*2, 10, 10, 100, 5, gamePlayer, obstacleArr);
-			mapEnemies[1] = new EnemyPlayer(gameWindow, 25+50*5, 25+50*2, 10, 10, 100, 5, gamePlayer, obstacleArr);
-			mapEnemies[2] = new EnemyPlayer(gameWindow, 25+50*3, 25+50*5, 10, 10, 100, 5, gamePlayer, obstacleArr);
+			mapEnemies[0] = new EnemyPlayer(gameWindow, 70, 70, 10, 10, 100, 5, gamePlayer, obstacleArr);
+			mapEnemies[1] = new EnemyPlayer(gameWindow, 275, 125, 10, 10, 100, 5, gamePlayer, obstacleArr);
+			mapEnemies[2] = new EnemyPlayer(gameWindow, 150, 275, 10, 10, 100, 5, gamePlayer, obstacleArr);
 			
 			break;
 		}

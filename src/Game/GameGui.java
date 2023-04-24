@@ -82,6 +82,8 @@ public class GameGui extends JFrame {
 		setLocationRelativeTo(null);
 		setVisible(true);
 		
+		JFrame gameGui = this;
+
 		// Add listeners to the play and quit buttons
 		quit.addActionListener(new ActionListener() {
 			@Override
@@ -96,7 +98,7 @@ public class GameGui extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// Start the game and close the GUI
-				new DungeonGame();
+				new DungeonGame(gameGui);
 				setVisible(false);
 				dispose();
 			}

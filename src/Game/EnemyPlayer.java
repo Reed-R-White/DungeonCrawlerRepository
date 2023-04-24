@@ -29,7 +29,8 @@ public class EnemyPlayer extends Player {
 	JFrame homeFrame;
 	Obstacle[] obstacleArr;
 	private int enemyHealth;
-	public final int ENEMYSIZE = 32;
+	float deltaX, deltaY;
+	public final int EnemySize = 32;
 
 	private final static int PLAYER_FOLLOW_DISTANCE = 200;
 
@@ -103,7 +104,7 @@ public class EnemyPlayer extends Player {
 		enemyAvatar = new JLabel();
 		ImageIcon enemySprite = new ImageIcon("src/Game/enemySprite.png");
 		enemyAvatar.setIcon(enemySprite);
-		enemyAvatar.setBounds((int) posX, (int) posX, ENEMYSIZE, ENEMYSIZE);
+		enemyAvatar.setBounds((int) posX, (int) posX, EnemySize, EnemySize);
 		enemyAvatar.setVisible(true);
 		gameJFrame.add(enemyAvatar);
 		healthBar = new JLabel("" + enemyHealth);
@@ -117,7 +118,7 @@ public class EnemyPlayer extends Player {
 	public void takeDamage(int damageAmount) {
 		enemyHealth -= damageAmount;
 		healthBar.setText(""+enemyHealth);
-		gameJFrame.repaint();
+		//gameJFrame.repaint();
 		if(enemyHealth <= 0) {
 			gameJFrame.remove(enemyAvatar);
 			gameJFrame.remove(healthBar);
@@ -130,7 +131,18 @@ public class EnemyPlayer extends Player {
 
 	public float getY() {
 		return posY;
+	}
 
+	public float getDeltaX(){
+		return deltaX;
+	}
+
+	public float getDeltaY(){
+		return deltaY;
+	}
+
+	public int getEnemySize(){
+		return EnemySize;
 	}
 	
 	public int getEnemyHealth() {
@@ -145,9 +157,7 @@ public class EnemyPlayer extends Player {
 	 * Moves the enemy towards the player if it is following, or follows a movement
 	 * pattern otherwise.
 	 */
-	public void move() {
-		
-		float deltaX =0, deltaY=0;
+	public void setDeltas() {
 		
 		checkPlayer(player);
 
@@ -184,22 +194,12 @@ public class EnemyPlayer extends Player {
 			// increment movement index
 			movementIndex += 1;
 		}
-		//Check x, if not colliding, move.
-		if (posX + deltaX >= 0 && posX + deltaX <= DungeonGame.GAMEWINDOWSIZE - ENEMYSIZE
-						&& !collidesWithObstacle(posX + deltaX, posY) 
-						&& !collidesWithObstacle(posX + deltaX + ENEMYSIZE, posY)
-						&& !collidesWithObstacle(posX + deltaX, posY + ENEMYSIZE)
-						&& !collidesWithObstacle(posX + deltaX + ENEMYSIZE, posY + ENEMYSIZE)) {
-			posX += deltaX ;
-		}
-		// set pos y
-		if (posY + deltaY >= 0 && posY + deltaY <= DungeonGame.GAMEWINDOWSIZE - ENEMYSIZE
-						&& !collidesWithObstacle(posX, posY + deltaY)
-						&& !collidesWithObstacle(posX, posY + deltaY + ENEMYSIZE)
-						&& !collidesWithObstacle(posX+ENEMYSIZE, posY + deltaY)
-						&& !collidesWithObstacle(posX+ENEMYSIZE, posY + deltaY + ENEMYSIZE)) {
-			posY += deltaY;
-		}
+
+	}
+
+	public void move(){
+		posX += deltaX;
+		posY += deltaY;
 		
 		drawEnemy();
 	}
@@ -231,7 +231,7 @@ public class EnemyPlayer extends Player {
 		
 	}
 
-	private boolean collidesWithObstacle(float x, float y) {
+	public boolean collidesWithObstacle(float x, float y) {
 		for (int i = 0; i < obstacleArr.length; i++) {
 			Obstacle obstacle = obstacleArr[i];
 			if (obstacle != null && obstacle.checkCollision(x, y)) {
@@ -249,6 +249,6 @@ public class EnemyPlayer extends Player {
 		enemyAvatar.setBounds((int) posX, (int) posY, 32, 32);
 		healthBar.setText("" + enemyHealth);
 		healthBar.setBounds((int) posX + 10, (int) posY - 25, 32, 32);
-		gameJFrame.repaint();
+		//gameJFrame.repaint();
 	}
 }

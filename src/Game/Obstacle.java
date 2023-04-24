@@ -1,3 +1,6 @@
+//Written by Charlie Said, Reed White, and Ryan O'Valley.
+//Fully commented.
+
 package Game;
 
 import java.awt.Image;
@@ -20,8 +23,6 @@ public class Obstacle {
 
     private float posX1,posY1,posX2,posY2,posX3,posY3,posX4,posY4,posX5,posY5;
 
-
-
 	/**
 	 * Object Constructor
 	 * 
@@ -39,7 +40,6 @@ public class Obstacle {
         posY1 = startingY;
         currentOrientation = rotation;
         ObstacleObject = new JLabel[1];
-        //Create objects
         
 
         //Config the rotation
@@ -90,7 +90,6 @@ public class Obstacle {
                 ObstacleObject = new JLabel[5];
                 break;
             case L_VERTICAL:
-                posX1=posX1;
                 posX2=posX1;
                 posY2=posY1+OBJECT_SIZE;
                 posX3=posX1;
@@ -106,7 +105,6 @@ public class Obstacle {
                 ObstacleObject = new JLabel[3];
                 break;
             case T_HORIZONTAL:
-                posY1=posY1;
                 posX2=posX1+OBJECT_SIZE;
                 posY2=posY1;
                 posX3=posX2+OBJECT_SIZE;
@@ -128,10 +126,11 @@ public class Obstacle {
 
 
 	/**
-	 * Put the object into the game.
+	 * This method draws the Obstacle into the game.
 	 */
 	public void draw() {
 
+		//Position the JLabels
     	switch(currentOrientation){
 	        case POINTING_BOTTOM_RIGHT:
 	        	ObstacleObject[0] = new JLabel();
@@ -236,8 +235,6 @@ public class Obstacle {
 	        	break;
 	            
 	    }
-        
-        System.out.println("X3 = "+posX3+", Y3 = "+posY3);
 
         //retrieve and resize the image
         ImageIcon sprite = new ImageIcon("src/Game/cobblestone_texture.jpeg");
@@ -245,10 +242,8 @@ public class Obstacle {
         tempImage = tempImage.getScaledInstance(OBJECT_SIZE, OBJECT_SIZE, java.awt.Image.SCALE_SMOOTH);
         sprite = new ImageIcon(tempImage);
 
-
-		// Draw the images
+		//Assign the image to the JLabel and put it in the JFrame
 		for (JLabel obj : ObstacleObject) {
-
 			obj.setIcon(sprite);
 			obj.setVisible(true);
 			gameJFrame.add(obj);
@@ -257,6 +252,11 @@ public class Obstacle {
 		gameJFrame.repaint();
     }
     
+	/**
+	 * Returns an array of all the JLabels in the given Obstacle.
+	 * 
+	 * @return A JLabel array with every JLabel that comprises the Obstacle.
+	 */
     public JLabel[] getObjects() {
     	return ObstacleObject;
     }
@@ -271,15 +271,17 @@ public class Obstacle {
 	 */
 	public boolean checkCollision(float x, float y) {
 
+		//Check the first Obstacle (in the case that there is only one JLabel in the Obstacle)
         if((x >= posX1 && x <= (posX1 + ObstacleObject[0].getWidth()) && y >= posY1 && y <= (posY1 + ObstacleObject[0].getHeight()))){
             return true;
         }
         
+		//If the Obstacle has 3 JLabels in it (if it's a straight line), check each JLabel.
         if (ObstacleObject.length == 3) {
         	if((x >= posX1 && x <= (posX1 + ObstacleObject[0].getWidth()) && y >= posY1 && y <= (posY1 + ObstacleObject[0].getHeight())) || (x >= posX2 && x <= (posX2 + ObstacleObject[1].getWidth()) && y >= posY2 && y <= (posY2 + ObstacleObject[1].getHeight())) || (x >= posX3 && x <= (posX3 + ObstacleObject[2].getWidth()) && y >= posY3 && y <= (posY3 + ObstacleObject[2].getHeight()))){
                 return true;
             }
-        }
+        }//Otherwise, if the Obstacle has 5 JLabels, check all 5.
         else if (ObstacleObject.length == 5) {
         	if((x >= posX1 && x <= (posX1 + ObstacleObject[0].getWidth()) && y >= posY1 && y <= (posY1 + ObstacleObject[0].getHeight())) 
         			|| (x >= posX2 && x <= (posX2 + ObstacleObject[1].getWidth()) && y >= posY2 && y <= (posY2 + ObstacleObject[1].getHeight())) 

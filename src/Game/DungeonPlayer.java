@@ -13,14 +13,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Polygon;
-
 import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
-import java.util.Timer;
-
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -49,9 +42,7 @@ public class DungeonPlayer {
 	private int playerY;
 	/* The new position of the player */
 	private Point newPosition;
-	/* The current position of the player */
 
-	private Point currentPosition;
 	public int PLAYERSIZE = 32;
 	
 	private int xMouseOffsetToContentPaneFromJFrame;
@@ -193,7 +184,7 @@ public class DungeonPlayer {
 		playerAvatar.setBounds(playerX, playerY, PLAYERSIZE, PLAYERSIZE);
 		healthBar.setText(""+playerHealth);
 		healthBar.setBounds(playerX + 8, playerY - 25, PLAYERSIZE, PLAYERSIZE);
-		homeFrame.repaint();
+		//homeFrame.repaint();
 
 	}
 
@@ -255,9 +246,9 @@ public class DungeonPlayer {
 	 */
 	public boolean attack(EnemyPlayer enemy) {
 		Point enemPoint = new Point((int) enemy.getX(), (int) enemy.getY());
-		Point enemBottomLeft = new Point((int) enemy.getX(), (int) enemy.getY() + enemy.ENEMYSIZE);
-		Point enemTopRight = new Point((int) enemy.getX()  + enemy.ENEMYSIZE, (int) enemy.getY());
-		Point enemBottomRight = new Point((int) enemy.getX() + enemy.ENEMYSIZE, (int) enemy.getY() + enemy.ENEMYSIZE);
+		Point enemBottomLeft = new Point((int) enemy.getX(), (int) enemy.getY() + enemy.EnemySize);
+		Point enemTopRight = new Point((int) enemy.getX()  + enemy.EnemySize, (int) enemy.getY());
+		Point enemBottomRight = new Point((int) enemy.getX() + enemy.EnemySize, (int) enemy.getY() + enemy.EnemySize);
 		
 		Point[] enemRecPoints = new Point[] { enemBottomLeft, enemPoint, enemBottomRight, enemTopRight };
 		
@@ -315,9 +306,9 @@ public class DungeonPlayer {
 	public boolean sweepAttack(EnemyPlayer enemy) {
 		
 		Point enemPoint = new Point((int) enemy.getX(), (int) enemy.getY());
-		Point enemBottomLeft = new Point((int) enemy.getX(), (int) enemy.getY() + enemy.ENEMYSIZE);
-		Point enemTopRight = new Point((int) enemy.getX()  + enemy.ENEMYSIZE, (int) enemy.getY());
-		Point enemBottomRight = new Point((int) enemy.getX() + enemy.ENEMYSIZE, (int) enemy.getY() + enemy.ENEMYSIZE);
+		Point enemBottomLeft = new Point((int) enemy.getX(), (int) enemy.getY() + enemy.EnemySize);
+		Point enemTopRight = new Point((int) enemy.getX()  + enemy.EnemySize, (int) enemy.getY());
+		Point enemBottomRight = new Point((int) enemy.getX() + enemy.EnemySize, (int) enemy.getY() + enemy.EnemySize);
 		
 		Point[] enemRecPoints = new Point[] { enemBottomLeft, enemPoint, enemBottomRight, enemTopRight };
 		
