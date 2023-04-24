@@ -11,6 +11,7 @@ package Game;
 import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.Polygon;
 
@@ -19,9 +20,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Timer;
 
-
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -53,6 +58,7 @@ public class DungeonPlayer {
 
 	private Point currentPosition;
 	public int PLAYERSIZE = 32;
+	private JLabel drawBox;
 	
 	private int xMouseOffsetToContentPaneFromJFrame;
 	private int yMouseOffsetToContentPaneFromJFrame;
@@ -88,6 +94,11 @@ public class DungeonPlayer {
 		playerJFrame.add(playerAvatar);
 
 		playerJFrame.add(healthBar);
+		
+		drawBox = new JLabel();
+		drawBox.setBounds(playerX-30, playerY-30, 100, 100);
+		drawBox.setVisible(true);
+		homeFrame.add(drawBox);
 
 	    
 		Container gameContentPane = homeFrame.getContentPane();
@@ -193,6 +204,7 @@ public class DungeonPlayer {
 		playerAvatar.setBounds(playerX, playerY, PLAYERSIZE, PLAYERSIZE);
 		healthBar.setText(""+playerHealth);
 		healthBar.setBounds(playerX + 8, playerY - 25, PLAYERSIZE, PLAYERSIZE);
+		drawBox.setBounds(playerX - 30, playerY - 30, 100, 100);
 		homeFrame.repaint();
 
 	}
@@ -242,6 +254,19 @@ public class DungeonPlayer {
 			p.y = pivot.y + (int) (dx * sin + dy * cos);
 		}
 	}
+	
+	public void drawRotatedImage(BufferedImage image, int x, int y, double angle) {
+	    Graphics2D g2d = (Graphics2D) drawBox.getGraphics();
+	    AffineTransform transform = new AffineTransform();
+	    transform.translate(x + image.getWidth() / 2, y + image.getHeight() / 2);
+	    transform.rotate(Math.toRadians(angle));
+	    transform.translate(-image.getWidth(), -image.getHeight());
+	    g2d.drawImage(image, transform, null);
+	    
+	    
+	}
+	
+	
 
 	/**
 	 * This method executes an attack action from the player towards the given
@@ -303,11 +328,23 @@ public class DungeonPlayer {
 	    }
 	    
 	    Polygon hitbox = new Polygon(xCords, yCords, 4);
-	    Rectangle attackHitbox = new Rectangle(hitbox.getBounds());
+	    
+	    ImageIcon sword = new ImageIcon("src/Game/sword.png");
+	    BufferedImage swordPic = null;
+	    
+	    try {
+			swordPic = ImageIO.read(new File("src/Game/swordStab.png"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    
+	    
+	    drawRotatedImage(swordPic, (int) (playerX) + 20, (int) (playerY), Math.toDegrees(angle)+90);
 	    
 	    Graphics2D g2d = (Graphics2D) g;
 	    g2d.draw(hitbox);
-	    return attackHitbox.intersects(enemyHitbox);
+	    return hitbox.intersects(enemyHitbox);
 	    // Check if the point is in the rectangle
 
 	}
@@ -377,11 +414,10 @@ public class DungeonPlayer {
 	    }
 	    
 	    Polygon hitbox = new Polygon(xCords, yCords, 4);
-	    Rectangle attackHitbox = new Rectangle(hitbox.getBounds());
 	    
 	    
 	    enemyHitbox.intersects(enemyHitbox);
-	    if (attackHitbox.intersects(enemyHitbox)) {
+	    if (hitbox.intersects(enemyHitbox)) {
 	    	return true;
 	    }
 	    
@@ -402,15 +438,14 @@ public class DungeonPlayer {
 		    }
 		    
 		    hitbox = new Polygon(xCords, yCords, 4);
-		    attackHitbox = new Rectangle(hitbox.getBounds());
-		    if (attackHitbox.intersects(enemyHitbox)) {
+		    if (hitbox.intersects(enemyHitbox)) {
 		    	return true;
 		    }
 		    
 		    g2d.draw(hitbox);
 	    }
 	    
-	    return attackHitbox.intersects(enemyHitbox);
+	    return hitbox.intersects(enemyHitbox);
 	    // Check if the point is in the rectangle
 	}
 }
