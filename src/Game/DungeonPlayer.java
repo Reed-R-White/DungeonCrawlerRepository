@@ -33,6 +33,9 @@ public class DungeonPlayer {
 
 	/* The maximum movement distance for the player */
 	public int MAXMOVEMENT = 3;
+
+	private final int INVINCIBILITYTIME = 50;
+
 	/* The amount of damage done to an enemy by the player */
 
 	private int playerDamage;
@@ -162,21 +165,25 @@ public class DungeonPlayer {
 		playerX = (int)pos.getX();
 		playerY = (int)pos.getY();
 	}
-
-
-	//Duplicate method with the one below, remove one or the other.
-	public void playerTakeDamage(int damageAmount) {
-		playerHealth -= damageAmount;
-		drawPlayer();
-	}
 	
 	public int getDamage() {
 		return playerDamage;
 	}
 	
+	/**
+	 * This method reduces the player's health by the specified amount and sets the
+	 * invincibility counter to 500.
+	 * 
+	 * @param damageAmount an integer representing the amount of damage taken by the
+	 *               player
+	 */
 	public void takeDamage(int damageAmount) {
-		playerHealth -= damageAmount;
-		drawPlayer();
+		if (invincibilityCounter<=0){
+			System.out.println(invincibilityCounter);
+			playerHealth = playerHealth-damageAmount;
+			invincibilityCounter = INVINCIBILITYTIME;
+			drawPlayer();
+		}
 	}
 
 	/**
@@ -184,7 +191,7 @@ public class DungeonPlayer {
 	 */
 	public void drawPlayer() {
 		playerAvatar.setBounds(playerX, playerY, PLAYERSIZE, PLAYERSIZE);
-		healthBar.setText("" + playerHealth);
+		healthBar.setText(""+playerHealth);
 		healthBar.setBounds(playerX + 8, playerY - 25, PLAYERSIZE, PLAYERSIZE);
 		homeFrame.repaint();
 
@@ -209,19 +216,6 @@ public class DungeonPlayer {
 	public int getInvincibility() {
 		return invincibilityCounter;
 
-	}
-
-	/**
-	 * This method reduces the player's health by the specified amount and sets the
-	 * invincibility counter to 500.
-	 * 
-	 * @param attack an integer representing the amount of damage taken by the
-	 *               player
-	 */
-	public void enemyTakeDamage(int attack) {
-		playerHealth -= attack;
-		drawPlayer();
-		invincibilityCounter = 500;
 	}
 
 	public int getMaxMovement() {

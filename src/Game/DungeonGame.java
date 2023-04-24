@@ -38,7 +38,7 @@ import Game.MapLayout.mapType;
 public class DungeonGame implements ActionListener, MouseListener {
 
 	// private static final long serialVersionUID = 1L;
-	public static final int GAMEWINDOWSIZE = 1000;
+	public static final int GAMEWINDOWSIZE = 900;
 	public Obstacle[] obstacleArr = new Obstacle[22];
 
 	public static final int gridWidth = 20;
@@ -220,15 +220,21 @@ public class DungeonGame implements ActionListener, MouseListener {
                 for (EnemyPlayer enemy : currentMap.getEnemyList()) {
                 	if(enemy.getEnemyHealth() >= 0) {
                 		levelOver = false;
-                		enemy.move();
-                		enemy.attack(player1);
-    					player1.reduceInvincibility();
-    					enemy.checkPlayer(player1);
                 		
-                		gameWindow.repaint();;
+						double distance = Math.sqrt(Math.pow(enemy.getX() - player1.getX(), 2) + Math.pow(enemy.getY()- player1.getY(), 2));
+						if (distance <=40){
+							enemy.attack(player1);
+						}
+						
+						player1.reduceInvincibility();
+						enemy.move();
+    					enemy.checkPlayer(player1);                		
+                		//gameWindow.repaint();
                 	}
                 }
                 
+				
+
                 if(levelOver) {
                 	currentLevel += 1;
                 	clearFrame();

@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import java.awt.Point;
 
 public class EnemyPlayer extends Player {
 	private List<Integer> movementPatternX;
@@ -31,7 +32,7 @@ public class EnemyPlayer extends Player {
 	private DungeonPlayer player;
 	private JLabel enemyAvatar;
 	private JLabel healthBar;
-	private int attack;
+	private int damage;
 	JFrame homeFrame;
 	Obstacle[] obstacleArr;
 	private int enemyHealth;
@@ -53,7 +54,7 @@ public class EnemyPlayer extends Player {
 	 * @param movementPatternY The Y values of the movement pattern of the enemy.
 	 */
 	public EnemyPlayer(JFrame gameJFrame, float startingX, float startingY, float width, float height,
-			int enemyHealth, int attack,
+			int enemyHealth, int damage,
 			DungeonPlayer player, Obstacle[] obstacleArr) {
 		super(gameJFrame, startingX, startingY, width, height);
 		
@@ -65,7 +66,7 @@ public class EnemyPlayer extends Player {
 		
 		
 		this.player = player;
-		this.attack = attack;
+		this.damage = damage;
 		this.obstacleArr = obstacleArr;
 		this.enemyHealth = enemyHealth;
 		
@@ -231,12 +232,10 @@ public class EnemyPlayer extends Player {
 	}
 
 	public void attack(DungeonPlayer player) {
-		if (player.getX() >= posX && player.getX() <= posX + width && player.getY() >= posY
-				&& player.getY() <= posY + height && player.getInvincibility() == 0) {
-
-			player.takeDamage(attack);
-
-		}
+		
+		System.out.println("Hit!  Player at "+ player.getHealth());
+		player.takeDamage(damage);
+		
 	}
 
 	private boolean collidesWithObstacle(float x, float y) {
@@ -251,11 +250,6 @@ public class EnemyPlayer extends Player {
 
 	public boolean isAlive() {
 		return enemyHealth > 0;
-	}
-
-	private boolean checkPlayer() {
-		return Math
-				.sqrt(Math.pow(posX - player.getX(), 2) + Math.pow(posY - player.getY(), 2)) <= PLAYER_FOLLOW_DISTANCE;
 	}
 
 	public void drawEnemy() {
