@@ -81,15 +81,26 @@ public class DungeonPlayer {
 	}
 
 	/**
-	 * Move the player by a specified amount in both x and y
+	 * Move the player by a specified amount along the x axis
 	 * 
 	 * @param dx The movement along the x axis
-	 * @param dy The movement along the y axis
 	 */
-	public void movePlayer(int dx, int dy) {
+	public void movePlayerX(int dx) {
 
 		// update player's position
 		playerX += (int) dx;
+
+		drawPlayer();
+	}
+
+	/**
+	 * Move the player by a specified amount along the y axis
+	 * 
+	 * @param dy The movement along the y axis
+	 */
+	public void movePlayerY(int dy) {
+
+		// update player's position
 		playerY += (int) dy;
 
 		drawPlayer();

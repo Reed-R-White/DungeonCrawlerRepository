@@ -229,10 +229,18 @@ public class EnemyPlayer extends Player {
 	}
 
 	/**
-	 * Moves the enemy by its deltas along the X and Y axis, then redraws it
+	 * Moves the enemy by its deltas along the X axis, then redraws it
 	 */
-	public void move(){
+	public void moveX(){
 		posX += deltaX;
+		
+		drawEnemy();
+	}
+
+	/**
+	 * Moves the enemy by its deltas along the Y axis, then redraws it
+	 */
+	public void moveY(){
 		posY += deltaY;
 		
 		drawEnemy();

@@ -1,10 +1,3 @@
-//Fully commented.
-
-/**
- * The DungeonGame class creates the game window, player character, and enemy characters. 
- * It contains a game loop which continuously updates the position and actions 
- * of the enemy characters and checks for collisions with the player character.
- */
 
 package Game;
 
@@ -27,11 +20,13 @@ import javax.swing.Timer;
 import Game.MapLayout.mapType;
 
 /**
- * The driver/main class for the game.
+ * The DungeonGame class creates the game window, player character, and enemy characters. 
+ * It contains a game loop which continuously updates the position and actions 
+ * of the enemy characters and checks for collisions with the player character.
  * 
- * @author Charlie Said, Ryan O'Valley, and Reed White
+ * @authors Charlie Said, Ryan O'Valley, and Reed White
  */
-public class DungeonGame implements ActionListener, MouseListener {
+public class DungeonGame implements ActionListener {
 
 	//Game variables
 	public static final int GAMEWINDOWSIZE = 850;
@@ -52,7 +47,8 @@ public class DungeonGame implements ActionListener, MouseListener {
 	//private int boostCoolDown = 0;
 	private static final int ATTACKCOOLDOWN = 0;
 	private Point targetPoint;
-	private boolean isColliding = false;
+	private boolean isCollidingX = false;
+	private boolean isCollidingY = false;
 	private Timer timer;
 	private JFrame GameGui;
 
@@ -96,47 +92,34 @@ public class DungeonGame implements ActionListener, MouseListener {
 				//The Space key triggers a stabbing attack, which deals extra damage.
 				double damageModifier = 1.3;
 				if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-		        	for(EnemyPlayer enemy: currentEnemies)
+		        	for(EnemyPlayer enemy: currentEnemies){
 			        	if (attackTimer <= 0) {
 			        		attackTimer = ATTACKCOOLDOWN;
 				        	if(player1.attack(enemy)) {
 				            	enemy.takeDamage((int)(player1.getDamage()*damageModifier));
 				            }
 			        	}
+					}
 		        }
 		        
 				//The Shift key triggers a sweeping attack
 		        if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
-		        	for(EnemyPlayer enemy: currentEnemies)
+		        	for(EnemyPlayer enemy: currentEnemies){
 			        	if (attackTimer <= 0) {
 			        		attackTimer = ATTACKCOOLDOWN;
 				        	if(player1.sweepAttack(enemy)) {
 				            	enemy.takeDamage(player1.getDamage());
 				            }
 			        	}
+					}
 		        }
-		        
-				//Retired code to make the player sprint
-//		        else if (e.getKeyCode() == KeyEvent.VK_W) {
-//		        	if (boostCoolDown <= 0) {
-//		        		boostTimer = 10;
-//		        	}
-//		        	System.out.println(xMouseOffsetToContentPaneFromJFrame+"\n"+yMouseOffsetToContentPaneFromJFrame);
-//		        }
-		        
 		    }
 		    
 			@Override
-			public void keyTyped(KeyEvent e) {
-				// TODO Auto-generated method stub
-
-			}
+			public void keyTyped(KeyEvent e) {}
 
 			@Override
-			public void keyReleased(KeyEvent e) {
-				// TODO Auto-generated method stub
-
-			}
+			public void keyReleased(KeyEvent e) {}
 		});
 
 
@@ -161,7 +144,6 @@ public class DungeonGame implements ActionListener, MouseListener {
 			public void mouseDragged(MouseEvent e) {}
 
 		});
-		 gameWindow.addMouseListener(this);
 
         //Set up the timer
         timer = new Timer(10, new ActionListener() {
@@ -175,25 +157,11 @@ public class DungeonGame implements ActionListener, MouseListener {
 					GameGui.setVisible(true);
 					timer.stop();
             	}
-            	//Retired code relating to the speed boost
-            	/*if (boostTimer > 0) {
-          		boostTimer -= 1;
-            		player1.MAXMOVEMENT = 6;
-            		boostCoolDown = 100;
-            	}
-            	else if (boostTimer <= 0) {
-                    player1.MAXMOVEMENT = 3; //Return the player speed to normal.
-                    //Start the cooldown
-                    if (boostCoolDown > 0) {
-            			boostCoolDown -= 1;
-            		}
-            	}*/
             	
 				//Update the attack timer.
             	if (attackTimer > 0) {
             		attackTimer -= 1;
             	}
-            	
             	
                 //Update the current position.
                 currentPosition.setLocation(player1.getX(), player1.getY());;
@@ -206,24 +174,43 @@ public class DungeonGame implements ActionListener, MouseListener {
                     dx = player1.MAXMOVEMENT * (player1.getNewTarget().getX() - currentPosition.getX()) / distance;
                     dy = player1.MAXMOVEMENT * (player1.getNewTarget().getY() - currentPosition.getY()) / distance;
                     
-                    // Check collision
-                    isColliding = false;
+                    // Check collision for X
+                    isCollidingX = false;
                     for(Obstacle obj : obstacleArr){
-                        if(obj.checkCollision((float)(player1.getX()+dx), (float)(player1.getY()+dy)) 
-							|| obj.checkCollision((float)(player1.getX()+player1.PLAYERSIZE+dx), (float)(player1.getY()+dy)) 
-							|| obj.checkCollision((float)(player1.getX()+player1.PLAYERSIZE+dx), (float)(player1.getY()+player1.PLAYERSIZE+dy)) 
-							|| obj.checkCollision((float)(player1.getX()+dx), (float)(player1.getY()+player1.PLAYERSIZE+dy))){
+                        if(obj.checkCollision((float)(player1.getX()+dx), (float)(player1.getY())) 
+							|| obj.checkCollision((float)(player1.getX()+player1.PLAYERSIZE+dx), (float)(player1.getY())) 
+							|| obj.checkCollision((float)(player1.getX()+player1.PLAYERSIZE+dx), (float)(player1.getY()+player1.PLAYERSIZE)) 
+							|| obj.checkCollision((float)(player1.getX()+dx), (float)(player1.getY()+player1.PLAYERSIZE))){
                             
-								isColliding = true;
+								isCollidingX = true;
                             	
                             	player1.setNewTarget(currentPosition);
                             	break;
                         }
                     }
 
-                    if(!isColliding){
+                    if(!isCollidingX){
                         // Marginally move the player by the x and y.
-                        player1.movePlayer((int)dx,(int)dy);
+                        player1.movePlayerX((int)dx);
+                    }
+
+					isCollidingY = false;
+                    for(Obstacle obj : obstacleArr){
+                        if(obj.checkCollision((float)(player1.getX()), (float)(player1.getY()+dy)) 
+							|| obj.checkCollision((float)(player1.getX()+player1.PLAYERSIZE), (float)(player1.getY()+dy)) 
+							|| obj.checkCollision((float)(player1.getX()+player1.PLAYERSIZE), (float)(player1.getY()+player1.PLAYERSIZE+dy)) 
+							|| obj.checkCollision((float)(player1.getX()), (float)(player1.getY()+player1.PLAYERSIZE+dy))){
+                            
+								isCollidingY = true;
+                            	
+                            	player1.setNewTarget(currentPosition);
+                            	break;
+                        }
+                    }
+
+                    if(!isCollidingY){
+                        // Marginally move the player by the x and y.
+                        player1.movePlayerY((int)dy);
                     }
                 }
 	            
@@ -243,19 +230,24 @@ public class DungeonGame implements ActionListener, MouseListener {
 						enemy.setDeltas();
 
 						//Check collision with obstacles.
-						if (enemy.getX() + enemy.getDeltaX() >= 0 && enemy.getX() + enemy.getDeltaX() <= DungeonGame.GAMEWINDOWSIZE - enemy.getEnemySize()
-							&& !enemy.collidesWithObstacle(enemy.getX() + enemy.getDeltaX(), enemy.getY()) 
-							&& !enemy.collidesWithObstacle(enemy.getX() + enemy.getDeltaX() + enemy.getEnemySize(), enemy.getY())
-							&& !enemy.collidesWithObstacle(enemy.getX() + enemy.getDeltaX(), enemy.getY() + enemy.getEnemySize())
-							&& !enemy.collidesWithObstacle(enemy.getX() + enemy.getDeltaX() + enemy.getEnemySize(), enemy.getY() + enemy.getEnemySize())
-							&& enemy.getY() + enemy.getDeltaY() >= 0 && enemy.getY() + enemy.getDeltaY() <= DungeonGame.GAMEWINDOWSIZE - enemy.EnemySize
-							&& !enemy.collidesWithObstacle(enemy.getX(), enemy.getY() + enemy.getDeltaY())
-							&& !enemy.collidesWithObstacle(enemy.getX(), enemy.getY() + enemy.getDeltaY() + enemy.EnemySize)
-							&& !enemy.collidesWithObstacle(enemy.getX()+enemy.EnemySize, enemy.getY() + enemy.getDeltaY())
-							&& !enemy.collidesWithObstacle(enemy.getX()+enemy.EnemySize, enemy.getY() + enemy.getDeltaY() + enemy.EnemySize)) {
+						if (enemy.getX() + enemy.getDeltaX() >= 0 && enemy.getX() + enemy.getDeltaX() <= DungeonGame.GAMEWINDOWSIZE - enemy.getEnemySize() && 
+						!enemy.collidesWithObstacle(enemy.getX() + enemy.getDeltaX(), enemy.getY()) && 
+						!enemy.collidesWithObstacle(enemy.getX() + enemy.getDeltaX() + enemy.getEnemySize(), enemy.getY()) && 
+						!enemy.collidesWithObstacle(enemy.getX() + enemy.getDeltaX(), enemy.getY() + enemy.getEnemySize()) && 
+						!enemy.collidesWithObstacle(enemy.getX() + enemy.getDeltaX() + enemy.getEnemySize(), enemy.getY() + enemy.getEnemySize())){
+
+							enemy.moveX();
+						}
 							
-								//Assuming the movement wouldn't put the enemy inside a wall, move the enemy.
-								enemy.move();
+							
+						if(enemy.getY() + enemy.getDeltaY() >= 0 && enemy.getY() + enemy.getDeltaY() <= DungeonGame.GAMEWINDOWSIZE - enemy.EnemySize && 
+						!enemy.collidesWithObstacle(enemy.getX(), enemy.getY() + enemy.getDeltaY()) && 
+						!enemy.collidesWithObstacle(enemy.getX(), enemy.getY() + enemy.getDeltaY() + enemy.EnemySize) && 
+						!enemy.collidesWithObstacle(enemy.getX()+enemy.EnemySize, enemy.getY() + enemy.getDeltaY()) && 
+						!enemy.collidesWithObstacle(enemy.getX()+enemy.EnemySize, enemy.getY() + enemy.getDeltaY() + enemy.EnemySize)) {
+							
+							//Assuming the movement wouldn't put the enemy inside a wall, move the enemy.
+							enemy.moveY();
 						}            		
                 	} 
                 }
@@ -323,23 +315,6 @@ public class DungeonGame implements ActionListener, MouseListener {
     		gameWindow.remove(enem.getJLabel());
     	}
     }
-
-	//The rest of these are override methods that the game needs in order to compile...
-
-	@Override
-	public void mouseClicked(MouseEvent e) {}
-
-	@Override
-	public void mousePressed(MouseEvent e) {}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {}
-
-	@Override
-	public void mouseExited(MouseEvent e) {}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {}
