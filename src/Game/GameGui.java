@@ -12,6 +12,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -28,6 +29,7 @@ public class GameGui extends JFrame {
 
 	// Declare instance variables
 	JLabel title;
+	JLabel message;
 	JButton play;
 	JButton quit;
 	JPanel panel;
@@ -59,6 +61,9 @@ public class GameGui extends JFrame {
 		Border border = BorderFactory.createLineBorder(Color.BLACK, 2);
 		title.setBorder(border);
 		titlePanel.add(title);
+		message = new JLabel("Click Start to play");
+		message.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+		titlePanel.add(message);
 		titlePanel.add(Box.createRigidArea(new Dimension(0, 100)));
 		titlePanel.setBackground(Color.decode("#B2AC88"));
 		title.setAlignmentX(JComponent.CENTER_ALIGNMENT);
@@ -66,6 +71,11 @@ public class GameGui extends JFrame {
 		// Set up the button panel
 		buttonPanel = new JPanel();
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+		
+		JButton temp = new JButton();
+		temp.setVisible(true);
+		panel.add(temp);
+		
 		panel.add(buttonPanel, BorderLayout.CENTER);
 		buttonPanel.add(play);
 		play.setPreferredSize(new Dimension(50, 50));
@@ -75,6 +85,12 @@ public class GameGui extends JFrame {
 		buttonPanel.add(quit);
 		quit.setAlignmentX(JComponent.CENTER_ALIGNMENT);
 		add(panel);
+		
+		
+		
+		
+		
+		
 
 		// Set up the JFrame
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -103,6 +119,10 @@ public class GameGui extends JFrame {
 				dispose();
 			}
 		});
+	}
+	
+	public void updateMessage(String m) {
+		message.setText(m);
 	}
 
 	/**

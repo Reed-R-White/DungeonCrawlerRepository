@@ -8,6 +8,12 @@
 package Game;
 
 import java.awt.BorderLayout;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.UnsupportedAudioFileException;
+
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Graphics;
@@ -19,17 +25,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.io.IOException;
 import java.util.Timer;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+
 /**
  * 
  * @author Reed White
  */
 public class DungeonPlayer {
+	
+	Clip attackClip;
 
 	/* The maximum movement distance for the player */
 	public int MAXMOVEMENT = 3;
@@ -74,6 +84,14 @@ public class DungeonPlayer {
 		
 		playerDamage = 20;
 		
+//		try {
+//			AudioInputStream aud = AudioSystem.getAudioInputStream(this.getClass().getResource("attackAudio.wav"));
+//			this.attackClip = AudioSystem.getClip();
+//			this.attackClip.open(aud);
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 
 		newPosition = new Point(playerX, playerY);
 		
@@ -178,10 +196,12 @@ public class DungeonPlayer {
 	 */
 	public void takeDamage(int damageAmount) {
 		if (invincibilityCounter<=0){
-			System.out.println(invincibilityCounter);
+			System.out.println("NOT INVINCIBLE: " + invincibilityCounter);
 			playerHealth = playerHealth-damageAmount;
 			invincibilityCounter = INVINCIBILITYTIME;
 			drawPlayer();
+		} else {
+			System.out.println("INVINCIBLE: " + invincibilityCounter);
 		}
 	}
 
@@ -253,6 +273,8 @@ public class DungeonPlayer {
 	 * @return true if an attack was executed, false otherwise
 	 */
 	public boolean attack(Point point) {
+		//this.attackClip.start();
+		
 		// Get the direction from the player to the mouse
 		double deltaX = newPosition.getX() - playerX;
 		double deltaY = newPosition.getY() - playerY;

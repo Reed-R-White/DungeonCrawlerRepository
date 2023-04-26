@@ -65,6 +65,7 @@ public class DungeonGame implements ActionListener, MouseListener {
 	private Point targetPoint;
 	boolean isColliding = false;
 	JFrame gameGUI;
+	Timer timer;
 
 
     public DungeonGame(JFrame gameGUI) {
@@ -92,7 +93,7 @@ public class DungeonGame implements ActionListener, MouseListener {
         currentPosition = new Point(player1.getX(),player1.getY());
 
         //currentMap = new MapLayout(mapType.MAZE, gameWindow, player1);
-        currentLevel = 3;
+        currentLevel = 2;
 		loadMap();
         
         gameWindow.addKeyListener(new KeyListener() {
@@ -123,6 +124,14 @@ public class DungeonGame implements ActionListener, MouseListener {
 		        		boostTimer = 10;
 		        	}
 		        	System.out.println(xMouseOffsetToContentPaneFromJFrame+"\n"+yMouseOffsetToContentPaneFromJFrame);
+		        }
+		        
+		        if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+		        	gameWindow.setVisible(false);
+            		gameWindow.dispose();
+            		gameGUI.setVisible(true);
+            		((GameGui)gameGUI).updateMessage("Instructions here");
+            		timer.stop();
 		        }
 		        
 		    }
@@ -162,11 +171,16 @@ public class DungeonGame implements ActionListener, MouseListener {
         
 
         //Set up the timer
-        Timer timer = new Timer(10, new ActionListener() {
+        timer = new Timer(10, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
             	if (player1.getHealth() <= 0) {
-            		gameWindow.dispatchEvent(new WindowEvent(gameWindow, WindowEvent.WINDOW_CLOSING));
+            		//gameWindow.dispatchEvent(new WindowEvent(gameWindow, WindowEvent.WINDOW_CLOSING));
+            		gameWindow.setVisible(false);
+            		gameWindow.dispose();
+            		gameGUI.setVisible(true);
+            		((GameGui)gameGUI).updateMessage("You Lost");
+            		timer.stop();
             	}
             	
             	if (boostTimer > 0) {
@@ -239,6 +253,14 @@ public class DungeonGame implements ActionListener, MouseListener {
                 	currentLevel += 1;
                 	clearFrame();
                 	loadMap();
+                	player1.drawPlayer();
+                	if(currentLevel > 3) {
+                		gameWindow.setVisible(false);
+                		gameWindow.dispose();
+                		gameGUI.setVisible(true);
+                		((GameGui)gameGUI).updateMessage("You Win");
+                		timer.stop();
+                	}
                 }
             }
         });
@@ -279,7 +301,7 @@ public class DungeonGame implements ActionListener, MouseListener {
     	default:
     		currentMap = new MapLayout(mapType.DEFAULT, gameWindow, player1);
     	}
-    	currentMap.drawMap();
+    	currentMap.drawMap(currentLevel);
         obstacleArr = currentMap.getObjectArray();
         currentEnemies = currentMap.getEnemyList();
     }
@@ -313,35 +335,6 @@ public class DungeonGame implements ActionListener, MouseListener {
         System.out.println("new target: "+e.getX()+", "+e.getY());
 
 	}
-
-	/**
-	 * Adds an enemy character to the game with a randomized movement pattern.
-	 * 
-	 * @param startingX  The starting x position of the enemy character.
-	 * @param startingY  The starting y position of the enemy character.
-	 * @param gameWindow The JFrame that the game is displayed in.
-	 */
-	private void addEnemy(float startingX, float startingY, JFrame gameWindow) {
-		Random random = new Random();
-		ArrayList<Integer> movementPatternX = new ArrayList<Integer>();
-		ArrayList<Integer> movementPatternY = new ArrayList<Integer>();
-
-		for (int i = 0; i < 10; i++) {
-			int directionX = random.nextInt(3) - 1;
-			int directionY = random.nextInt(3) - 1;
-			for (int j = 0; j < 40; j++) {
-				movementPatternX.add(directionX);
-				movementPatternY.add(directionY);
-			}
-
-		}
-
-		EnemyPlayer enemy = new EnemyPlayer(gameWindow, startingX, startingY, 50, 50, 100, 10, player1, obstacleArr);
-		enemies.add(enemy);
-	}
-
-	// Weird auto-generated things that the program needs to compile but are
-	// absolutely useless.
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {

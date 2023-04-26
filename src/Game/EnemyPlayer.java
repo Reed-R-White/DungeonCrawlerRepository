@@ -14,6 +14,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -37,6 +41,8 @@ public class EnemyPlayer extends Player {
 	Obstacle[] obstacleArr;
 	private int enemyHealth;
 	public final int ENEMYSIZE = 32;
+	
+	Clip monsterClip;
 
 	private final static int PLAYER_FOLLOW_DISTANCE = 200;
 
@@ -62,6 +68,15 @@ public class EnemyPlayer extends Player {
 		follow = false;
 		color = Color.red;
 		speed = 0.5f;
+		
+//		try {
+//			AudioInputStream aud = AudioSystem.getAudioInputStream(this.getClass().getResource("monster.wav"));
+//			this.monsterClip = AudioSystem.getClip();
+//			this.monsterClip.open(aud);
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 
 		
 		
@@ -232,7 +247,7 @@ public class EnemyPlayer extends Player {
 	}
 
 	public void attack(DungeonPlayer player) {
-		
+		//monsterClip.start();
 		System.out.println("Hit!  Player at "+ player.getHealth());
 		player.takeDamage(damage);
 		

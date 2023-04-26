@@ -18,7 +18,7 @@ public class Obstacle {
 	private static final int OBJECT_SIZE = 40;
     private Rotation currentOrientation;
 
-    private float posX1,posY1,posX2,posY2,posX3,posY3,posX4,posY4,posX5,posY5;
+    public float posX1,posY1,posX2,posY2,posX3,posY3,posX4,posY4,posX5,posY5;
 
 
 
@@ -301,5 +301,13 @@ public class Obstacle {
         
         return false;
     }
+	
+	public float getPosX1() {
+		return posX1;
+	}
+	
+	public float getPosY1() {
+		return posY1;
+	}
 
 }
