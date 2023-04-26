@@ -1,9 +1,3 @@
-/**
- * The DungeonPlayer class represents the player of a game. 
- * It allows the player to move their avatar in response to mouse movements 
- * and updates the player's position on a timer. The class also handles the player's health 
- * and damage taken, and renders the player's avatar on the game screen.
-*/
 
 package Game;
 
@@ -15,12 +9,13 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 import java.awt.Color;
+
 import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Polygon;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -28,50 +23,48 @@ import java.awt.event.MouseMotionAdapter;
 import java.io.IOException;
 import java.util.Timer;
 
+import java.awt.Rectangle;
+
+
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 
 /**
+ * The class managing the player, including their health, attacks, and movement.
  * 
- * @author Reed White
+ * @author Reed White, Charlie Said, Ryan O'Valley
  */
 public class DungeonPlayer {
 	
 	Clip attackClip;
 
-	/* The maximum movement distance for the player */
 	public int MAXMOVEMENT = 3;
-
 	private final int INVINCIBILITYTIME = 50;
-
-	/* The amount of damage done to an enemy by the player */
-
 	private int playerDamage;
-
-	/* The health of the player */
 	private int playerHealth;
-	/* The x-coordinate of the player */
-	private int playerX;
-	/* The y-coordinate of the player */
-	private int playerY;
-	/* The new position of the player */
+	private int playerX, playerY;
 	private Point newPosition;
-	/* The current position of the player */
 
 	public int PLAYERSIZE = 32;
-	
+	private int invincibilityCounter;
+
 	private int xMouseOffsetToContentPaneFromJFrame;
 	private int yMouseOffsetToContentPaneFromJFrame;
 	
 	private JLabel playerAvatar;
 	private JLabel healthBar;
 	private JFrame homeFrame;
-	private int invincibilityCounter;
+	
 
 	/**
 	 * Constructor for the DungeonPlayer class.
+	 * 
+	 * The DungeonPlayer class represents the player of a game. 
+ 	 * It allows the player to move their avatar in response to mouse movements 
+	 * and updates the player's position on a timer. The class also handles the player's health 
+	 * and damage taken, and renders the player's avatar on the game screen.
 	 *
 	 * @param playerJFrame the JFrame containing the player
 	 */
@@ -80,8 +73,6 @@ public class DungeonPlayer {
 
 		playerX = X;
 		playerY = Y;
-
-		
 		playerDamage = 20;
 		
 //		try {
@@ -94,9 +85,6 @@ public class DungeonPlayer {
 //		}
 
 		newPosition = new Point(playerX, playerY);
-		
-		playerHealth = 100;
-		healthBar = new JLabel("" + playerHealth);
 		invincibilityCounter = 0;
 
 		// Draw the player for the first time
@@ -106,34 +94,39 @@ public class DungeonPlayer {
 		playerAvatar.setBounds(playerX, playerY, PLAYERSIZE, PLAYERSIZE);
 		playerAvatar.setVisible(true);
 		playerJFrame.add(playerAvatar);
-
+		
+		//Add the health bar
+		playerHealth = 100;
+		healthBar = new JLabel("" + playerHealth);
 		playerJFrame.add(healthBar);
 
-	    
+	    //Calculate the offset required for the player sprite.
 		Container gameContentPane = homeFrame.getContentPane();
-
-        // Event mouse position is given relative to JFrame, where
-        // dolphin's image in JLabel is given relative to ContentPane,
-        // so adjust for the border ( / 2  since border is on either side)
         int borderWidth = (homeFrame.getWidth() - gameContentPane.getWidth()) / 2;
-        // assume side border = bottom border; ignore title bar
         xMouseOffsetToContentPaneFromJFrame = borderWidth;
         yMouseOffsetToContentPaneFromJFrame = homeFrame.getHeight() - gameContentPane.getHeight() - borderWidth;
 
 	}
 
 	/**
-	 * Move the player by a specified amount in both x and y
+	 * Move the player by a specified amount along the x axis
 	 * 
 	 * @param dx The movement along the x axis
-	 * @param dy The movement along the y axis
 	 */
-	public void movePlayer(int dx, int dy) {
-
+	public void movePlayerX(int dx) {
 		// update player's position
 		playerX += (int) dx;
-		playerY += (int) dy;
+		drawPlayer();
+	}
 
+	/**
+	 * Move the player by a specified amount along the y axis
+	 * 
+	 * @param dy The movement along the y axis
+	 */
+	public void movePlayerY(int dy) {
+		// update player's position
+		playerY += (int) dy;
 		drawPlayer();
 	}
 
@@ -174,15 +167,30 @@ public class DungeonPlayer {
 		return playerY;
 	}
 
+	/**
+	 * Getter for the player's health
+	 * 
+	 * @return player health
+	 */
 	public int getHealth() {
 		return playerHealth;
 	}
 
+	/**
+	 * Setter for the player's position.
+	 * 
+	 * @param pos The point to put the player at.
+	 */
 	public void setCurrentPosition(Point pos){
 		playerX = (int)pos.getX();
 		playerY = (int)pos.getY();
 	}
 	
+	/**
+	 * Getter for the player's damage output (damage dealt to enemies)
+	 * 
+	 * @return playerDamage
+	 */
 	public int getDamage() {
 		return playerDamage;
 	}
@@ -195,13 +203,12 @@ public class DungeonPlayer {
 	 *               player
 	 */
 	public void takeDamage(int damageAmount) {
+		
 		if (invincibilityCounter<=0){
-			System.out.println("NOT INVINCIBLE: " + invincibilityCounter);
-			playerHealth = playerHealth-damageAmount;
+			playerHealth = playerHealth - damageAmount;
+
 			invincibilityCounter = INVINCIBILITYTIME;
 			drawPlayer();
-		} else {
-			System.out.println("INVINCIBLE: " + invincibilityCounter);
 		}
 	}
 
@@ -212,8 +219,6 @@ public class DungeonPlayer {
 		playerAvatar.setBounds(playerX, playerY, PLAYERSIZE, PLAYERSIZE);
 		healthBar.setText(""+playerHealth);
 		healthBar.setBounds(playerX + 8, playerY - 25, PLAYERSIZE, PLAYERSIZE);
-		homeFrame.repaint();
-
 	}
 
 	/**
@@ -237,6 +242,11 @@ public class DungeonPlayer {
 
 	}
 
+	/**
+	 * Getter for the player's maximum movement.
+	 * 
+	 * @return MAXMOVEMENT
+	 */
 	public int getMaxMovement() {
 		return MAXMOVEMENT;
 	}
@@ -269,11 +279,28 @@ public class DungeonPlayer {
 	 * within this rectangle. If an intersection is found, the game object will
 	 * receive {@link DungeonPlayer.PLAYERDAMAGE} points of damage.
 	 *
-	 * @param point the point towards which the player should execute the attack
-	 * @return true if an attack was executed, false otherwise
+	 * @param enemy the enemy the method checks its attack against
+	 * @return true if an attack hit, false otherwise
 	 */
-	public boolean attack(Point point) {
+
+
+	
+	public boolean attack(EnemyPlayer enemy) {
 		//this.attackClip.start();
+		Point enemPoint = new Point((int) enemy.getX(), (int) enemy.getY());
+		Point enemBottomLeft = new Point((int) enemy.getX(), (int) enemy.getY() + enemy.ENEMYSIZE);
+		Point enemTopRight = new Point((int) enemy.getX()  + enemy.ENEMYSIZE, (int) enemy.getY());
+		Point enemBottomRight = new Point((int) enemy.getX() + enemy.ENEMYSIZE, (int) enemy.getY() + enemy.ENEMYSIZE);
+		
+		Point[] enemRecPoints = new Point[] { enemBottomLeft, enemPoint, enemBottomRight, enemTopRight };
+		
+		int[] enemxCords = new int[] { (int) enemBottomLeft.getX(), (int) enemPoint.getX(), (int) enemTopRight.getX(),
+				(int) enemBottomRight.getX() };
+		int[] enemyCords = new int[] { (int) enemBottomLeft.getY(), (int) enemPoint.getY(), (int) enemTopRight.getY(),
+				(int) enemBottomRight.getY() };
+		
+		Polygon enemhitbox = new Polygon(enemxCords, enemyCords, 4);
+		Rectangle enemyHitbox = new Rectangle(enemhitbox.getBounds());
 		
 		// Get the direction from the player to the mouse
 		double deltaX = newPosition.getX() - playerX;
@@ -308,18 +335,43 @@ public class DungeonPlayer {
 	    	yCords[i] += yMouseOffsetToContentPaneFromJFrame + PLAYERSIZE/2;
 	    }
 	    
-	    
-	    
 	    Polygon hitbox = new Polygon(xCords, yCords, 4);
-	    System.out.println("///attacking from player X:"+ playerX + " Y: "+playerY+ " \n /// Rectangle at X:"+rectX+" Y: "+rectY);
+	    Rectangle attackHitbox = new Rectangle(hitbox.getBounds());
+	    
 	    Graphics2D g2d = (Graphics2D) g;
 	    g2d.draw(hitbox);
-	    return hitbox.contains(point);
+	    return attackHitbox.intersects(enemyHitbox);
 	    // Check if the point is in the rectangle
 
 	}
 
-	public boolean sweepAttack(Point point) {
+	/**
+	 * This method executes an attack action from the player towards the given
+	 * point. The attack is executed by drawing a rectangle projecting from the
+	 * player towards the given point and checking whether a given point exists
+	 * within this rectangle. If an intersection is found, the game object will
+	 * receive {@link DungeonPlayer.PLAYERDAMAGE} points of damage.
+	 *
+	 * @param enemy the enemy the method checks the attack against.
+	 * @return true if an attack hit, false otherwise
+	 */
+	public boolean sweepAttack(EnemyPlayer enemy) {
+		
+		Point enemPoint = new Point((int) enemy.getX(), (int) enemy.getY());
+		Point enemBottomLeft = new Point((int) enemy.getX(), (int) enemy.getY() + enemy.ENEMYSIZE);
+		Point enemTopRight = new Point((int) enemy.getX()  + enemy.ENEMYSIZE, (int) enemy.getY());
+		Point enemBottomRight = new Point((int) enemy.getX() + enemy.ENEMYSIZE, (int) enemy.getY() + enemy.ENEMYSIZE);
+		
+		Point[] enemRecPoints = new Point[] { enemBottomLeft, enemPoint, enemBottomRight, enemTopRight };
+		
+		int[] enemxCords = new int[] { (int) enemBottomLeft.getX(), (int) enemPoint.getX(), (int) enemTopRight.getX(),
+				(int) enemBottomRight.getX() };
+		int[] enemyCords = new int[] { (int) enemBottomLeft.getY(), (int) enemPoint.getY(), (int) enemTopRight.getY(),
+				(int) enemBottomRight.getY() };
+		
+		Polygon enemhitbox = new Polygon(enemxCords, enemyCords, 4);
+		Rectangle enemyHitbox = new Rectangle(enemhitbox.getBounds());
+		
 		double ROTATIONCONSTANT = 0.25;
 
 		Graphics g = homeFrame.getGraphics();
@@ -368,7 +420,11 @@ public class DungeonPlayer {
 	    }
 	    
 	    Polygon hitbox = new Polygon(xCords, yCords, 4);
-	    if (hitbox.contains(point)) {
+	    Rectangle attackHitbox = new Rectangle(hitbox.getBounds());
+	    
+	    
+	    enemyHitbox.intersects(enemyHitbox);
+	    if (attackHitbox.intersects(enemyHitbox)) {
 	    	return true;
 	    }
 	    
@@ -389,14 +445,15 @@ public class DungeonPlayer {
 		    }
 		    
 		    hitbox = new Polygon(xCords, yCords, 4);
-		    if (hitbox.contains(point)) {
+		    attackHitbox = new Rectangle(hitbox.getBounds());
+		    if (attackHitbox.intersects(enemyHitbox)) {
 		    	return true;
 		    }
 		    
 		    g2d.draw(hitbox);
 	    }
 	    
-	    return hitbox.contains(point);
+	    return attackHitbox.intersects(enemyHitbox);
 	    // Check if the point is in the rectangle
 	}
 }
