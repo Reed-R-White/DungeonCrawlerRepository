@@ -10,7 +10,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.Cursor;
 
@@ -173,50 +172,54 @@ public class DungeonGame implements ActionListener {
                     // calculate the amount to move in each direction based on MAXMOVEMENT
                     dx = player1.MAXMOVEMENT * (player1.getNewTarget().getX() - currentPosition.getX()) / distance;
                     dy = player1.MAXMOVEMENT * (player1.getNewTarget().getY() - currentPosition.getY()) / distance;
-                    
-                    // Check collision for X
-                    isCollidingX = false;
-                    for(Obstacle obj : obstacleArr){
-                        if(obj.checkCollision((float)(player1.getX()+dx), (float)(player1.getY())) 
-							|| obj.checkCollision((float)(player1.getX()+player1.PLAYERSIZE+dx), (float)(player1.getY())) 
-							|| obj.checkCollision((float)(player1.getX()+player1.PLAYERSIZE+dx), (float)(player1.getY()+player1.PLAYERSIZE)) 
-							|| obj.checkCollision((float)(player1.getX()+dx), (float)(player1.getY()+player1.PLAYERSIZE))){
-                            
-								isCollidingX = true;
+				} else {
+					dx = 0;
+					dy = 0;
+				}
+
+                // Check collision for X
+                isCollidingX = false;
+                for(Obstacle obj : obstacleArr){
+                    if(obj.checkCollision((float)(player1.getX()+dx), (float)(player1.getY())) 
+						|| obj.checkCollision((float)(player1.getX()+player1.PLAYERSIZE+dx), (float)(player1.getY())) 
+						|| obj.checkCollision((float)(player1.getX()+player1.PLAYERSIZE+dx), (float)(player1.getY()+player1.PLAYERSIZE)) 
+						|| obj.checkCollision((float)(player1.getX()+dx), (float)(player1.getY()+player1.PLAYERSIZE))){
+                        									
+						isCollidingX = true;
                             	
-                            	player1.setNewTarget(currentPosition);
-                            	break;
-                        }
-                    }
-
-                    if(!isCollidingX){
-                        // Marginally move the player by the x and y.
-                        player1.movePlayerX((int)dx);
-                    }
-
-					isCollidingY = false;
-                    for(Obstacle obj : obstacleArr){
-                        if(obj.checkCollision((float)(player1.getX()), (float)(player1.getY()+dy)) 
-							|| obj.checkCollision((float)(player1.getX()+player1.PLAYERSIZE), (float)(player1.getY()+dy)) 
-							|| obj.checkCollision((float)(player1.getX()+player1.PLAYERSIZE), (float)(player1.getY()+player1.PLAYERSIZE+dy)) 
-							|| obj.checkCollision((float)(player1.getX()), (float)(player1.getY()+player1.PLAYERSIZE+dy))){
-                            
-								isCollidingY = true;
-                            	
-                            	player1.setNewTarget(currentPosition);
-                            	break;
-                        }
-                    }
-
-                    if(!isCollidingY){
-                        // Marginally move the player by the x and y.
-                        player1.movePlayerY((int)dy);
+                        player1.setNewTarget(currentPosition);
+                        break;
                     }
                 }
+
+                if(!isCollidingX){
+                    // Marginally move the player by the x and y.
+                    player1.movePlayerX((int)dx);
+                }
+
+				isCollidingY = false;
+                for(Obstacle obj : obstacleArr){
+                    if(obj.checkCollision((float)(player1.getX()), (float)(player1.getY()+dy)) 
+						|| obj.checkCollision((float)(player1.getX()+player1.PLAYERSIZE), (float)(player1.getY()+dy)) 
+						|| obj.checkCollision((float)(player1.getX()+player1.PLAYERSIZE), (float)(player1.getY()+player1.PLAYERSIZE+dy)) 
+						|| obj.checkCollision((float)(player1.getX()), (float)(player1.getY()+player1.PLAYERSIZE+dy))){
+                            
+						isCollidingY = true;
+                            	
+                    	player1.setNewTarget(currentPosition);
+                    	break;
+                    }
+                }
+
+                if(!isCollidingY){
+                    // Marginally move the player by the x and y.
+                    player1.movePlayerY((int)dy);
+                }
+                
 	            
+				//Enemy loop:
 	            boolean levelOver = true;
-	            
-				//Move the enemies
+
                 for (EnemyPlayer enemy : currentMap.getEnemyList()) {
                 	if(enemy.getEnemyHealth() >= 0) {
                 		levelOver = false;
@@ -226,8 +229,10 @@ public class DungeonGame implements ActionListener {
 						if (distance <=enemy.getEnemySize()+10){
 							enemy.attack(player1);
 						}
-						
-						enemy.setDeltas();
+
+						enemy.checkPlayer(player1);
+
+						enemy.determineDeltas();
 
 						//Check collision with obstacles.
 						if (enemy.getX() + enemy.getDeltaX() >= 0 && enemy.getX() + enemy.getDeltaX() <= DungeonGame.GAMEWINDOWSIZE - enemy.getEnemySize() && 
@@ -237,8 +242,9 @@ public class DungeonGame implements ActionListener {
 						!enemy.collidesWithObstacle(enemy.getX() + enemy.getDeltaX() + enemy.getEnemySize(), enemy.getY() + enemy.getEnemySize())){
 
 							enemy.moveX();
+						} else {
+							enemy.setDeltaX(0);
 						}
-							
 							
 						if(enemy.getY() + enemy.getDeltaY() >= 0 && enemy.getY() + enemy.getDeltaY() <= DungeonGame.GAMEWINDOWSIZE - enemy.EnemySize && 
 						!enemy.collidesWithObstacle(enemy.getX(), enemy.getY() + enemy.getDeltaY()) && 
@@ -246,9 +252,18 @@ public class DungeonGame implements ActionListener {
 						!enemy.collidesWithObstacle(enemy.getX()+enemy.EnemySize, enemy.getY() + enemy.getDeltaY()) && 
 						!enemy.collidesWithObstacle(enemy.getX()+enemy.EnemySize, enemy.getY() + enemy.getDeltaY() + enemy.EnemySize)) {
 							
-							//Assuming the movement wouldn't put the enemy inside a wall, move the enemy.
 							enemy.moveY();
-						}            		
+						} else {
+							enemy.setDeltaY(0);
+						}
+						
+						if (enemy.getDeltaX() < 1 && enemy.getDeltaY() < 1){
+							enemy.incrementBoredom();
+						} else {
+							enemy.decrementBoredom();
+						}
+
+						//System.out.println("DeltaX: "+enemy.getDeltaX()+", DeltaY: "+enemy.getDeltaY()+", Boredom counter at: "+enemy.getBoredom());
                 	} 
                 }
 

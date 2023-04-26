@@ -30,11 +30,13 @@ public class EnemyPlayer extends Player {
 	private List<Integer> movementPatternX;
 	private List<Integer> movementPatternY;
 	private int movementIndex;
-	Boolean follow;
+	private Boolean follow;
+	private int boredom;
 	private DungeonPlayer player;
 	private JLabel enemyAvatar;
 	private JLabel healthBar;
 	private int damage;
+	private final float ENEMYSPEED = (float) 1;
 	JFrame homeFrame;
 	Obstacle[] obstacleArr;
 	private int enemyHealth;
@@ -64,11 +66,11 @@ public class EnemyPlayer extends Player {
 		homeFrame = gameJFrame;
 		follow = false;
 		color = Color.red;
-		speed = 0.5f;
 		this.player = player;
 		this.damage = damage;
 		this.obstacleArr = obstacleArr;
 		this.enemyHealth = enemyHealth;
+		
 		
 		//Set up the random movement patterns
 		movementPatternX = new ArrayList<Integer>();
@@ -142,13 +144,23 @@ public class EnemyPlayer extends Player {
 
 	/**
 	 * Getter for the enemy's delta along the X axis.
-	 * The delta is set by the setDeltas method, but defaults to 0.
+	 * The delta is set by the determineDeltas method, but defaults to 0.
 	 * The delta is how much the enemy plans to move, not how much it has or is moving.
 	 * 
 	 * @return the enemy's delta along the X axis
 	 */
 	public float getDeltaX(){
 		return deltaX;
+	}
+
+	/**
+	 * Setter for the enemy's deltaX.
+	 * DeltaX is the amount by which the enemy will move along the X axis when moveX is called.
+	 * 
+	 * @param deltaX the new value to set deltaX to
+	 */
+	public void setDeltaX(float deltaX){
+		this.deltaX = deltaX;
 	}
 
 	/**
@@ -160,6 +172,16 @@ public class EnemyPlayer extends Player {
 	 */
 	public float getDeltaY(){
 		return deltaY;
+	}
+
+	/**
+	 * Setter for the enemy's deltaY.
+	 * DeltaX is the amount by which the enemy will move along the X axis when moveY is called.
+	 * 
+	 * @param deltaX the new value to set deltaX to
+	 */
+	public void setDeltaY(float deltaY){
+		this.deltaY = deltaY;
 	}
 
 	/**
@@ -194,23 +216,25 @@ public class EnemyPlayer extends Player {
 	 * If in following mode, the enemy will move towards the player.
 	 * Otherwise, the enemy will follow its predetermined course.
 	 */
-	public void setDeltas() {
-		
-		//Check which mode to be in.
-		checkPlayer(player);
+	public void determineDeltas() {
 
 		//Calculate deltas if the enemy is near enough to follow the player
 		if (follow) {
-			if (posX > player.getX()) {
-				deltaX = -2*speed;
-			} else if (posX < player.getX()) {
-				deltaX = 2*speed;
+			if (posX > player.getX()){
+				deltaX = -1*ENEMYSPEED;
+			} else if (posX < player.getX()){
+				deltaX = ENEMYSPEED;
+			} else if (posX == player.getX()){
+				deltaX = 0;
 			}
-			if (posY > player.getY()) {
-				deltaY = -2*speed;
-			} else if (posY < player.getY()) {
-				deltaY = 2*speed;
+			if (posY > player.getY()){
+				deltaY = -1*ENEMYSPEED;
+			} else if (posY < player.getY()){
+				deltaY = ENEMYSPEED;
+			} else if (posY == player.getY()){
+				deltaY = 0;
 			}
+
 		} //Otherwise, follow the wandering pattern
 		else {
 			// if you go out of bounds in the random-movement array,
@@ -220,8 +244,8 @@ public class EnemyPlayer extends Player {
 			}
 			
 			//Set the deltas to the next int in the movement pattern.
-			deltaX = movementPatternX.get((int) movementIndex)*speed;
-			deltaY = movementPatternY.get((int) movementIndex)*speed;
+			deltaX = movementPatternX.get((int) movementIndex)*ENEMYSPEED;
+			deltaY = movementPatternY.get((int) movementIndex)*ENEMYSPEED;
 			
 			// increment movement index
 			movementIndex += 1;
@@ -245,7 +269,33 @@ public class EnemyPlayer extends Player {
 		
 		drawEnemy();
 	}
-	
+
+	/**
+	 * Method to increase the enemy's boredom by 1.
+	 */
+	public void incrementBoredom(){
+		boredom++;
+	}
+
+	/**
+	 * Method to reduce the enemy's boredom by 1.
+	 * Boredom cannot go below 0.  If boredom would be reduced below 0, the method does nothing.
+	 */
+	public void decrementBoredom(){
+		if (boredom >0){
+			boredom--;
+		}
+	}
+
+	/**
+	 * Getter for boredom
+	 * 
+	 * @return The enemy's current boredom.
+	 */
+	public int getBoredom(){
+		return boredom;
+	}
+
 	/**
 	 * Set internal behavior, whether or not the enemy should follow the player
 	 * based on the player's proximity. Should be called every time the player moves
@@ -257,12 +307,17 @@ public class EnemyPlayer extends Player {
 		double distance = Math.sqrt(Math.pow(posX - player.getX(), 2) + Math.pow(posY - player.getY(), 2));
 		// if the distance from player is 200 or less
 		if (distance <= PLAYER_FOLLOW_DISTANCE) {
-			follow = true; // set follow to true
-			// this.player = player;
+			follow = true;
 		} else {
-			// set follow to false
 			follow = false;
-			// this.player = null;
+		}
+
+		if (boredom > 500){
+			follow = false;
+		}
+
+		if (boredom > 3000){
+			boredom = 0;
 		}
 	}
 

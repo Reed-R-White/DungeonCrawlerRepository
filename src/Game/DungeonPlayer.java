@@ -1,11 +1,3 @@
-//Fully commented
-
-/**
- * The DungeonPlayer class represents the player of a game. 
- * It allows the player to move their avatar in response to mouse movements 
- * and updates the player's position on a timer. The class also handles the player's health 
- * and damage taken, and renders the player's avatar on the game screen.
-*/
 
 package Game;
 
@@ -47,6 +39,11 @@ public class DungeonPlayer {
 
 	/**
 	 * Constructor for the DungeonPlayer class.
+	 * 
+	 * The DungeonPlayer class represents the player of a game. 
+ 	 * It allows the player to move their avatar in response to mouse movements 
+	 * and updates the player's position on a timer. The class also handles the player's health 
+	 * and damage taken, and renders the player's avatar on the game screen.
 	 *
 	 * @param playerJFrame the JFrame containing the player
 	 */
@@ -86,10 +83,8 @@ public class DungeonPlayer {
 	 * @param dx The movement along the x axis
 	 */
 	public void movePlayerX(int dx) {
-
 		// update player's position
 		playerX += (int) dx;
-
 		drawPlayer();
 	}
 
@@ -99,10 +94,8 @@ public class DungeonPlayer {
 	 * @param dy The movement along the y axis
 	 */
 	public void movePlayerY(int dy) {
-
 		// update player's position
 		playerY += (int) dy;
-
 		drawPlayer();
 	}
 
@@ -185,8 +178,6 @@ public class DungeonPlayer {
 			playerHealth = playerHealth - damageAmount;
 			invincibilityCounter = INVINCIBILITYTIME;
 			drawPlayer();
-		} else{
-			System.out.println("  Hahaha Miss!");
 		}
 	}
 
@@ -197,8 +188,6 @@ public class DungeonPlayer {
 		playerAvatar.setBounds(playerX, playerY, PLAYERSIZE, PLAYERSIZE);
 		healthBar.setText(""+playerHealth);
 		healthBar.setBounds(playerX + 8, playerY - 25, PLAYERSIZE, PLAYERSIZE);
-		//homeFrame.repaint();
-
 	}
 
 	/**
