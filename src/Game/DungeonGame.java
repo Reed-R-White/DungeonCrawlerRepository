@@ -82,7 +82,7 @@ public class DungeonGame implements ActionListener {
         currentPosition = new Point(player1.getX(),player1.getY());
 
         //Set up the map
-        currentLevel =3;
+        currentLevel =1;
 		loadMap();
         
 		//Add controls for different keystrokes
