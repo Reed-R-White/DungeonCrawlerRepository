@@ -46,7 +46,7 @@ public class DungeonGame implements ActionListener {
 	private int attackTimer = 0;
 	//private int boostTimer = 0;
 	//private int boostCoolDown = 0;
-	private static final int ATTACKCOOLDOWN = 0;
+	private static final int ATTACKCOOLDOWN = 100;
 	private Point targetPoint;
 	private boolean isCollidingX = false;
 	private boolean isCollidingY = false;
@@ -81,9 +81,8 @@ public class DungeonGame implements ActionListener {
         player1 = new DungeonPlayer(gameWindow, 70, 70);
         currentPosition = new Point(player1.getX(),player1.getY());
 
-
         //Set up the map
-        currentLevel = 1;
+        currentLevel =3;
 		loadMap();
         
 		//Add controls for different keystrokes
@@ -93,24 +92,20 @@ public class DungeonGame implements ActionListener {
 				//The Space key triggers a stabbing attack, which deals extra damage.
 				double damageModifier = 1.3;
 				if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-		        	for(EnemyPlayer enemy: currentEnemies){
-			        	if (attackTimer <= 0) {
-			        		attackTimer = ATTACKCOOLDOWN;
-				        	if(player1.attack(enemy)) {
-				            	enemy.takeDamage((int)(player1.getDamage()*damageModifier));
-				            }
-			        	}
+		        	for(EnemyPlayer enemy: currentEnemies){		
+				    	if(player1.attack(enemy) && attackTimer <= 0) {
+				           	enemy.takeDamage((int)(player1.getDamage()*damageModifier));
+							attackTimer = ATTACKCOOLDOWN;
+			            }
 					}
 		        }
 		        
 				//The Shift key triggers a sweeping attack
 		        if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
 		        	for(EnemyPlayer enemy: currentEnemies){
-			        	if (attackTimer <= 0) {
-			        		attackTimer = ATTACKCOOLDOWN;
-				        	if(player1.sweepAttack(enemy)) {
-				            	enemy.takeDamage(player1.getDamage());
-				            }
+				    	if(player1.sweepAttack(enemy) && attackTimer <= 0) {
+				            enemy.takeDamage(player1.getDamage());
+							attackTimer = ATTACKCOOLDOWN;
 			        	}
 					}
 		        }

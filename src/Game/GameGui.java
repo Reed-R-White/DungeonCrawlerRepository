@@ -14,8 +14,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -24,6 +22,7 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
 /**
@@ -67,7 +66,7 @@ public class GameGui extends JFrame {
 		Border border = BorderFactory.createLineBorder(Color.BLACK, 2);
 		title.setBorder(border);
 		titlePanel.add(title);
-		message = new JLabel("Click Start to play");
+		message = new JLabel("<html><div style='text-align: center;'>Click 'Start Game' to play<br/>Run by moving the mousePress 'Shift' to slash<br/>Press 'Space' to stab for extra damage<html>", SwingConstants.CENTER);
 		message.setAlignmentX(JComponent.CENTER_ALIGNMENT);
 		titlePanel.add(message);
 		titlePanel.add(Box.createRigidArea(new Dimension(0, 100)));

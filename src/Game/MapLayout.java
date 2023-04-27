@@ -107,8 +107,8 @@ public class MapLayout {
 			mapEnemies = new EnemyPlayer[3];
 
 			mapEnemies[0] = new EnemyPlayer(gameWindow, 70, 70, 10, 10, 100, 5, gamePlayer, obstacleArr);
-			mapEnemies[1] = new EnemyPlayer(gameWindow, 275, 125, 10, 10, 100, 5, gamePlayer, obstacleArr);
-			mapEnemies[2] = new EnemyPlayer(gameWindow, 150, 275, 10, 10, 100, 5, gamePlayer, obstacleArr);
+			mapEnemies[1] = new EnemyPlayer(gameWindow, 500, 70, 10, 10, 100, 5, gamePlayer, obstacleArr);
+			mapEnemies[2] = new EnemyPlayer(gameWindow, 500, 400, 10, 10, 200, 10, gamePlayer, obstacleArr);
 			
 
 			break;
