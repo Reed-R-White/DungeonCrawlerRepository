@@ -346,8 +346,10 @@ public class EnemyPlayer extends Player {
 	 */
 	public void attack(DungeonPlayer player) {
 
-		//monsterClip.start();
-		player.takeDamage(damage);
+		if (enemyHealth > 0){
+			//monsterClip.start();
+			player.takeDamage(damage);
+		}
 	}
 
 	/**

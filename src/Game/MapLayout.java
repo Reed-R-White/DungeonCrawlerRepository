@@ -233,18 +233,17 @@ public class MapLayout {
         		}
         		
         		if (!hasWall) {
-	        		JLabel bg = new JLabel();
+	        		/*JLabel bg = new JLabel();
 	        		bg.setIcon(sprite);
 	    			bg.setVisible(true);
 	    			bg.setBounds(row, col, objectSize, objectSize);
-	    			mapJFrame.add(bg);
+	    			mapJFrame.add(bg);//*/
         		}
         	}
         }
-		mapJFrame.repaint();
-
 		for(Obstacle obj : obstacleArr){
             obj.draw();
         }
+		mapJFrame.repaint();
 	}
 }

@@ -199,7 +199,7 @@ public class DungeonGame implements ActionListener {
                         									
 						isCollidingX = true;
                             	
-                        player1.setNewTarget(currentPosition);
+                        //player1.setNewTarget(currentPosition);
                         break;
                     }
                 }
@@ -218,7 +218,7 @@ public class DungeonGame implements ActionListener {
                             
 						isCollidingY = true;
                             	
-                    	player1.setNewTarget(currentPosition);
+                    	//player1.setNewTarget(currentPosition);
                     	break;
                     }
                 }
@@ -274,8 +274,6 @@ public class DungeonGame implements ActionListener {
 						} else {
 							enemy.decrementBoredom();
 						}
-
-						//System.out.println("DeltaX: "+enemy.getDeltaX()+", DeltaY: "+enemy.getDeltaY()+", Boredom counter at: "+enemy.getBoredom());
                 	} 
                 }
 
@@ -331,6 +329,7 @@ public class DungeonGame implements ActionListener {
     	currentMap.drawMap(currentLevel);
         obstacleArr = currentMap.getObstacleArray();
         currentEnemies = currentMap.getEnemyList();
+		System.out.println("Enemies: "+currentEnemies.length);
     }
     
 	/**
