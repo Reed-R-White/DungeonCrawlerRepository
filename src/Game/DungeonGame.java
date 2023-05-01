@@ -50,7 +50,7 @@ public class DungeonGame implements ActionListener, MouseListener {
 
 	private double dx, dy, distance;
 	
-	private static final int ATTACKCOOLDOWN = 0;
+	private static final int ATTACKCOOLDOWN = 100;
 
 	private MapLayout currentMap;
 	private EnemyPlayer[] currentEnemies;
@@ -101,6 +101,7 @@ public class DungeonGame implements ActionListener, MouseListener {
 				        	if(player1.attack(enemy)) {
 				            	enemy.takeDamage(player1.getDamage());
 				            }
+				        	player1.toggleSwordVisual(true);
 			        	}
 		        }
 		        
@@ -181,6 +182,10 @@ public class DungeonGame implements ActionListener, MouseListener {
             	
             	if (attackTimer > 0) {
             		attackTimer -= 1;
+            		player1.toggleSwordVisual(false);
+            	}
+            	else if (attackTimer <= 0) {
+            		
             	}
             	
             	

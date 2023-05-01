@@ -63,6 +63,7 @@ public class DungeonPlayer {
 	private int xMouseOffsetToContentPaneFromJFrame;
 	private int yMouseOffsetToContentPaneFromJFrame;
 	
+	private GameObject swordDrawBox;
 	private JLabel playerAvatar;
 	private JLabel healthBar;
 	private JFrame homeFrame;
@@ -95,10 +96,18 @@ public class DungeonPlayer {
 
 		playerJFrame.add(healthBar);
 		
-		drawBox = new JLabel();
-		drawBox.setBounds(playerX-30, playerY-30, 100, 100);
-		drawBox.setVisible(true);
-		homeFrame.add(drawBox);
+		BufferedImage swordPic = null;
+		
+		try {
+			swordPic = ImageIO.read(new File("src/Game/swordStab.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	    
+		swordDrawBox = new GameObject(swordPic, 110, 70, 0);
+	    homeFrame.add(swordDrawBox);
+	    swordDrawBox.setVisible(true);
+	    swordDrawBox.setBounds(playerX - 60, playerY - 60, 200, 200);
 
 	    
 		Container gameContentPane = homeFrame.getContentPane();
@@ -164,6 +173,10 @@ public class DungeonPlayer {
 	public int getY() {
 		return playerY;
 	}
+	
+	public void toggleSwordVisual(Boolean toggleOption) {
+		swordDrawBox.setVisible(toggleOption);
+	}
 
 	public int getHealth() {
 		return playerHealth;
@@ -204,7 +217,7 @@ public class DungeonPlayer {
 		playerAvatar.setBounds(playerX, playerY, PLAYERSIZE, PLAYERSIZE);
 		healthBar.setText(""+playerHealth);
 		healthBar.setBounds(playerX + 8, playerY - 25, PLAYERSIZE, PLAYERSIZE);
-		drawBox.setBounds(playerX - 30, playerY - 30, 100, 100);
+		swordDrawBox.setBounds(playerX - 100, playerY - 100, 200, 200);
 		homeFrame.repaint();
 
 	}
@@ -256,13 +269,12 @@ public class DungeonPlayer {
 	}
 	
 	public void drawRotatedImage(BufferedImage image, int x, int y, double angle) {
-	    Graphics2D g2d = (Graphics2D) drawBox.getGraphics();
+	    Graphics2D g2d = (Graphics2D) homeFrame.getGraphics();
 	    AffineTransform transform = new AffineTransform();
 	    transform.translate(x + image.getWidth() / 2, y + image.getHeight() / 2);
 	    transform.rotate(Math.toRadians(angle));
 	    transform.translate(-image.getWidth(), -image.getHeight());
 	    g2d.drawImage(image, transform, null);
-	    
 	    
 	}
 	
@@ -328,19 +340,8 @@ public class DungeonPlayer {
 	    }
 	    
 	    Polygon hitbox = new Polygon(xCords, yCords, 4);
+	    swordDrawBox.setAngle(Math.toDegrees(angle)+90);
 	    
-	    ImageIcon sword = new ImageIcon("src/Game/sword.png");
-	    BufferedImage swordPic = null;
-	    
-	    try {
-			swordPic = ImageIO.read(new File("src/Game/swordStab.png"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	    
-	    
-	    drawRotatedImage(swordPic, (int) (playerX) + 20, (int) (playerY), Math.toDegrees(angle)+90);
 	    
 	    Graphics2D g2d = (Graphics2D) g;
 	    g2d.draw(hitbox);
