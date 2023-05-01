@@ -7,7 +7,8 @@ import java.awt.image.BufferedImage;
 import javax.swing.JComponent;
 
 public class GameObject extends JComponent {
-    private BufferedImage image;
+	private static final long serialVersionUID = 1L;
+	private BufferedImage image;
     private int x;
     private int y;
     private double angle;
@@ -17,6 +18,10 @@ public class GameObject extends JComponent {
         this.x = x;
         this.y = y;
         this.angle = angle;
+    }
+    
+    public void setImage(BufferedImage newImage) {
+    	this.image = newImage;
     }
 
     @Override

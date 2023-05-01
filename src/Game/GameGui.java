@@ -1,3 +1,5 @@
+//Fully commented.
+
 /**
 * The GameGui class creates a graphical user interface for the Dungeon Game.
 * It extends the JFrame class and includes a title, a play button, a quit button,
@@ -12,22 +14,27 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
+/**
+ * This class creates the menu, where the player can either begin the game, or back out.
+ * 
+ * @author Ryan O'Valley
+ */
 public class GameGui extends JFrame {
 
 	// Declare instance variables
 	JLabel title;
+	JLabel message;
 	JButton play;
 	JButton quit;
 	JPanel panel;
@@ -59,6 +66,9 @@ public class GameGui extends JFrame {
 		Border border = BorderFactory.createLineBorder(Color.BLACK, 2);
 		title.setBorder(border);
 		titlePanel.add(title);
+		message = new JLabel("<html><div style='text-align: center;'>Click 'Start Game' to play<br/>Run by moving the mousePress 'Shift' to slash<br/>Press 'Space' to stab for extra damage<html>", SwingConstants.CENTER);
+		message.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+		titlePanel.add(message);
 		titlePanel.add(Box.createRigidArea(new Dimension(0, 100)));
 		titlePanel.setBackground(Color.decode("#B2AC88"));
 		title.setAlignmentX(JComponent.CENTER_ALIGNMENT);
@@ -66,6 +76,11 @@ public class GameGui extends JFrame {
 		// Set up the button panel
 		buttonPanel = new JPanel();
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+		
+		JButton temp = new JButton();
+		temp.setVisible(true);
+		panel.add(temp);
+		
 		panel.add(buttonPanel, BorderLayout.CENTER);
 		buttonPanel.add(play);
 		play.setPreferredSize(new Dimension(50, 50));
@@ -75,6 +90,12 @@ public class GameGui extends JFrame {
 		buttonPanel.add(quit);
 		quit.setAlignmentX(JComponent.CENTER_ALIGNMENT);
 		add(panel);
+		
+		
+		
+		
+		
+		
 
 		// Set up the JFrame
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -82,6 +103,8 @@ public class GameGui extends JFrame {
 		setLocationRelativeTo(null);
 		setVisible(true);
 		
+		JFrame gameGui = this;
+
 		// Add listeners to the play and quit buttons
 		quit.addActionListener(new ActionListener() {
 			@Override
@@ -96,11 +119,15 @@ public class GameGui extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// Start the game and close the GUI
-				new DungeonGame();
+				new DungeonGame(gameGui);
 				setVisible(false);
 				dispose();
 			}
 		});
+	}
+	
+	public void updateMessage(String m) {
+		message.setText(m);
 	}
 
 	/**
