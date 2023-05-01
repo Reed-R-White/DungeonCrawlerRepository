@@ -21,7 +21,6 @@ import java.awt.event.WindowEvent;
 import java.awt.Cursor;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -54,7 +53,7 @@ public class DungeonGame implements ActionListener, MouseListener {
 
 	private MapLayout currentMap;
 	private EnemyPlayer[] currentEnemies;
-	private int attackTimer = 0;
+	private int attackTimer = 10;
 	private int currentLevel;
 	private int xMouseOffsetToContentPaneFromJFrame;
 	private int yMouseOffsetToContentPaneFromJFrame;
@@ -115,12 +114,12 @@ public class DungeonGame implements ActionListener, MouseListener {
 			        	}
 		        }
 		        
-//		        else if (e.getKeyCode() == KeyEvent.VK_W) {
-//		        	if (boostCoolDown <= 0) {
-//		        		boostTimer = 10;
-//		        	}
-//		        	System.out.println(xMouseOffsetToContentPaneFromJFrame+"\n"+yMouseOffsetToContentPaneFromJFrame);
-//		        }
+		        else if (e.getKeyCode() == KeyEvent.VK_W) {
+		        	if (boostCoolDown <= 0) {
+		        		boostTimer = 10;
+		        	}
+		        	System.out.println(xMouseOffsetToContentPaneFromJFrame+"\n"+yMouseOffsetToContentPaneFromJFrame);
+		        }
 		        
 		    }
 		    
@@ -149,9 +148,7 @@ public class DungeonGame implements ActionListener, MouseListener {
 
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				// TODO Auto-generated method stub
-				// throw new UnsupportedOperationException("Unimplemented method
-				// 'mouseDragged'");
+				
 			}
 
 		});
@@ -174,7 +171,6 @@ public class DungeonGame implements ActionListener, MouseListener {
             	}
             	else if (boostTimer <= 0) {
                     player1.MAXMOVEMENT = 3; //Return the player speed to normal.
-                    //Start the cooldown
                     if (boostCoolDown > 0) {
             			boostCoolDown -= 1;
             		}
@@ -182,10 +178,14 @@ public class DungeonGame implements ActionListener, MouseListener {
             	
             	if (attackTimer > 0) {
             		attackTimer -= 1;
+            	}
+            	
+            	if (attackTimer < ATTACKCOOLDOWN - 3) {
             		player1.toggleSwordVisual(false);
             	}
+            	
             	else if (attackTimer <= 0) {
-            		
+            		player1.toggleSwordVisual(false);
             	}
             	
             	

@@ -11,20 +11,14 @@ package Game;
 import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.Point;
 import java.awt.Polygon;
 
 import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Timer;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -56,9 +50,7 @@ public class DungeonPlayer {
 	private Point newPosition;
 	/* The current position of the player */
 
-	private Point currentPosition;
 	public int PLAYERSIZE = 32;
-	private JLabel drawBox;
 	
 	private int xMouseOffsetToContentPaneFromJFrame;
 	private int yMouseOffsetToContentPaneFromJFrame;
@@ -107,7 +99,7 @@ public class DungeonPlayer {
 		swordDrawBox = new GameObject(swordPic, 110, 70, 0);
 	    homeFrame.add(swordDrawBox);
 	    swordDrawBox.setVisible(true);
-	    swordDrawBox.setBounds(playerX - 60, playerY - 60, 200, 200);
+	    swordDrawBox.setBounds(playerX - 100, playerY - 100, 200, 200);
 
 	    
 		Container gameContentPane = homeFrame.getContentPane();
@@ -295,9 +287,7 @@ public class DungeonPlayer {
 		Point enemBottomLeft = new Point((int) enemy.getX(), (int) enemy.getY() + enemy.ENEMYSIZE);
 		Point enemTopRight = new Point((int) enemy.getX()  + enemy.ENEMYSIZE, (int) enemy.getY());
 		Point enemBottomRight = new Point((int) enemy.getX() + enemy.ENEMYSIZE, (int) enemy.getY() + enemy.ENEMYSIZE);
-		
-		Point[] enemRecPoints = new Point[] { enemBottomLeft, enemPoint, enemBottomRight, enemTopRight };
-		
+				
 		int[] enemxCords = new int[] { (int) enemBottomLeft.getX(), (int) enemPoint.getX(), (int) enemTopRight.getX(),
 				(int) enemBottomRight.getX() };
 		int[] enemyCords = new int[] { (int) enemBottomLeft.getY(), (int) enemPoint.getY(), (int) enemTopRight.getY(),
@@ -356,9 +346,7 @@ public class DungeonPlayer {
 		Point enemBottomLeft = new Point((int) enemy.getX(), (int) enemy.getY() + enemy.ENEMYSIZE);
 		Point enemTopRight = new Point((int) enemy.getX()  + enemy.ENEMYSIZE, (int) enemy.getY());
 		Point enemBottomRight = new Point((int) enemy.getX() + enemy.ENEMYSIZE, (int) enemy.getY() + enemy.ENEMYSIZE);
-		
-		Point[] enemRecPoints = new Point[] { enemBottomLeft, enemPoint, enemBottomRight, enemTopRight };
-		
+				
 		int[] enemxCords = new int[] { (int) enemBottomLeft.getX(), (int) enemPoint.getX(), (int) enemTopRight.getX(),
 				(int) enemBottomRight.getX() };
 		int[] enemyCords = new int[] { (int) enemBottomLeft.getY(), (int) enemPoint.getY(), (int) enemTopRight.getY(),
