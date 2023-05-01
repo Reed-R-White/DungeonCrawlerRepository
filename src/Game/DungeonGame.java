@@ -254,7 +254,7 @@ public class DungeonGame implements ActionListener {
 	            boolean levelOver = true;
 
                 for (EnemyPlayer enemy : currentMap.getEnemyList()) {
-                	if(enemy.getEnemyHealth() >= 0) {
+                	if(enemy.getEnemyHealth() > 0) {
                 		levelOver = false;
                 		
 						//If the enemy is within range of the player, attack it
