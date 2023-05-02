@@ -88,7 +88,7 @@ public class DungeonGame implements ActionListener {
         currentPosition = new Point(player1.getX(),player1.getY());
 
         //Set up the map
-        currentLevel =1;
+        currentLevel = 3;
 		loadMap();
         
 		//Add controls for different keystrokes
@@ -96,7 +96,6 @@ public class DungeonGame implements ActionListener {
         	
 		    public void keyPressed(KeyEvent e) {
 		        if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-		        	player1.toggleSwordVisual(true);
 		        	if(attackTimer <= 0) {
 		        		attackTimer = ATTACKCOOLDOWN;
 			        	for(EnemyPlayer enemy: currentEnemies) {
@@ -109,7 +108,6 @@ public class DungeonGame implements ActionListener {
 		        
 				//The Shift key triggers a sweeping attack
 		        else if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
-		        	player1.toggleSwordVisual(true);
 		        	if(attackTimer <= 0) {
 		        		attackTimer = ATTACKCOOLDOWN;
 			        	for(EnemyPlayer enemy: currentEnemies) {
@@ -253,8 +251,11 @@ public class DungeonGame implements ActionListener {
 				//Enemy loop:
 	            boolean levelOver = true;
 
+	            int numOfEnemies = 0;
                 for (EnemyPlayer enemy : currentMap.getEnemyList()) {
-                	if(enemy.getEnemyHealth() >= 0) {
+                	if(enemy.isAlive()) {
+                		numOfEnemies += 1;
+                		
                 		levelOver = false;
                 		
 						//If the enemy is within range of the player, attack it
@@ -295,8 +296,9 @@ public class DungeonGame implements ActionListener {
 						} else {
 							enemy.decrementBoredom();
 						}
-                	} 
+                	}
                 }
+                System.out.println(numOfEnemies);
 
 				//After each hit, the player has a short period of invulnerability.
 				//This method counts that timer down so the player can be hit again soon.

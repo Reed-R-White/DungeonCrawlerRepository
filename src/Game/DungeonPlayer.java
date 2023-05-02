@@ -77,16 +77,6 @@ public class DungeonPlayer {
 		playerX = X;
 		playerY = Y;
 		playerDamage = 20;
-		
-//		try {
-//			AudioInputStream aud = AudioSystem.getAudioInputStream(this.getClass().getResource("attackAudio.wav"));
-//			this.attackClip = AudioSystem.getClip();
-//			this.attackClip.open(aud);
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-
 		newPosition = new Point(playerX, playerY);
 		invincibilityCounter = 0;
 
@@ -115,7 +105,7 @@ public class DungeonPlayer {
 	    
 		swordDrawBox = new GameObject(swordStab, 110, 70, 0);
 	    homeFrame.add(swordDrawBox);
-	    swordDrawBox.setVisible(true);
+	    swordDrawBox.setVisible(false);
 	    swordDrawBox.setBounds(playerX - 100, playerY - 100, 200, 200);
 
 	    //Calculate the offset required for the player sprite.

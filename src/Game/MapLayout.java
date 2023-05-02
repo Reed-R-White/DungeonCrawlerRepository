@@ -94,16 +94,16 @@ public class MapLayout {
 			
 		case HOUSE:
 			obstacleArr = scanMap(new int[][] {
-				{5,3,3,3,3,3,6},
-				{5,3,0,5,6,0,2},
-				{7,8,0,4,8,0,2},
-				{4,4,0,0,0,0,2},
-				{7,4,4,4,4,4,8},
-				{0,0,0,9,0,0,0},
+				{5,3,3,3,3,3,3,6},
+				{1,5,3,0,5,6,0,2},
+				{1,7,8,0,4,8,0,2},
+				{1,4,4,0,0,0,0,2},
+				{7,7,4,4,4,4,4,8},
+				{0,0,0,9,0,0,0,0},
 			});
 			
 			//Set the player position
-			gamePlayer.setCurrentPosition(new Point(100, 200));
+			gamePlayer.setCurrentPosition(new Point(160, 200));
 
 			//Create the enemies
 			mapEnemies = new EnemyPlayer[3];

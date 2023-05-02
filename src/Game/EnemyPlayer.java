@@ -117,7 +117,7 @@ public class EnemyPlayer extends Player {
 
 		// Draw the Enemy for the first time
 		enemyAvatar = new JLabel();
-		ImageIcon enemySprite = new ImageIcon("src/Game/enemySprite.png");
+		ImageIcon enemySprite = new ImageIcon("src/Game/Ork.png");
 		enemyAvatar.setIcon(enemySprite);
 		enemyAvatar.setBounds((int) posX, (int) posX, ENEMYSIZE, ENEMYSIZE);
 		enemyAvatar.setVisible(true);
