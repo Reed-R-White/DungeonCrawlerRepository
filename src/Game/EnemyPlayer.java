@@ -301,7 +301,7 @@ public class EnemyPlayer extends Player {
 	 */
 	public void decrementBoredom(){
 		if (boredom >0){
-			boredom--;
+			boredom -= 2;
 		}
 	}
 
