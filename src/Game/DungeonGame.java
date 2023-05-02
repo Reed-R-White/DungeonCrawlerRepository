@@ -253,9 +253,11 @@ public class DungeonGame implements ActionListener {
 
 	            int numOfEnemies = 0;
                 for (EnemyPlayer enemy : currentMap.getEnemyList()) {
+                	
                 	if(enemy.isAlive()) {
-                		numOfEnemies += 1;
                 		
+                		numOfEnemies += 1;
+
                 		levelOver = false;
                 		
 						//If the enemy is within range of the player, attack it

@@ -66,7 +66,7 @@ public class GameGui extends JFrame {
 		Border border = BorderFactory.createLineBorder(Color.BLACK, 2);
 		title.setBorder(border);
 		titlePanel.add(title);
-		message = new JLabel("<html><div style='text-align: center;'>Click 'Start Game' to play<br/>Run by moving the mousePress 'Shift' to slash<br/>Press 'Space' to stab for extra damage<html>", SwingConstants.CENTER);
+		message = new JLabel("<html><div style='text-align: center;'>Click 'Start Game' to play<br/>Run by moving the mouse<br/>Press 'Shift' to slash<br/>Press 'Space' to stab for extra damage<html>", SwingConstants.CENTER);
 		message.setAlignmentX(JComponent.CENTER_ALIGNMENT);
 		titlePanel.add(message);
 		titlePanel.add(Box.createRigidArea(new Dimension(0, 100)));
@@ -90,12 +90,6 @@ public class GameGui extends JFrame {
 		buttonPanel.add(quit);
 		quit.setAlignmentX(JComponent.CENTER_ALIGNMENT);
 		add(panel);
-		
-		
-		
-		
-		
-		
 
 		// Set up the JFrame
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
