@@ -2,7 +2,11 @@
 
 package Game;
 
+import java.awt.Image;
 import java.awt.Point;
+
+import javax.swing.ImageIcon;
+
 import javax.swing.JFrame;
 
 /**
@@ -20,6 +24,7 @@ public class MapLayout {
 	private Obstacle[] obstacleArr;
 	private EnemyPlayer[] mapEnemies;
 	private JFrame mapJFrame;
+	private int objectSize = 40;
 
 	/**
 	 * Constructor for the MapLayout, which sets up the specified map design, and
@@ -41,9 +46,9 @@ public class MapLayout {
 			obstacleArr = scanMap(new int[][] {
 				{ 5, 3, 3, 3, 3, 3, 6 },
 				{ 1, 0, 0, 0, 0, 0, 2 },
-				{ 1, 0, 5, 0, 0, 0, 2 },
-				{ 1, 0, 0, 0, 8, 0, 2 },
-				{ 1, 0, 0, 0, 0, 0, 2 },
+				{ 1, 0, 5, 0, 0, 0, 2 }, 
+				{ 1, 0, 0, 0, 8, 0, 2 }, 
+				{ 1, 0, 0, 0, 0, 0, 2 }, 
 				{ 7, 4, 4, 4, 4, 4, 8 },
 				{ 0, 0, 0, 9, 0, 0, 0 }, });
 
@@ -62,9 +67,9 @@ public class MapLayout {
 
 		case MAZE:
 			obstacleArr = scanMap(
-					new int[][] {
+					new int[][] { 
 						{ 5, 3, 6, 3, 3, 3, 6 },
-						{ 5, 6, 2, 9, 6, 9, 6 },
+						{ 5, 6, 2, 9, 6, 9, 6 }, 
 						{ 1, 3, 2, 2, 3, 2, 2 },
 						{ 1, 7, 2, 5, 8, 3, 2 },
 						{ 7, 4, 4, 4, 8, 8, 8 },
@@ -84,12 +89,12 @@ public class MapLayout {
 
 		case HOUSE:
 			obstacleArr = scanMap(
-					new int[][] {
-						{ 5, 3, 3, 3, 3, 3, 3, 6 },
-						{ 1, 5, 3, 0, 5, 6, 0, 2 },
+					new int[][] { 
+						{ 5, 3, 3, 3, 3, 3, 3, 6 }, 
+						{ 1, 5, 3, 0, 5, 6, 0, 2 }, 
 						{ 1, 7, 8, 0, 4, 8, 0, 2 },
-						{ 1, 4, 4, 0, 0, 0, 0, 2 },
-						{ 7, 7, 4, 4, 4, 4, 4, 8 },
+						{ 1, 4, 4, 0, 0, 0, 0, 2 }, 
+						{ 7, 7, 4, 4, 4, 4, 4, 8 }, 
 						{ 0, 0, 0, 9, 0, 0, 0, 0 }, });
 
 			// Set the player position
@@ -103,26 +108,29 @@ public class MapLayout {
 			mapEnemies[2] = new EnemyPlayer(gameWindow, 500, 400, 10, 10, 200, 10, gamePlayer, obstacleArr);
 
 			break;
+			
 		default:
-			obstacleArr = scanMap(
-					new int[][] {
-						{ 5, 3, 3, 3, 3, 3, 3, 6 },
-						{ 1, 5, 3, 0, 5, 6, 0, 2 },
-						{ 1, 7, 8, 0, 4, 8, 0, 2 },
-						{ 1, 4, 4, 0, 0, 0, 0, 2 },
-						{ 7, 7, 4, 4, 4, 4, 4, 8 },
-						{ 0, 0, 0, 9, 0, 0, 0, 0 }, });
+			
+			obstacleArr = scanMap(new int[][] {
+				{ 5, 3, 3, 3, 3, 3, 6 },
+				{ 1, 0, 0, 0, 0, 0, 2 },
+				{ 1, 0, 5, 0, 0, 0, 2 }, 
+				{ 1, 0, 0, 0, 8, 0, 2 }, 
+				{ 1, 0, 0, 0, 0, 0, 2 }, 
+				{ 7, 4, 4, 4, 4, 4, 8 },
+				{ 0, 0, 0, 9, 0, 0, 0 }, });
 
 			// Set the player position
-			gamePlayer.setCurrentPosition(new Point(160, 200));
+			gamePlayer.setCurrentPosition(new Point(70, 70));
 
 			// Create the enemies
-			mapEnemies = new EnemyPlayer[3];
+			mapEnemies = new EnemyPlayer[5];
+			for (int i = 0; i < mapEnemies.length; i++) {
 
-			mapEnemies[0] = new EnemyPlayer(gameWindow, 70, 70, 10, 10, 100, 5, gamePlayer, obstacleArr);
-			mapEnemies[1] = new EnemyPlayer(gameWindow, 500, 70, 10, 10, 100, 5, gamePlayer, obstacleArr);
-			mapEnemies[2] = new EnemyPlayer(gameWindow, 500, 400, 10, 10, 200, 10, gamePlayer, obstacleArr);
+				mapEnemies[i] = new EnemyPlayer(gameWindow, 300 + (10 * i), 100 + (5 * i), 10, 10, 50, 5, gamePlayer,
+						obstacleArr);
 
+			}
 			break;
 		}
 	}
@@ -147,21 +155,9 @@ public class MapLayout {
 
 	/**
 	 * This method creates the array of obstacles based on a map key, in the form or
-	 * a 2D int array. The ints in the array are keyed withing the methods to correspond
-	 * to obstacles in the map as follows
-	 * 1 = left vertical wall
-	 * 2 = right vertical wall
-	 * 3 = top horizontal wall
-	 * 4 = bottom horizontal wall
-	 * 5 = top left corner
-	 * 6 = top right corner
-	 * 7 = bottom left corner
-	 * 8 = bottom right corner
-	 * 9 = single free standing block
+	 * a 2D int array.
 	 * 
-	 * @param mapTemplate a 2D int array specifying which obstacles to draw where. 
-	 * The array should be organized such that the 0th internal array is the top row,
-	 * and lower rows come after.
+	 * @param mapTemplate a 2D int array specifying which obstacles to draw where
 	 * @return An array of obstacles fully constructed.
 	 */
 	private Obstacle[] scanMap(int[][] mapTemplate) {
@@ -228,6 +224,53 @@ public class MapLayout {
 				}
 			}
 		}
+
 		return mapObstacles;
+	}
+
+	public void drawMap(int currentLevel) {
+
+		ImageIcon sprite = new ImageIcon("src/Game/dungeonBackground.jpg");
+		Image tempImage = sprite.getImage();
+		tempImage = tempImage.getScaledInstance(objectSize, objectSize, java.awt.Image.SCALE_SMOOTH);
+		sprite = new ImageIcon(tempImage);
+
+		for (int row = 0; row < DungeonGame.GAMEWINDOWSIZE; row += objectSize) {
+			for (int col = 0; col < DungeonGame.GAMEWINDOWSIZE; col += objectSize) {
+
+				boolean hasWall = false;
+
+				for (Obstacle obj : obstacleArr) {
+					if (obj.getPosX1() == row && obj.getPosY1() == col) {
+						hasWall = true;
+					} else if (obj.posX2 == row && obj.posY2 == col) {
+						hasWall = true;
+					} else if (obj.posX3 == row && obj.posY3 == col) {
+						hasWall = true;
+					} else if (obj.posX4 == row && obj.posY4 == col) {
+						hasWall = true;
+					} else if (obj.posX5 == row && obj.posY5 == col) {
+						hasWall = true;
+					}
+				}
+
+				if (row == 0 && col == 0 && currentLevel == 3) {
+					hasWall = false;
+				} else if (row == 200 && col == 560 && currentLevel == 3) {
+					hasWall = false;
+				}
+
+				if (!hasWall) {
+					/*
+					 * JLabel bg = new JLabel(); bg.setIcon(sprite); bg.setVisible(true);
+					 * bg.setBounds(row, col, objectSize, objectSize); mapJFrame.add(bg);//
+					 */
+				}
+			}
+		}
+		for (Obstacle obj : obstacleArr) {
+			obj.draw();
+		}
+		mapJFrame.repaint();
 	}
 }

@@ -1,6 +1,7 @@
 
 package Game;
 
+
 import java.awt.Container;
 import java.awt.Point;
 import java.awt.Polygon;
@@ -18,13 +19,14 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.Timer;
 
+
 /**
  * The class managing the player, including their health, attacks, and movement.
  * 
  * @author Reed White, Charlie Said, Ryan O'Valley
  */
 public class DungeonPlayer {
-
+	
 	public int MAXMOVEMENT = 3;
 	private final int INVINCIBILITYTIME = 50;
 	private int playerDamage;
@@ -37,21 +39,22 @@ public class DungeonPlayer {
 
 	private int xMouseOffsetToContentPaneFromJFrame;
 	private int yMouseOffsetToContentPaneFromJFrame;
-
+	
 	private GameObject swordDrawBox;
 	private JLabel playerAvatar;
 	private JLabel healthBar;
 	private JFrame homeFrame;
 	private BufferedImage swordStab;
 	private BufferedImage swordSlash;
+	
 
 	/**
 	 * Constructor for the DungeonPlayer class.
 	 * 
-	 * The DungeonPlayer class represents the player of a game. It allows the player
-	 * to move their avatar in response to mouse movements and updates the player's
-	 * position on a timer. The class also handles the player's health and damage
-	 * taken, and renders the player's avatar on the game screen.
+	 * The DungeonPlayer class represents the player of a game. 
+ 	 * It allows the player to move their avatar in response to mouse movements 
+	 * and updates the player's position on a timer. The class also handles the player's health 
+	 * and damage taken, and renders the player's avatar on the game screen.
 	 *
 	 * @param playerJFrame the JFrame containing the player
 	 */
@@ -66,37 +69,37 @@ public class DungeonPlayer {
 
 		// Draw the player for the first time
 		playerAvatar = new JLabel();
-		ImageIcon playerSprite = new ImageIcon("src/Game/playerIdle.gif");
+		ImageIcon playerSprite = new ImageIcon("src/Game/playerIdle.png");
 		playerAvatar.setIcon(playerSprite);
 		playerAvatar.setBounds(playerX, playerY, PLAYERSIZE, PLAYERSIZE);
 		playerAvatar.setVisible(true);
 		playerJFrame.add(playerAvatar);
-
-		// Add the health bar
+		
+		//Add the health bar
 		playerHealth = 100;
 		healthBar = new JLabel("" + playerHealth);
 		playerJFrame.add(healthBar);
-
+		
 		swordStab = null;
 		swordSlash = null;
-
+		
 		try {
 			swordStab = ImageIO.read(new File("src/Game/swordStab.png"));
 			swordSlash = ImageIO.read(new File("src/Game/shortSword.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
+	    
 		swordDrawBox = new GameObject(swordStab, 110, 70, 0);
-		homeFrame.add(swordDrawBox);
-		swordDrawBox.setVisible(false);
-		swordDrawBox.setBounds(playerX - 100, playerY - 100, 200, 200);
+	    homeFrame.add(swordDrawBox);
+	    swordDrawBox.setVisible(false);
+	    swordDrawBox.setBounds(playerX - 100, playerY - 100, 200, 200);
 
-		// Calculate the offset required for the player sprite.
+	    //Calculate the offset required for the player sprite.
 		Container gameContentPane = homeFrame.getContentPane();
-		int borderWidth = (homeFrame.getWidth() - gameContentPane.getWidth()) / 2;
-		xMouseOffsetToContentPaneFromJFrame = borderWidth;
-		yMouseOffsetToContentPaneFromJFrame = homeFrame.getHeight() - gameContentPane.getHeight() - borderWidth;
+        int borderWidth = (homeFrame.getWidth() - gameContentPane.getWidth()) / 2;
+        xMouseOffsetToContentPaneFromJFrame = borderWidth;
+        yMouseOffsetToContentPaneFromJFrame = homeFrame.getHeight() - gameContentPane.getHeight() - borderWidth;
 
 	}
 
@@ -158,21 +161,22 @@ public class DungeonPlayer {
 	public int getY() {
 		return playerY;
 	}
-
-	// a visual method called by the stab attack that very simply displays the sword 
-	// in a set position on a timer that shortly expires.
+	
+	public void toggleSwordVisual(Boolean toggleOption) {
+		swordDrawBox.setVisible(toggleOption);
+	}
+	
 	private void doSwordStabVisual(int initialAngle, int visiblityDuration) {
 		swordDrawBox.setImage(swordStab);
 		swordDrawBox.setAngle(initialAngle - 10);
 		swordDrawBox.setVisible(true);
-
+		
 		final Timer stabTimer = new Timer(10, null);
 		ActionListener stabAction = new ActionListener() {
 			int visiblityCounter = 0;
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (visiblityCounter >= visiblityDuration) {
+				if(visiblityCounter >= visiblityDuration) {
 					swordDrawBox.setVisible(false);
 					stabTimer.stop();
 				}
@@ -182,30 +186,28 @@ public class DungeonPlayer {
 		stabTimer.addActionListener(stabAction);
 		stabTimer.start();
 	}
-
-	// a graphics method called when attacking to display a simple sword sweep
-	// animation using a timer that self destructs.
+	
+	// method that preforms the sword slash animation
 	private void doSwordSweepVisual(int initialAngle, int increment, int angelOfSlash) {
-
-		int numOfIncrements = angelOfSlash / increment;
+		
+		int numOfIncrements = angelOfSlash/increment;
 		swordDrawBox.setImage(swordSlash);
 		swordDrawBox.setAngle(initialAngle - 20);
+		swordDrawBox.setSlashing(true);
 		swordDrawBox.setVisible(true);
-		swordDrawBox.setSwipingBoolean(true);
-
+		
 		final Timer sweeptimer = new Timer(10, null);
 		ActionListener sweepAction = new ActionListener() {
 			int currentIncrement = 0;
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (currentIncrement >= numOfIncrements) {
-					swordDrawBox.setSwipingBoolean(false);
+				if(currentIncrement >= numOfIncrements) {
 					swordDrawBox.setVisible(false);
+					swordDrawBox.setSlashing(false);
 					sweeptimer.stop();
 					return;
 				}
-				swordDrawBox.setAngle(initialAngle - 20 + (increment * currentIncrement));
+				swordDrawBox.setAngle(initialAngle - 20 +(increment*currentIncrement));
 				currentIncrement += 1;
 			}
 		};
@@ -227,11 +229,11 @@ public class DungeonPlayer {
 	 * 
 	 * @param pos The point to put the player at.
 	 */
-	public void setCurrentPosition(Point pos) {
-		playerX = (int) pos.getX();
-		playerY = (int) pos.getY();
+	public void setCurrentPosition(Point pos){
+		playerX = (int)pos.getX();
+		playerY = (int)pos.getY();
 	}
-
+	
 	/**
 	 * Getter for the player's damage output (damage dealt to enemies)
 	 * 
@@ -240,17 +242,17 @@ public class DungeonPlayer {
 	public int getDamage() {
 		return playerDamage;
 	}
-
+	
 	/**
 	 * This method reduces the player's health by the specified amount and sets the
 	 * invincibility counter to 500.
 	 * 
 	 * @param damageAmount an integer representing the amount of damage taken by the
-	 *                     player
+	 *               player
 	 */
 	public void takeDamage(int damageAmount) {
-
-		if (invincibilityCounter <= 0) {
+		
+		if (invincibilityCounter<=0){
 			playerHealth = playerHealth - damageAmount;
 
 			invincibilityCounter = INVINCIBILITYTIME;
@@ -263,7 +265,7 @@ public class DungeonPlayer {
 	 */
 	public void drawPlayer() {
 		playerAvatar.setBounds(playerX, playerY, PLAYERSIZE, PLAYERSIZE);
-		healthBar.setText("" + playerHealth);
+		healthBar.setText(""+playerHealth);
 		healthBar.setBounds(playerX + 8, playerY - 25, PLAYERSIZE, PLAYERSIZE);
 		swordDrawBox.setBounds(playerX - 100, playerY - 100, 200, 200);
 		homeFrame.repaint();
@@ -308,9 +310,8 @@ public class DungeonPlayer {
 	 * @param angle     the angle in radians by which to rotate the rectangle
 	 */
 	public void rotateRectangle(Point[] rectangle, Point pivot, double angle) {
-		// Code provided with help from chat GPT using the prompt:
-		// Write a methods that takes an array of point objects and rotates them around a pivot point by a given angel.
-		
+		// WARNING: CHAT GPT CODE PLZ USE CAREFULLY
+		// add context
 		double cos = Math.cos(angle);
 		double sin = Math.sin(angle);
 		for (Point p : rectangle) {
@@ -331,30 +332,30 @@ public class DungeonPlayer {
 	 * @param enemy the enemy the method checks its attack against
 	 * @return true if an attack hit, false otherwise
 	 */
-
+	
 	public boolean attack(EnemyPlayer enemy) {
-
+		
 		Point enemPoint = new Point((int) enemy.getX(), (int) enemy.getY());
 		Point enemBottomLeft = new Point((int) enemy.getX(), (int) enemy.getY() + enemy.ENEMYSIZE);
-		Point enemTopRight = new Point((int) enemy.getX() + enemy.ENEMYSIZE, (int) enemy.getY());
+		Point enemTopRight = new Point((int) enemy.getX()  + enemy.ENEMYSIZE, (int) enemy.getY());
 		Point enemBottomRight = new Point((int) enemy.getX() + enemy.ENEMYSIZE, (int) enemy.getY() + enemy.ENEMYSIZE);
-
+				
 		int[] enemyXCords = new int[] { (int) enemPoint.getX(), (int) enemTopRight.getX(), (int) enemBottomRight.getX(),
 				(int) enemBottomLeft.getX() };
 		int[] enemyYCords = new int[] { (int) enemPoint.getY(), (int) enemTopRight.getY(), (int) enemBottomRight.getY(),
 				(int) enemBottomLeft.getY() };
-
+		
 		for (int i = 0; i < enemyXCords.length; i++) {
 			enemyXCords[i] += xMouseOffsetToContentPaneFromJFrame;
-		}
-
-		for (int i = 0; i < enemyYCords.length; i++) {
-			enemyYCords[i] += yMouseOffsetToContentPaneFromJFrame;
-		}
-
+	    }
+	    
+	    for (int i = 0; i < enemyYCords.length; i++) {
+	    	enemyYCords[i] += yMouseOffsetToContentPaneFromJFrame;
+	    }
+		
 		Polygon enemhitbox = new Polygon(enemyXCords, enemyYCords, 4);
 		Rectangle enemyHitbox = new Rectangle(enemhitbox.getBounds());
-
+		
 		// Get the direction from the player to the mouse
 		double deltaX = newPosition.getX() - playerX;
 		double deltaY = newPosition.getY() - playerY;
@@ -366,36 +367,33 @@ public class DungeonPlayer {
 		double rectX = playerX;
 		double rectY = playerY - rectHeight / 2.0;
 
-		// Rotate the rectangle to match the angle of the mouse in relation to the
-		// player
-		double angle = Math.atan2(deltaY, deltaX);
-		System.out.println("attack angle = " + Math.toDegrees(angle));
-
-		Point bottomLeft = new Point((int) rectX, (int) rectY);
-		Point topLeft = new Point((int) rectX, (int) (rectY + rectHeight));
-		Point bottomRight = new Point((int) (rectX + rectWidth), (int) rectY);
-		Point topRight = new Point((int) (rectX + rectWidth), (int) (rectY + rectHeight));
-		Point[] recPoints = new Point[] { bottomLeft, topLeft, bottomRight, topRight };
-		rotateRectangle(recPoints, new Point(playerX, playerY), angle);
-
-		int[] xCords = new int[] { (int) bottomLeft.getX(), (int) topLeft.getX(), (int) topRight.getX(),
-				(int) bottomRight.getX() };
-		int[] yCords = new int[] { (int) bottomLeft.getY(), (int) topLeft.getY(), (int) topRight.getY(),
-				(int) bottomRight.getY() };
-
-		for (int i = 0; i < xCords.length; i++) {
-			xCords[i] += xMouseOffsetToContentPaneFromJFrame + PLAYERSIZE / 2;
-		}
-
-		for (int i = 0; i < yCords.length; i++) {
-			yCords[i] += yMouseOffsetToContentPaneFromJFrame + PLAYERSIZE / 2;
-		}
-
-		Polygon hitbox = new Polygon(xCords, yCords, 4);
-		doSwordStabVisual((int) Math.toDegrees(angle) + 90, 10);
-
-		return hitbox.intersects(enemyHitbox);
-		// Check if the point is in the rectangle
+	    // Rotate the rectangle to match the angle of the mouse in relation to the player
+	    double angle = Math.atan2(deltaY, deltaX);
+	    System.out.println("attack angle = "+Math.toDegrees(angle));
+	    
+	    Point bottomLeft = new Point((int) rectX, (int) rectY);
+	    Point topLeft = new Point((int) rectX, (int) (rectY + rectHeight));
+	    Point bottomRight = new Point((int) (rectX + rectWidth), (int) rectY);
+	    Point topRight = new Point((int) (rectX + rectWidth), (int) (rectY + rectHeight));
+	    Point[] recPoints = new Point[] {bottomLeft, topLeft, bottomRight, topRight};
+	    rotateRectangle(recPoints,new Point(playerX, playerY), angle);
+	    
+	    int[] xCords = new int[] {(int) bottomLeft.getX(), (int) topLeft.getX(), (int) topRight.getX(), (int) bottomRight.getX()}; 
+	    int[] yCords = new int[] {(int) bottomLeft.getY(), (int) topLeft.getY(), (int) topRight.getY(), (int) bottomRight.getY()};
+	    
+	    for (int i = 0; i < xCords.length; i++) {
+	    	xCords[i] += xMouseOffsetToContentPaneFromJFrame + PLAYERSIZE/2;
+	    }
+	    
+	    for (int i = 0; i < yCords.length; i++) {
+	    	yCords[i] += yMouseOffsetToContentPaneFromJFrame + PLAYERSIZE/2;
+	    }
+	    
+	    Polygon hitbox = new Polygon(xCords, yCords, 4);
+	    doSwordStabVisual((int) Math.toDegrees(angle)+90, 10);
+	    
+	    return hitbox.intersects(enemyHitbox);
+	    // Check if the point is in the rectangle
 
 	}
 
@@ -410,42 +408,43 @@ public class DungeonPlayer {
 	 * @return true if an attack hit, false otherwise
 	 */
 	public boolean sweepAttack(EnemyPlayer enemy) {
-
+		
 		Point enemPoint = new Point((int) enemy.getX(), (int) enemy.getY());
 		Point enemBottomLeft = new Point((int) enemy.getX(), (int) enemy.getY() + enemy.ENEMYSIZE);
-		Point enemTopRight = new Point((int) enemy.getX() + enemy.ENEMYSIZE, (int) enemy.getY());
+		Point enemTopRight = new Point((int) enemy.getX()  + enemy.ENEMYSIZE, (int) enemy.getY());
 		Point enemBottomRight = new Point((int) enemy.getX() + enemy.ENEMYSIZE, (int) enemy.getY() + enemy.ENEMYSIZE);
-
+				
 		int[] enemyXCords = new int[] { (int) enemPoint.getX(), (int) enemTopRight.getX(), (int) enemBottomRight.getX(),
 				(int) enemBottomLeft.getX() };
 		int[] enemyYCords = new int[] { (int) enemPoint.getY(), (int) enemTopRight.getY(), (int) enemBottomRight.getY(),
 				(int) enemBottomLeft.getY() };
-
+		
 		for (int i = 0; i < enemyXCords.length; i++) {
 			enemyXCords[i] += xMouseOffsetToContentPaneFromJFrame;
-		}
-
-		for (int i = 0; i < enemyYCords.length; i++) {
-			enemyYCords[i] += yMouseOffsetToContentPaneFromJFrame;
-		}
-
+	    }
+	    
+	    for (int i = 0; i < enemyYCords.length; i++) {
+	    	enemyYCords[i] += yMouseOffsetToContentPaneFromJFrame;
+	    }
+	    
 		Polygon enemhitbox = new Polygon(enemyXCords, enemyYCords, 4);
 		Rectangle enemyHitbox = new Rectangle(enemhitbox.getBounds());
-
+		
 		double ROTATIONCONSTANT = 0.25;
 
-		// Get the direction from the player to the mouse
-
-		double deltaX = newPosition.getX() - playerX;
-		double deltaY = newPosition.getY() - playerY;
-
-		int rotationPointAdjustmentX = 3 * Integer.signum((int) deltaX);
-		int rotationPointAdjustmentY = 3 * Integer.signum((int) deltaY);
-
-		Point sweepRotationPoint = new Point((playerX + rotationPointAdjustmentX),
+		
+	    // Get the direction from the player to the mouse
+	    
+	    double deltaX = newPosition.getX() - playerX;
+	    double deltaY = newPosition.getY() - playerY;
+	    
+	    int rotationPointAdjustmentX = 3*Integer.signum((int) deltaX);
+	    int rotationPointAdjustmentY = 3*Integer.signum((int) deltaY);
+	    
+	    Point sweepRotationPoint = new Point((playerX + rotationPointAdjustmentX),
 				(playerY + rotationPointAdjustmentY));
 
-		// Calculate the rectangle emanating from the player in the direction of the
+	    // Calculate the rectangle emanating from the player in the direction of the
 		// mouse
 		double rectWidth = 15;
 		double rectHeight = 15;
@@ -462,52 +461,52 @@ public class DungeonPlayer {
 		Point topRight = new Point((int) (rectX + rectWidth), (int) (rectY + rectHeight));
 		Point[] recPoints = new Point[] { bottomLeft, topLeft, bottomRight, topRight };
 		rotateRectangle(recPoints, sweepRotationPoint, (angle + ROTATIONCONSTANT * 5));
-
+		
 		int[] xCords = new int[] { (int) bottomLeft.getX(), (int) topLeft.getX(), (int) topRight.getX(),
 				(int) bottomRight.getX() };
 		int[] yCords = new int[] { (int) bottomLeft.getY(), (int) topLeft.getY(), (int) topRight.getY(),
 				(int) bottomRight.getY() };
 
 		for (int i = 0; i < xCords.length; i++) {
-			xCords[i] += xMouseOffsetToContentPaneFromJFrame + PLAYERSIZE / 2;
-		}
-
-		for (int i = 0; i < yCords.length; i++) {
-			yCords[i] += yMouseOffsetToContentPaneFromJFrame + PLAYERSIZE / 2;
-		}
-
-		Polygon hitbox = new Polygon(xCords, yCords, 4);
-
-		enemyHitbox.intersects(enemyHitbox);
-		if (hitbox.intersects(enemyHitbox)) {
-			return true;
-		}
-
-		for (int i = 0; i < 5; i++) {
-			rotateRectangle(recPoints, sweepRotationPoint, ROTATIONCONSTANT);
-
-			xCords = new int[] { (int) bottomLeft.getX(), (int) topLeft.getX(), (int) topRight.getX(),
-					(int) bottomRight.getX() };
-			yCords = new int[] { (int) bottomLeft.getY(), (int) topLeft.getY(), (int) topRight.getY(),
-					(int) bottomRight.getY() };
-
-			for (int n = 0; n < xCords.length; n++) {
-				xCords[n] += xMouseOffsetToContentPaneFromJFrame + PLAYERSIZE / 2;
-			}
-
-			for (int n = 0; n < yCords.length; n++) {
-				yCords[n] += yMouseOffsetToContentPaneFromJFrame + PLAYERSIZE / 2;
-			}
-
-			hitbox = new Polygon(xCords, yCords, 4);
-			if (hitbox.intersects(enemyHitbox)) {
-				return true;
-			}
-
-		}
-
-		doSwordSweepVisual((int) Math.toDegrees(angle + (ROTATIONCONSTANT * 5)), 10, 90);
-
-		return hitbox.intersects(enemyHitbox);
+	    	xCords[i] += xMouseOffsetToContentPaneFromJFrame + PLAYERSIZE/2;
+	    }
+	    
+	    for (int i = 0; i < yCords.length; i++) {
+	    	yCords[i] += yMouseOffsetToContentPaneFromJFrame + PLAYERSIZE/2;
+	    }
+	    
+	    Polygon hitbox = new Polygon(xCords, yCords, 4);
+	    
+	    
+	    enemyHitbox.intersects(enemyHitbox);
+	    if (hitbox.intersects(enemyHitbox)) {
+	    	return true;
+	    }
+	    
+	    
+	    for (int i = 0; i < 5; i++) {
+	    	rotateRectangle(recPoints, sweepRotationPoint, ROTATIONCONSTANT);
+		    
+		    xCords = new int[] {(int) bottomLeft.getX(), (int) topLeft.getX(), (int) topRight.getX(), (int) bottomRight.getX()}; 
+		    yCords = new int[] {(int) bottomLeft.getY(), (int) topLeft.getY(), (int) topRight.getY(), (int) bottomRight.getY()};
+		    
+		    for (int n = 0; n < xCords.length; n++) {
+		    	xCords[n] += xMouseOffsetToContentPaneFromJFrame + PLAYERSIZE/2;
+		    }
+		    
+		    for (int n = 0; n < yCords.length; n++) {
+		    	yCords[n] += yMouseOffsetToContentPaneFromJFrame + PLAYERSIZE/2;
+		    }
+		    
+		    hitbox = new Polygon(xCords, yCords, 4);
+		    if (hitbox.intersects(enemyHitbox)) {
+		    	return true;
+		    }
+		    
+	    }
+	    
+	    doSwordSweepVisual((int) Math.toDegrees(angle + (ROTATIONCONSTANT * 5)), 10 , 90);
+	    
+	    return hitbox.intersects(enemyHitbox);
 	}
 }
