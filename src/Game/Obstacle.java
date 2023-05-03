@@ -273,7 +273,7 @@ public class Obstacle {
 
 		//Check the first Obstacle (in the case that there is only one JLabel in the Obstacle)
         if((x >= posX1 && x <= (posX1 + ObstacleObject[0].getWidth()) && y >= posY1 && y <= (posY1 + ObstacleObject[0].getHeight()))){
-            return true;
+			return true;
         }
         
 		//If the Obstacle has 3 JLabels in it (if it's a straight line), check each JLabel.

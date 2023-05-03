@@ -43,14 +43,9 @@ public class MapLayout {
 		// Create the arrays of obstacles
 		switch (selectedMap) {
 		case DEFAULT:
-			obstacleArr = scanMap(new int[][] {
-				{ 5, 3, 3, 3, 3, 3, 6 },
-				{ 1, 0, 0, 0, 0, 0, 2 },
-				{ 1, 0, 5, 0, 0, 0, 2 }, 
-				{ 1, 0, 0, 0, 8, 0, 2 }, 
-				{ 1, 0, 0, 0, 0, 0, 2 }, 
-				{ 7, 4, 4, 4, 4, 4, 8 },
-				{ 0, 0, 0, 9, 0, 0, 0 }, });
+			obstacleArr = scanMap(new int[][] { { 5, 3, 3, 3, 3, 3, 6 }, { 1, 0, 0, 0, 0, 0, 2 },
+					{ 1, 0, 5, 0, 0, 0, 2 }, { 1, 0, 0, 0, 8, 0, 2 }, { 1, 0, 0, 0, 0, 0, 2 }, { 7, 4, 4, 4, 4, 4, 8 },
+					{ 0, 0, 0, 9, 0, 0, 0 }, });
 
 			// Set the player position
 			gamePlayer.setCurrentPosition(new Point(70, 70));
@@ -67,13 +62,8 @@ public class MapLayout {
 
 		case MAZE:
 			obstacleArr = scanMap(
-					new int[][] { 
-						{ 5, 3, 6, 3, 3, 3, 6 },
-						{ 5, 6, 2, 9, 6, 9, 6 }, 
-						{ 1, 3, 2, 2, 3, 2, 2 },
-						{ 1, 7, 2, 5, 8, 3, 2 },
-						{ 7, 4, 4, 4, 8, 8, 8 },
-						{ 0, 0, 0, 9, 0, 0, 0 }, });
+					new int[][] { { 5, 3, 6, 3, 3, 3, 6 }, { 5, 6, 2, 9, 6, 9, 6 }, { 1, 3, 2, 2, 3, 2, 2 },
+							{ 1, 7, 2, 5, 8, 3, 2 }, { 7, 4, 4, 4, 8, 8, 8 }, { 0, 0, 0, 9, 0, 0, 0 }, });
 
 			// Set the player position
 
@@ -89,13 +79,8 @@ public class MapLayout {
 
 		case HOUSE:
 			obstacleArr = scanMap(
-					new int[][] { 
-						{ 5, 3, 3, 3, 3, 3, 3, 6 }, 
-						{ 1, 5, 3, 0, 5, 6, 0, 2 }, 
-						{ 1, 7, 8, 0, 4, 8, 0, 2 },
-						{ 1, 4, 4, 0, 0, 0, 0, 2 }, 
-						{ 7, 7, 4, 4, 4, 4, 4, 8 }, 
-						{ 0, 0, 0, 9, 0, 0, 0, 0 }, });
+					new int[][] { { 5, 3, 3, 3, 3, 3, 3, 6 }, { 1, 5, 3, 0, 5, 6, 0, 2 }, { 1, 7, 8, 0, 4, 8, 0, 2 },
+							{ 1, 4, 4, 0, 0, 0, 0, 2 }, { 7, 7, 4, 4, 4, 4, 4, 8 }, { 0, 0, 0, 9, 0, 0, 0, 0 }, });
 
 			// Set the player position
 			gamePlayer.setCurrentPosition(new Point(160, 200));
@@ -108,17 +93,12 @@ public class MapLayout {
 			mapEnemies[2] = new EnemyPlayer(gameWindow, 500, 400, 10, 10, 200, 10, gamePlayer, obstacleArr);
 
 			break;
-			
+
 		default:
-			
-			obstacleArr = scanMap(new int[][] {
-				{ 5, 3, 3, 3, 3, 3, 6 },
-				{ 1, 0, 0, 0, 0, 0, 2 },
-				{ 1, 0, 5, 0, 0, 0, 2 }, 
-				{ 1, 0, 0, 0, 8, 0, 2 }, 
-				{ 1, 0, 0, 0, 0, 0, 2 }, 
-				{ 7, 4, 4, 4, 4, 4, 8 },
-				{ 0, 0, 0, 9, 0, 0, 0 }, });
+
+			obstacleArr = scanMap(new int[][] { { 5, 3, 3, 3, 3, 3, 6 }, { 1, 0, 0, 0, 0, 0, 2 },
+					{ 1, 0, 5, 0, 0, 0, 2 }, { 1, 0, 0, 0, 8, 0, 2 }, { 1, 0, 0, 0, 0, 0, 2 }, { 7, 4, 4, 4, 4, 4, 8 },
+					{ 0, 0, 0, 9, 0, 0, 0 }, });
 
 			// Set the player position
 			gamePlayer.setCurrentPosition(new Point(70, 70));

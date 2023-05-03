@@ -99,8 +99,8 @@ public class DungeonGame implements ActionListener {
 		        	if(attackTimer <= 0) {
 		        		attackTimer = ATTACKCOOLDOWN;
 			        	for(EnemyPlayer enemy: currentEnemies) {
-			        		if(player1.attack(enemy)) {
-					            enemy.takeDamage(player1.getDamage());
+							if (player1.attack(enemy)) {
+					            enemy.takeDamage(player1.getStabDamage());
 				        	}
 			        	}
 		        	}
@@ -112,7 +112,7 @@ public class DungeonGame implements ActionListener {
 		        		attackTimer = ATTACKCOOLDOWN;
 			        	for(EnemyPlayer enemy: currentEnemies) {
 			        		if(player1.sweepAttack(enemy)) {
-					            enemy.takeDamage(player1.getDamage());
+					            enemy.takeDamage(player1.getSlashDamage());
 				        	}
 			        	}
 		        	}
