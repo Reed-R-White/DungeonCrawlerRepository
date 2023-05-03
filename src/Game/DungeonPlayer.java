@@ -38,7 +38,7 @@ import javax.swing.JLabel;
  */
 public class DungeonPlayer {
 	
-	Clip attackClip;
+
 
 	public int MAXMOVEMENT = 3;
 	private final int INVINCIBILITYTIME = 50;
@@ -75,14 +75,7 @@ public class DungeonPlayer {
 		playerY = Y;
 		playerDamage = 20;
 		
-//		try {
-//			AudioInputStream aud = AudioSystem.getAudioInputStream(this.getClass().getResource("attackAudio.wav"));
-//			this.attackClip = AudioSystem.getClip();
-//			this.attackClip.open(aud);
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+	
 
 		newPosition = new Point(playerX, playerY);
 		invincibilityCounter = 0;
@@ -286,7 +279,6 @@ public class DungeonPlayer {
 
 	
 	public boolean attack(EnemyPlayer enemy) {
-		//this.attackClip.start();
 		Point enemPoint = new Point((int) enemy.getX(), (int) enemy.getY());
 		Point enemBottomLeft = new Point((int) enemy.getX(), (int) enemy.getY() + enemy.ENEMYSIZE);
 		Point enemTopRight = new Point((int) enemy.getX()  + enemy.ENEMYSIZE, (int) enemy.getY());

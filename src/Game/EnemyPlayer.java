@@ -46,7 +46,7 @@ public class EnemyPlayer extends Player {
 	private int enemyHealth;
 	public final int ENEMYSIZE = 32;
 	
-	Clip monsterClip;
+
 	float deltaX = 0, deltaY = 0;
 
 
@@ -73,16 +73,6 @@ public class EnemyPlayer extends Player {
 		homeFrame = gameJFrame;
 		follow = false;
 		color = Color.red;
-
-		
-//		try {
-//			AudioInputStream aud = AudioSystem.getAudioInputStream(this.getClass().getResource("monster.wav"));
-//			this.monsterClip = AudioSystem.getClip();
-//			this.monsterClip.open(aud);
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
 
 		this.player = player;
 		this.damage = damage;
@@ -346,7 +336,7 @@ public class EnemyPlayer extends Player {
 	 */
 	public void attack(DungeonPlayer player) {
 
-		//monsterClip.start();
+		
 		player.takeDamage(damage);
 	}
 
