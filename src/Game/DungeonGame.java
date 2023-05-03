@@ -122,14 +122,13 @@ public class DungeonGame implements ActionListener {
 		        	if (boostCoolDown <= 0) {
 		        		boostTimer = 10;
 		        	}
-		        	System.out.println(xMouseOffsetToContentPaneFromJFrame+"\n"+yMouseOffsetToContentPaneFromJFrame);
 		        }
 		        
 		        else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 		        	gameWindow.setVisible(false);
             		gameWindow.dispose();
             		gameGUI.setVisible(true);
-            		((GameGui)gameGUI).updateMessage("Instructions here");
+            		((GameGui)gameGUI).updateMessage("Press play to play again!");
             		timer.stop();
 		        }
 		    }

@@ -369,7 +369,6 @@ public class DungeonPlayer {
 
 	    // Rotate the rectangle to match the angle of the mouse in relation to the player
 	    double angle = Math.atan2(deltaY, deltaX);
-	    System.out.println("attack angle = "+Math.toDegrees(angle));
 	    
 	    Point bottomLeft = new Point((int) rectX, (int) rectY);
 	    Point topLeft = new Point((int) rectX, (int) (rectY + rectHeight));
