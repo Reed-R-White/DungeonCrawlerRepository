@@ -26,12 +26,14 @@ import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
 /**
- * This class creates the menu, where the player can either begin the game, or back out.
+ * This class creates the menu, where the player can either begin the game, or
+ * back out.
  * 
  * @author Ryan O'Valley
  */
 public class GameGui extends JFrame {
 
+	private static final long serialVersionUID = 7778055339582890569L;
 	// Declare instance variables
 	JLabel title;
 	JLabel message;
@@ -66,7 +68,9 @@ public class GameGui extends JFrame {
 		Border border = BorderFactory.createLineBorder(Color.BLACK, 2);
 		title.setBorder(border);
 		titlePanel.add(title);
-		message = new JLabel("<html><div style='text-align: center;'>Click 'Start Game' to play<br/>Run by moving the mouse<br/>Press 'Shift' to slash<br/>Press 'Space' to stab for extra damage<html>", SwingConstants.CENTER);
+		message = new JLabel(
+				"<html><div style='text-align: center;'>Click 'Start Game' to play<br/>Run by moving the mouse<br/>Press 'Shift' to slash<br/>Press 'Space' to stab for extra damage<html>",
+				SwingConstants.CENTER);
 		message.setAlignmentX(JComponent.CENTER_ALIGNMENT);
 		titlePanel.add(message);
 		titlePanel.add(Box.createRigidArea(new Dimension(0, 100)));
@@ -76,11 +80,11 @@ public class GameGui extends JFrame {
 		// Set up the button panel
 		buttonPanel = new JPanel();
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
-		
+
 		JButton temp = new JButton();
 		temp.setVisible(true);
 		panel.add(temp);
-		
+
 		panel.add(buttonPanel, BorderLayout.CENTER);
 		buttonPanel.add(play);
 		play.setPreferredSize(new Dimension(50, 50));
@@ -93,10 +97,10 @@ public class GameGui extends JFrame {
 
 		// Set up the JFrame
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(400, 400);
+		setSize(500, 400);
 		setLocationRelativeTo(null);
 		setVisible(true);
-		
+
 		JFrame gameGui = this;
 
 		// Add listeners to the play and quit buttons
@@ -119,7 +123,7 @@ public class GameGui extends JFrame {
 			}
 		});
 	}
-	
+
 	public void updateMessage(String m) {
 		message.setText(m);
 	}

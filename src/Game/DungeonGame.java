@@ -122,7 +122,6 @@ public class DungeonGame implements ActionListener {
 		        	if (boostCoolDown <= 0) {
 		        		boostTimer = 10;
 		        	}
-		        	System.out.println(xMouseOffsetToContentPaneFromJFrame+"\n"+yMouseOffsetToContentPaneFromJFrame);
 		        }
 		        
 		        else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
@@ -251,18 +250,15 @@ public class DungeonGame implements ActionListener {
 				//Enemy loop:
 	            boolean levelOver = true;
 
-	            int numOfEnemies = 0;
                 for (EnemyPlayer enemy : currentMap.getEnemyList()) {
                 	
                 	if(enemy.isAlive()) {
                 		
-                		numOfEnemies += 1;
-
                 		levelOver = false;
                 		
 						//If the enemy is within range of the player, attack it
 						double distance = Math.sqrt(Math.pow(enemy.getX() - player1.getX(), 2) + Math.pow(enemy.getY()- player1.getY(), 2));
-						if (distance <=enemy.getEnemySize()+10){
+						if (distance <=enemy.getEnemySize()+10) {
 							enemy.attack(player1);
 						}
 
@@ -300,7 +296,6 @@ public class DungeonGame implements ActionListener {
 						}
                 	}
                 }
-                System.out.println(numOfEnemies);
 
 				//After each hit, the player has a short period of invulnerability.
 				//This method counts that timer down so the player can be hit again soon.
@@ -351,10 +346,8 @@ public class DungeonGame implements ActionListener {
 			break;
     	}
 
-    	currentMap.drawMap(currentLevel);
         obstacleArr = currentMap.getObstacleArray();
         currentEnemies = currentMap.getEnemyList();
-		System.out.println("Enemies: "+currentEnemies.length);
     }
     
 	/**

@@ -15,18 +15,14 @@ import java.util.Random;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
-
 
 import java.awt.Color;
 
-
 /**
- * The enemy class extends player, and contains similar capabilites as the user-controlled player.
- * The main difference is that, unless in follow mode, the enemy will follow a simple pre-defined movement pattern.
+ * The enemy class extends player, and contains similar capabilites as the
+ * user-controlled player. The main difference is that, unless in follow mode,
+ * the enemy will follow a simple pre-defined movement pattern.
  * 
  * @authors Ryan O'Valley, Reed White, Charlie Said
  */
@@ -45,10 +41,9 @@ public class EnemyPlayer extends Player {
 	Obstacle[] obstacleArr;
 	private int enemyHealth;
 	public final int ENEMYSIZE = 32;
-	
+
 	Clip monsterClip;
 	float deltaX = 0, deltaY = 0;
-
 
 	private final static int PLAYER_FOLLOW_DISTANCE = 200;
 
@@ -65,32 +60,20 @@ public class EnemyPlayer extends Player {
 	 * @param movementPatternX The X values of the movement pattern of the enemy.
 	 * @param movementPatternY The Y values of the movement pattern of the enemy.
 	 */
-	public EnemyPlayer(JFrame gameJFrame, float startingX, float startingY, float width, float height,
-			int enemyHealth, int damage,
-			DungeonPlayer player, Obstacle[] obstacleArr) {
+	public EnemyPlayer(JFrame gameJFrame, float startingX, float startingY, float width, float height, int enemyHealth,
+			int damage, DungeonPlayer player, Obstacle[] obstacleArr) {
 		super(gameJFrame, startingX, startingY, width, height);
-		
+
 		homeFrame = gameJFrame;
 		follow = false;
 		color = Color.red;
-
-		
-//		try {
-//			AudioInputStream aud = AudioSystem.getAudioInputStream(this.getClass().getResource("monster.wav"));
-//			this.monsterClip = AudioSystem.getClip();
-//			this.monsterClip.open(aud);
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
 
 		this.player = player;
 		this.damage = damage;
 		this.obstacleArr = obstacleArr;
 		this.enemyHealth = enemyHealth;
-		
-		
-		//Set up the random movement patterns
+
+		// Set up the random movement patterns
 		movementPatternX = new ArrayList<Integer>();
 		movementPatternY = new ArrayList<Integer>();
 		Random random = new Random();
@@ -133,10 +116,10 @@ public class EnemyPlayer extends Player {
 	 */
 	public void takeDamage(int damageAmount) {
 		enemyHealth -= damageAmount;
-		healthBar.setText(""+enemyHealth);
+		healthBar.setText("" + enemyHealth);
 
-		//Check if the enemy is dead.  If it is, remove it.
-		if(enemyHealth <= 0) {
+		// Check if the enemy is dead. If it is, remove it.
+		if (enemyHealth <= 0) {
 			gameJFrame.remove(enemyAvatar);
 			gameJFrame.remove(healthBar);
 		}
@@ -161,44 +144,44 @@ public class EnemyPlayer extends Player {
 	}
 
 	/**
-	 * Getter for the enemy's delta along the X axis.
-	 * The delta is set by the determineDeltas method, but defaults to 0.
-	 * The delta is how much the enemy plans to move, not how much it has or is moving.
+	 * Getter for the enemy's delta along the X axis. The delta is set by the
+	 * determineDeltas method, but defaults to 0. The delta is how much the enemy
+	 * plans to move, not how much it has or is moving.
 	 * 
 	 * @return the enemy's delta along the X axis
 	 */
-	public float getDeltaX(){
+	public float getDeltaX() {
 		return deltaX;
 	}
 
 	/**
-	 * Setter for the enemy's deltaX.
-	 * DeltaX is the amount by which the enemy will move along the X axis when moveX is called.
+	 * Setter for the enemy's deltaX. DeltaX is the amount by which the enemy will
+	 * move along the X axis when moveX is called.
 	 * 
 	 * @param deltaX the new value to set deltaX to
 	 */
-	public void setDeltaX(float deltaX){
+	public void setDeltaX(float deltaX) {
 		this.deltaX = deltaX;
 	}
 
 	/**
-	 * Getter for the enemy's delta along the Y axis.
-	 * The delta is set by the setDeltas method, but defaults to 0.
-	 * The delta is how much the enemy plans to move, not how much it has or is moving.
+	 * Getter for the enemy's delta along the Y axis. The delta is set by the
+	 * setDeltas method, but defaults to 0. The delta is how much the enemy plans to
+	 * move, not how much it has or is moving.
 	 * 
 	 * @return the enemy's delta along the Y axis
 	 */
-	public float getDeltaY(){
+	public float getDeltaY() {
 		return deltaY;
 	}
 
 	/**
-	 * Setter for the enemy's deltaY.
-	 * DeltaX is the amount by which the enemy will move along the X axis when moveY is called.
+	 * Setter for the enemy's deltaY. DeltaX is the amount by which the enemy will
+	 * move along the X axis when moveY is called.
 	 * 
 	 * @param deltaX the new value to set deltaX to
 	 */
-	public void setDeltaY(float deltaY){
+	public void setDeltaY(float deltaY) {
 		this.deltaY = deltaY;
 	}
 
@@ -207,12 +190,13 @@ public class EnemyPlayer extends Player {
 	 * 
 	 * @return enemy size
 	 */
-	public int getEnemySize(){
+	public int getEnemySize() {
 		return ENEMYSIZE;
 	}
-	
+
 	/**
-	 * Getter for the enemy's health.  Note that this is its current health, not its maximum health
+	 * Getter for the enemy's health. Note that this is its current health, not its
+	 * maximum health
 	 * 
 	 * @return enemy current health
 	 */
@@ -230,41 +214,41 @@ public class EnemyPlayer extends Player {
 	}
 
 	/**
-	 * Determines where the enemy ought to move to next.  
-	 * If in following mode, the enemy will move towards the player.
-	 * Otherwise, the enemy will follow its predetermined course.
+	 * Determines where the enemy ought to move to next. If in following mode, the
+	 * enemy will move towards the player. Otherwise, the enemy will follow its
+	 * predetermined course.
 	 */
 	public void determineDeltas() {
 
-		//Calculate deltas if the enemy is near enough to follow the player
+		// Calculate deltas if the enemy is near enough to follow the player
 		if (follow) {
-			if (posX > player.getX()){
-				deltaX = -1*ENEMYSPEED;
-			} else if (posX < player.getX()){
+			if (posX > player.getX()) {
+				deltaX = -1 * ENEMYSPEED;
+			} else if (posX < player.getX()) {
 				deltaX = ENEMYSPEED;
-			} else if (posX == player.getX()){
+			} else if (posX == player.getX()) {
 				deltaX = 0;
 			}
-			if (posY > player.getY()){
-				deltaY = -1*ENEMYSPEED;
-			} else if (posY < player.getY()){
+			if (posY > player.getY()) {
+				deltaY = -1 * ENEMYSPEED;
+			} else if (posY < player.getY()) {
 				deltaY = ENEMYSPEED;
-			} else if (posY == player.getY()){
+			} else if (posY == player.getY()) {
 				deltaY = 0;
 			}
 
-		} //Otherwise, follow the wandering pattern
+		} // Otherwise, follow the wandering pattern
 		else {
 			// if you go out of bounds in the random-movement array,
 			if (movementIndex >= movementPatternX.size()) {
 				// set movement index to 0
 				movementIndex = 0;
 			}
-			
-			//Set the deltas to the next int in the movement pattern.
-			deltaX = movementPatternX.get((int) movementIndex)*ENEMYSPEED;
-			deltaY = movementPatternY.get((int) movementIndex)*ENEMYSPEED;
-			
+
+			// Set the deltas to the next int in the movement pattern.
+			deltaX = movementPatternX.get((int) movementIndex) * ENEMYSPEED;
+			deltaY = movementPatternY.get((int) movementIndex) * ENEMYSPEED;
+
 			// increment movement index
 			movementIndex += 1;
 		}
@@ -273,34 +257,34 @@ public class EnemyPlayer extends Player {
 	/**
 	 * Moves the enemy by its deltas along the X axis, then redraws it
 	 */
-	public void moveX(){
+	public void moveX() {
 		posX += deltaX;
-		
+
 		drawEnemy();
 	}
 
 	/**
 	 * Moves the enemy by its deltas along the Y axis, then redraws it
 	 */
-	public void moveY(){
+	public void moveY() {
 		posY += deltaY;
-		
+
 		drawEnemy();
 	}
 
 	/**
 	 * Method to increase the enemy's boredom by 1.
 	 */
-	public void incrementBoredom(){
+	public void incrementBoredom() {
 		boredom++;
 	}
 
 	/**
-	 * Method to reduce the enemy's boredom by 1.
-	 * Boredom cannot go below 0.  If boredom would be reduced below 0, the method does nothing.
+	 * Method to reduce the enemy's boredom by 1. Boredom cannot go below 0. If
+	 * boredom would be reduced below 0, the method does nothing.
 	 */
-	public void decrementBoredom(){
-		if (boredom >0){
+	public void decrementBoredom() {
+		if (boredom > 0) {
 			boredom -= 2;
 		}
 	}
@@ -310,7 +294,7 @@ public class EnemyPlayer extends Player {
 	 * 
 	 * @return The enemy's current boredom.
 	 */
-	public int getBoredom(){
+	public int getBoredom() {
 		return boredom;
 	}
 
@@ -330,11 +314,11 @@ public class EnemyPlayer extends Player {
 			follow = false;
 		}
 
-		if (boredom > 500){
+		if (boredom > 500) {
 			follow = false;
 		}
 
-		if (boredom > 3000){
+		if (boredom > 3000) {
 			boredom = 0;
 		}
 	}
@@ -346,14 +330,15 @@ public class EnemyPlayer extends Player {
 	 */
 	public void attack(DungeonPlayer player) {
 
-		if (enemyHealth > 0){
-			//monsterClip.start();
+		if (enemyHealth > 0) {
+			// monsterClip.start();
 			player.takeDamage(damage);
 		}
 	}
 
 	/**
-	 * Checks if a certain x,y point collides with an Obstacle, by checking each object in the Obstacle.
+	 * Checks if a certain x,y point collides with an Obstacle, by checking each
+	 * object in the Obstacle.
 	 * 
 	 * @param x the x-coord of the point to check.
 	 * @param y the y-coord of the point to check.

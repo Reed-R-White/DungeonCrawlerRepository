@@ -27,7 +27,6 @@ public class Player {
 		destY = startingY;
 		this.width = width;
 		this.height = height;
-		color = color.blue;
 
 		playerSprite = new JLabel();
 		gameJFrame.getContentPane().add(playerSprite);
@@ -46,23 +45,17 @@ public class Player {
 	}
 
 	public void move() {
-		float deltaX = 0;
-		float deltaY = 0;
 
 		if (posX > destX) {
 			posX -= speed;
-			deltaX = -1;
 		} else if (posX < destX) {
 			posX += speed;
-			deltaX = 1;
 		}
 
 		if (posY > destY) {
 			posY -= speed;
-			deltaY = -1;
 		} else if (posY < destY) {
 			posY += speed;
-			deltaY = 1;
 		}
 
 	}
